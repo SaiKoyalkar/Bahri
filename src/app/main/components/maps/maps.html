@@ -1,0 +1,116 @@
+<div id="vessel" class="page-layout simple tabbed doc-page" layout="column">
+
+    <!-- HEADER -->
+    <div class="md-accent-bg header-vessel-bg" layout="row" layout-align="space-between">
+        <div layout="row" layout-align="start start" flex-xs="15" flex-sm="6" flex="6" hide-gt-sm>
+            <md-button id="navigation-toggle" class="md-icon-button" ng-click="vm.toggleSidenav('navigation')"
+                        aria-label="Toggle navigation" translate
+                       translate-attr-aria-label="TOOLBAR.TOGGLE_NAVIGATION">
+                <md-icon md-font-icon="icon-menu" class="icon"></md-icon>
+            </md-button>
+        </div>
+        <div class="ph-10" layout="column" layout-align="start start" layout-wrap flex>
+            <div class="title">Vessel Location With Alert</div>
+            <div class="description">
+                Last updated on: {{vm.date | date: 'dd/MM/yyyy HH:mm:ss'}}
+            </div>
+        </div>
+        <div layout="row" layout-align="end center" layout-wrap flex>
+            <md-menu-bar id="user-menu">
+                <md-menu md-position-mode="left bottom">
+                    <md-button class="user-menu-button" ng-click="$mdOpenMenu()"
+                               aria-label="User settings"
+                               translate translate-attr-aria-label="TOOLBAR.USER_SETTINGS">
+                        <div layout="row" layout-align="space-between center">
+                            <span class="username">{{ vm.username }}</span>
+                            <md-icon md-font-icon="icon-chevron-down"
+                                     class="icon s16"></md-icon>
+                        </div>
+                    </md-button>
+
+                    <md-menu-content width="3">
+                        <md-menu-item class="md-indent">
+                            <md-icon md-font-icon="icon-logout" class="icon"></md-icon>
+                            <md-button ng-click="vm.logout()">Logout</md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+            </md-menu-bar>
+        </div>
+    </div>
+    <!-- / HEADER -->
+
+    <!-- TOOLBAR -->
+    <md-toolbar id="toolbar" class="md-menu-toolbar md-whiteframe-4dp ng-scope _md md-default-theme toolbar-header">
+
+        <div class="ph-5 maps-vessel-name" layout="row" layout-xs="row" style="min-height:64px" ng-show="!vm.loadingProgress">
+            <div  layout="row" layout-align="start center" flex="50">
+                <md-autocomplete flex class="md-block"
+                    md-input-name="port_name"
+                    md-input-minlength="2"
+                    md-no-cache="vm.noCache"
+                    md-selected-item="vm.port_name"
+                    md-search-text="vm.searchText"
+                    md-items="item in vm.querySearch(vm.searchText)"
+                    md-item-text="item.display"
+                    md-require-match
+                    placeholder="Vessel Name">
+                    <md-item-template>
+                        <div md-highlight-text="vm.searchText" ng-click="vm.selectMarker(item)">{{item.display}}</div>
+                    </md-item-template>
+                </md-autocomplete>
+            </div>
+            <div layout="row" layout-align="end center" flex="50">
+                <md-button id="navigation-toggle" class="md-icon-button btn-filter" ng-click="vm.navigateToWeatherMap()"
+                        aria-label="Weather Map">
+                    <md-icon md-font-icon="icon-map-marker" class="icon filter-icon"></md-icon>
+                </md-button>
+                <md-button id="navigation-toggle" class="md-icon-button btn-filter" ng-click="vm.showAdvanced($event)"
+                            aria-label="Filter Vessel">
+                    <md-icon md-font-icon="icon-filter" class="icon filter-icon"></md-icon>
+                </md-button>
+            </div>
+        </div>
+    </md-toolbar>
+    <!-- / TOOLBAR -->
+
+    <!-- CONTENT -->
+    <md-progress-linear md-mode="indeterminate" ng-show="vm.loadingProgress" class="md-warn"></md-progress-linear>
+
+    <div class="content" style="max-width:100%;height:100%;margin-top:2px;">
+        <ui-gmap-google-map control="customMarkerMap.control"
+                    center="customMarkerMap.center" 
+                    zoom="customMarkerMap.zoom" 
+                    options="customMarkerMap.options"
+                    draggable="false"
+                    click="customMarkerMap.window.model"
+                    events="customMarkerMap.events">
+
+            <ui-gmap-markers  
+                models="customMarkerMap.markers" 
+                coords="'self'"  
+                events="customMarkerMap.markersEvents"
+                options="'options'">
+                <ui-gmap-window 
+                    show="customMarkerMap.window.show" 
+                    coords="customMarkerMap.window.model"
+                    options="customMarkerMap.window.options" 
+                    click="customMarkerMap.window.model"
+                    closeClick="customMarkerMap.window.closeClick()">
+                </ui-gmap-window>
+            </ui-gmap-markers>
+
+        </ui-gmap-google-map>
+    </div>
+    <!-- / CONTENT -->
+
+</div>
+
+<style type="text/css">
+.angular-google-map-container{
+    position: absolute !important;
+    height: 100%;
+    width: 100%;
+}
+#map_canvas img { max-width: none !important; }
+</style>

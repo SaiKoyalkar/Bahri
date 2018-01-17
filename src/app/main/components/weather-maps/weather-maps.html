@@ -1,0 +1,162 @@
+
+<div id="weather-vessel" class="page-layout simple tabbed doc-page" layout="column">
+
+    <!-- HEADER -->
+    <div class="md-accent-bg header-vessel-bg" layout="row" layout-align="space-between">
+        <div layout="row" layout-align="start start" flex-xs="15" flex-sm="6" flex="6" hide-gt-sm>
+            <md-button id="navigation-toggle" class="md-icon-button" ng-click="vm.toggleSidenav('navigation')"
+                        aria-label="Toggle navigation" translate
+                       translate-attr-aria-label="TOOLBAR.TOGGLE_NAVIGATION">
+                <md-icon md-font-icon="icon-menu" class="icon"></md-icon>
+            </md-button>
+        </div>
+        <div class="ph-10" layout="column" layout-align="start start" layout-wrap flex>
+            <div class="title">Vessel Location With Alert</div>
+            <div class="description">
+                Last updated on: {{vm.date | date: 'dd/MM/yyyy HH:mm:ss'}}
+            </div>
+        </div>
+        <div layout="row" layout-align="end center" layout-wrap flex>
+            <md-menu-bar id="user-menu">
+                <md-menu md-position-mode="left bottom">
+                    <md-button class="user-menu-button" ng-click="$mdOpenMenu()"
+                               aria-label="User settings"
+                               translate translate-attr-aria-label="TOOLBAR.USER_SETTINGS">
+                        <div layout="row" layout-align="space-between center">
+                            <span class="username">{{ vm.username }}</span>
+                            <md-icon md-font-icon="icon-chevron-down"
+                                     class="icon s16"></md-icon>
+                        </div>
+                    </md-button>
+
+                    <md-menu-content width="3">
+                        <md-menu-item class="md-indent">
+                            <md-icon md-font-icon="icon-logout" class="icon"></md-icon>
+                            <md-button ng-click="vm.logout()">Logout</md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+            </md-menu-bar>
+        </div>
+    </div>
+    <!-- / HEADER -->
+
+    <!-- TOOLBAR -->
+    <md-toolbar id="toolbar" class="md-menu-toolbar md-whiteframe-4dp ng-scope _md md-default-theme toolbar-header">
+        <div class="ph-5" layout="row" layout-xs="row" layout-align="start center" style="min-height:64px">      
+            <div class="ph-5" flex="100" layout-align="start start" layout="row" layout-md="row" layout-sm="row" layout-xs="column">
+                <md-checkbox class="map-checkbox checkbox-orange" ng-init="bot=true" ng-model="bot" ng-change="vm.showVessels(bot,'BOT')" aria-label="Bahri Oil Transport" ng-show="vm.showBOTCheckbox">
+                    <span class="map-label-text text-orange">
+                        Bahri Oil Transport
+                    </span>
+                </md-checkbox>
+
+                <md-checkbox class="map-checkbox checkbox-yellow" ng-init="bcc=true" ng-model="bcc" ng-change="vm.showVessels(bcc,'BCC')" aria-label="Bahri Chemical Carriers" ng-show="vm.showBCCCheckbox">
+                    <span class="map-label-text text-yellow">
+                        Bahri Chemical Carriers
+                    </span>
+                </md-checkbox>
+
+                <md-checkbox class="map-checkbox checkbox-teal" ng-init="bdb=true" ng-model="bdb" ng-change="vm.showVessels(bdb,'BDB')" aria-label="Bahri Dry Bulk" ng-show="vm.showBDBCheckbox">
+                    <span class="map-label-text text-teal">
+                        Bahri Dry Bulk
+                    </span>
+                </md-checkbox>
+
+                <md-checkbox class="map-checkbox checkbox-aqua" ng-init="bgc=true" ng-model="bgc" ng-change="vm.showVessels(bgc,'BGC')" aria-label="Bahri General Cargo" ng-show="vm.showBGCCheckbox">
+                    <span class="map-label-text text-aqua">
+                        Bahri General Cargo
+                    </span>
+                </md-checkbox>
+
+                <!-- <md-checkbox class="map-checkbox checkbox-purple" ng-init="bdb_ais=true" ng-model="bdb_ais" ng-change="vm.showVessels(bdb_ais,'BDBAIS')" aria-label="Bahri General Cargo1" ng-show="vm.showBDBAISCheckbox">
+                    <span class="map-label-text text-purple">
+                        BDB Operator Model
+                    </span>
+                </md-checkbox> -->
+                
+
+            </div>
+           
+           <div>
+               <md-select name="overlays" id="overlays" class="simplified font-size-16 change-duration" ng-model="vm.currentOverlay" aria-label="Change Overlay" ng-change="vm.changeOverlays()">
+                        <md-option class="duration-options" ng-repeat="(key, range) in vm.overlays"
+                             value="{{key}}" ng-selected="$first">
+                            {{range}}
+                        </md-option>
+                </md-select>
+           </div>
+
+           <div>
+               <md-select name="levels" id="levels" class="simplified font-size-16 change-duration" ng-model="vm.currentLevel" aria-label="Change level" ng-change="vm.changeLevels()">
+                        <md-option class="duration-options" ng-repeat="(key, range) in vm.levels"
+                             value="{{key}}" ng-selected="$first">
+                            {{range}}
+                        </md-option>
+                </md-select>
+           </div>
+            <div>
+                 
+                
+                <md-button id="navigation-toggle" class="md-icon-button btn-filter" ng-click="vm.showAdvanced($event)"
+                            aria-label="Filter Vessel">
+                    <md-icon md-font-icon="icon-filter" class="icon filter-icon"></md-icon>
+                </md-button>
+            </div>
+        </div>
+
+    </md-toolbar>
+    <!-- / TOOLBAR -->
+
+    <!-- CONTENT -->
+    <md-progress-linear md-mode="indeterminate" ng-show="vm.loadingProgress" class="md-warn"></md-progress-linear>
+
+     <div class="content" style="max-width:100%;height:100%;margin-top:2px;">
+            <div id="windyty-container">
+              <!--   <leaflet defaults="defaults" lf-center="center" height="480px" width="640px"></leaflet> -->
+                <div id="windyty"></div>
+                <div class="windyty-content">
+                  
+                </div>
+                <div id="forecastid" style="position: absolute;bottom: 223px;right:39px;background-color: #ffffff"><md-button id="navigation-toggle" class="md-icon-button btn-filter" ng-click="vm.closeForecast()"
+                            aria-label="Filter Vessel">
+                    <md-icon md-font-icon="icon-close" class="icon close-icon"></md-icon>
+                </md-button></div>
+                <div class="preview" id="preview"> Preview:<br/></div>
+            </div>
+    </div>
+  
+
+</div>
+
+<style type="text/css">
+    .angular-google-map-container {
+        position: absolute !important;
+        height: 100%;
+        width: 100%;
+    }
+    #map_canvas img {
+        max-width: none !important;
+    }
+</style>
+
+<script type="text/javascript">
+    
+    if(typeof W == 'undefined') {
+        var windytyInit = {
+            key: 'PsL-At-XpsPTZexBwUkO7Mx5I',
+            lat: 0, lon: 0, zoom:2
+        };
+
+        function windytyMain(map) {
+            angular.element(document.getElementById('windyty')).scope().xyz(map,'',2);
+        }
+
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src = "https://api.windytv.com/v2.3/boot.js";
+        document.head.appendChild(script);
+    }
+
+
+</script>

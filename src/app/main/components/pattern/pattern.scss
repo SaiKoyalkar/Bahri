@@ -1,0 +1,42 @@
+#maps {
+
+    > .content {
+
+        md-tabs {
+            box-shadow: $whiteframe-shadow-1dp;
+        }
+
+        .card {
+            max-width: 1200px;
+            padding: 16px;
+            margin: 24px;
+
+            .angular-google-map-container {
+                height: 400px;
+            }
+        }
+    }
+}
+
+#vessel-pattern{
+    .btn-filter{
+        cursor: pointer;
+    }
+    md-icon.filter-icon{
+        color: #ff6600;
+    }
+
+    > .content {
+        md-content {
+            margin: 16px 24px 48px 24px !important;
+            padding: 0 !important;
+        }
+    }
+
+    .vessel-trade-percentage{
+        float: right;
+        bottom: 10px;
+        position: absolute;
+        right: 10px;
+    }
+}

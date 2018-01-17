@@ -1,0 +1,112 @@
+/*COLORS*/
+$orange-label:#f47929;
+/* Margin */
+.margin-none {
+    margin: 0px 0px 0px 0px !important;
+}
+.margin-bottom-none
+{
+	margin-bottom: 0px !important;
+}
+
+.margin-right-15{
+	margin-right: 15px !important;
+}
+.margin-top-15{
+	margin-top: 15px !important;
+}
+
+/* Text */
+.text-center{
+	text-align: center !important; 
+}
+
+/* Height */
+.height-138{
+	height: 138px !important;
+}
+.height-92{
+	height: 92px !important;
+}
+
+.no-record{
+	font-size: 18px;
+	font-weight: 500;
+	color: #09486B;
+}
+
+.success-toast{
+	background-color: green;
+}
+
+.capitalize{
+	text-transform: capitalize !important;
+}
+
+/* MD SELECT */
+
+.md-select-value.md-select-placeholder{
+	border-bottom-width: 1px !important;
+	border-bottom-style: solid !important;
+}
+
+.md-select-value{
+	border-bottom-width: 1px !important;
+	border-bottom-style: solid !important;	
+}
+
+/* MD PROGRESSBAR */
+
+.md-orange-progressbar .md-gap{
+	border-top-color : #ff6600 !important;
+	border-bottom-color : #ff6600 !important;
+}
+
+md-progress-linear.md-default-theme.md-warn .md-container, md-progress-linear.md-warn .md-container {
+    background-color: rgb(255, 204, 188);
+}
+
+md-progress-linear.md-default-theme.md-warn .md-bar, md-progress-linear.md-warn .md-bar {
+    background-color: #ff6600 !important;
+}
+
+/* MD TOAST */
+
+md-toast.success .md-toast-content {
+  background-color: #2DBD9B !important;
+}
+
+md-toast.error .md-toast-content{
+   background-color: #DC4250 !important;
+}
+.table-layout-fixed
+{
+	table-layout: fixed;
+}
+.hidden
+{
+	display: none !important;
+}
+.ellipsis-table tbody tr td
+{
+	white-space: nowrap;
+	max-width: 200px;
+	width: auto;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	padding: 0 5px !important;
+}
+.no-box-shadow
+{
+	box-shadow: 0 0 0 !important;
+}
+.no-data-text
+{
+	text-align: center;
+	color:#09486F;
+}
+.error-text
+{
+	color:#F44336 !important;
+}
+

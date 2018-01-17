@@ -1,0 +1,227 @@
+<div id="edit-user" class="page-layout simple fullwidth doc-page chart-doc-page">
+
+    <!-- HEADER -->
+    <div class="md-accent-bg header-msml-bg" layout="row" layout-align="space-between">
+        <div layout="row" layout-align="start start" flex-xs="15" flex-sm="6" flex="6" hide-gt-sm>
+            <md-button id="navigation-toggle" class="md-icon-button" ng-click="vm.toggleSidenav('navigation')"
+                        aria-label="Toggle navigation" translate
+                       translate-attr-aria-label="TOOLBAR.TOGGLE_NAVIGATION">
+                <md-icon md-font-icon="icon-menu" class="icon"></md-icon>
+            </md-button>
+        </div>
+        <div class="ph-10" layout="column" layout-align="start start" layout-wrap flex>
+            <div class="title">Edit User</div>
+            <div class="description">Last updated on: {{vm.date | date: 'dd/MM/yyyy HH:mm:ss'}}</div>
+        </div>
+        <div layout="row" layout-align="end center" layout-wrap flex>
+            <md-menu-bar id="user-menu">
+                <md-menu md-position-mode="left bottom">
+                    <md-button class="user-menu-button" ng-click="$mdOpenMenu()"
+                               aria-label="User settings"
+                               translate translate-attr-aria-label="TOOLBAR.USER_SETTINGS">
+                        <div layout="row" layout-align="space-between center">
+                            <span class="username">{{ vm.username }}</span>
+                            <md-icon md-font-icon="icon-chevron-down"
+                                     class="icon s16"></md-icon>
+                        </div>
+                    </md-button>
+
+                    <md-menu-content width="3">
+                        <md-menu-item class="md-indent">
+                            <md-icon md-font-icon="icon-logout" class="icon"></md-icon>
+                            <md-button ng-click="vm.logout()">Logout</md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+            </md-menu-bar>
+        </div>
+    </div>
+    <!-- / HEADER -->
+
+    <!-- CONTENT -->
+    <md-progress-linear md-mode="indeterminate" ng-show="vm.loadingProgress" class="md-warn"></md-progress-linear>
+    <div class="content" ng-hide="vm.loadingProgress">
+       <div class="form-wrapper md-whiteframe-1dp" flex="100">
+
+            <form name="basicForm" class="md-inline-form" novalidate ng-submit="vm.submit()">
+
+                <div layout="column" layout-gt-sm="row">
+                    <md-input-container flex>
+                        <input type="text" name="username" ng-model="vm.basicForm.username"
+                               placeholder="Username"
+                               ng-keyup = "vm.isUserExist(this,'username')"
+                               required>
+                        <div ng-messages="basicForm.username.$error"
+                             role="alert">
+                            <div ng-message="validationError" ng-if="basicForm.username.$dirty"> 
+                                <span>{{ vm.existUsernameError }}</span> 
+                            </div>
+                            <div ng-message="required">
+                                <span>Username field is required.</span>
+                            </div>
+                        </div>
+                    </md-input-container>
+
+                    <md-input-container flex>
+                        <input type="text" name="email" ng-model="vm.basicForm.email"
+                               placeholder="Email Address"
+                               ng-keyup = "vm.isUserExist(this,'email')"
+                               ng-pattern="/^.+@.+\..+$/"
+                               required>
+                        <div ng-messages="basicForm.email.$error"
+                             role="alert">
+                            <div ng-message="validationError" ng-if="basicForm.email.$dirty"> 
+                                <span>{{ vm.existEmailError }}</span> 
+                            </div>
+                            <div ng-message="required">
+                                <span>Email field is required.</span>
+                            </div>
+                        </div>
+                    </md-input-container>
+
+                </div>
+
+                <div layout="column" layout-gt-sm="row">
+                    
+                    <md-input-container flex>
+                        <input type="text" name="firstname" ng-model="vm.basicForm.firstname"
+                               placeholder="First name"
+                               required>
+                        <div ng-messages="basicForm.firstname.$error"
+                             role="alert">
+                            <div ng-message="required">
+                                <span>First name field is required.</span>
+                            </div>
+                        </div>
+                    </md-input-container>
+
+                    <md-input-container flex>
+                        <input type="text" name="lastname" ng-model="vm.basicForm.lastname" placeholder="Last name"
+                               required>
+                        <div ng-messages="basicForm.lastname.$error"
+                             role="alert">
+                            <div ng-message="required">
+                                <span>Last name field is required.</span>
+                            </div>
+                        </div>
+                    </md-input-container>
+                </div>
+
+                <div layout="column" layout-gt-sm="row">
+                    <md-input-container flex>
+                        <label>Select Company</label>
+                        <md-select ng-model="vm.basicForm.company">
+                            <md-option ng-repeat="(company_key,company) in vm.companies" value="{{company_key}}">
+                                {{company}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+
+                <div layout="column" layout-gt-sm="row">
+                    
+                    <md-input-container flex>
+                        <label>Select Designation</label>
+                        <md-select ng-model="vm.basicForm.designation">
+                            <md-option ng-repeat="(designation_key,designation) in vm.designations" value="{{designation_key}}">
+                                {{designation}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+
+                    <md-input-container flex>
+                        <label>Select Department</label>
+                        <md-select ng-model="vm.basicForm.department">
+                            <md-option ng-repeat="(department_key,department) in vm.departments" value="{{department_key}}">
+                                {{department}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+
+                <div layout="column" layout-gt-sm="row">
+                    <md-chips ng-model="vm.selectedGroups" md-autocomplete-snap
+                        md-require-match flex>
+                        
+                        <md-autocomplete
+                            md-selected-item="vm.selectedItem"
+                            md-search-text="vm.searchText"
+                            md-input-minlength="1"
+                            md-input-maxlength="18"
+                            md-no-cache="vm.noCache"
+                            md-search-text="vm.searchText"
+                            md-items="group in vm.querySearch(vm.searchText)"
+                            md-item-text="group.display"
+                            placeholder="Assign Groups">
+                            
+                             <md-item-template>
+                                <span md-highlight-text="vm.searchText">
+                                    {{group.display}}
+                                </span>
+                            </md-item-template>
+                        </md-autocomplete>
+                        
+                        <md-chip-template>
+                            <span>
+                                <strong>{{$chip.display}}</strong>
+                            </span>
+                        </md-chip-template>
+
+                    </md-chips>
+
+                </div>
+
+                <div layout="row" class="pv-20" ng-show="vm.showModules">
+                    <fieldset class="demo-fieldset" flex>
+                        <legend class="demo-legend">Assign Individual Modules</legend>
+                        <v-accordion class="vAccordion--default" multiple ng-repeat="(mainModuleKey, mainModule) in vm.modules">
+                            <v-pane expanded="true">
+                                <v-pane-header>
+                                    {{ mainModuleKey }}
+                                </v-pane-header>
+                                <v-pane-content>
+                                    <span ng-repeat="(subModuleKey, subModule) in mainModule">
+                                        <md-checkbox class="capitalize margin-right-15" aria-label="subModule.module_name" ng-model = "subModule.is_checked">
+                                            {{ subModule.module_name }}
+                                        </md-checkbox>
+                                    </span>
+                                </v-pane-content>
+                            </v-pane>
+                        </v-accordion>
+                        <!-- <div layout="row" layout-wrap flex>
+                            <div layout="column" flex="25" ng-repeat="(mainModuleKey, mainModule) in vm.modules">
+                                <span ng-repeat="(subModuleKey, subModule) in mainModule">
+                                    <span class="primary-title" ng-show="subModule.is_parent == true">{{ subModule.module_name | uppercase }}</span>
+                                    <md-checkbox aria-label="Select All"
+                                            ng-model = "subModule.is_checked"
+                                            ng-checked=""
+                                            md-indeterminate=""
+                                            ng-click=""
+                                            ng-show="subModule.is_parent == true">
+                                        <span class="text-orange-bold">{{ subModule.module_name | uppercase }}</span>
+                                    </md-checkbox>
+
+                                    <md-checkbox class="capitalize" aria-label="subModule.module_name" ng-show="subModule.is_parent == false" ng-model = "subModule.is_checked">
+                                        {{ subModule.module_name }}
+                                    </md-checkbox>
+                                </span>
+                            </div> 
+                        </div>-->
+                    </fieldset>
+                </div>
+                
+                <md-button type="submit" class="md-raised md-button-orange" aria-label="Update" ng-disabled="basicForm.$invalid">
+                    Update
+                </md-button>
+
+                <md-button type="button" ng-click="vm.btnCancel()" class="md-raised" aria-label="Cancel">
+                    Cancel
+                </md-button>
+                
+            </form>
+
+        </div>
+    </div>
+    <!-- / CONTENT -->
+
+</div>

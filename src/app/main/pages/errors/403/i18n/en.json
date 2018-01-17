@@ -1,0 +1,9 @@
+{
+    "ERROR403": {
+        "CODE": "403",
+        "MESSAGE": "Well, you broke the rules!",
+        "SUBMESSAGE": "Just kidding, looks like you are not authorized or we couldn’t find the page you are looking for.",
+        "DASHBOARD": "Go back to dashboard",
+        "LOGOUT": "Do Logout"
+    }
+}

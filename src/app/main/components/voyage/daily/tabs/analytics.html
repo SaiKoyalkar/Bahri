@@ -1,0 +1,96 @@
+<div class="md-whiteframe-4dp">
+    <div class="ph-5 card-block" flex-xs="100" flex-sm="100" flex-md="100" flex="100" ng-hide="vm.loadingProgress">
+        <div layout="row" layout-align="" class="fuel-type-selection">
+
+            <md-radio-group ng-model="vm.selectedFuelType" layout="row" >
+                <div ng-repeat="type in vm.fuelConsumptionType">
+                    <md-radio-button flex ng-value="type.id" class="md-primary" ng-click="vm.changeFuelType(type.id)">
+                        {{type.name}}
+                    </md-radio-button>
+                </div>
+            </md-radio-group>
+        </div>
+    </div>
+</div>
+
+<div class="md-whiteframe-4dp">
+    <div class="ph-5 card-block" flex-xs="100" flex-sm="100" flex-md="100" flex="100" ng-hide="vm.loadingProgress">
+        <div class="card card-header">
+            <div class="md-title graph-title">
+                Fuel Consumption Performance
+                <span class="export">
+                    <md-select name="duration" class="simplified font-size-16 change-duration" ng-model="vm.currentExportOption" aria-label="Export Graph" ng-change="vm.exportData('fuel-consumption-container','Fuel Consumption Performance')">
+                        <md-option class="duration-options" ng-repeat="(key, range) in vm.exportGraphOptions"
+                            value="{{key}}" ng-selected="$first">
+                            {{range}}
+                        </md-option>
+                    </md-select>
+                </span>
+            </div>
+        </div>
+        <div class="card md-card-margin-top-bottom-none">
+            <div layout="row" layout-align="center center" ng-show="vm.circularLoader">
+                <md-progress-circular md-mode="indeterminate" md-diameter="80" class="md-warn"></md-progress-circular>
+            </div>
+            <div id="fuel-consumption-container" class="graph-container" ng-hide="vm.circularLoader">
+                <h2 class="no-data-text" ng-hide="vm.circularLoader">{{noDataAvailable}}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="md-whiteframe-4dp">
+    <div class="ph-5 card-block" flex-xs="100" flex-sm="100" flex-md="100" flex="100" ng-hide="vm.loadingProgress">
+
+        <div class="card card-header">
+            <div class="md-title graph-title">
+                Consumption vs Speed Performance
+                <span class="export">
+                    <md-select name="duration" class="simplified font-size-16 change-duration" ng-model="vm.currentExportOption" aria-label="Export Graph" ng-change="vm.exportData('crew-fuel-consumption-container','Crew Fuel Consumption Performance')">
+                        <md-option class="duration-options" ng-repeat="(key, range) in vm.exportGraphOptions"
+                            value="{{key}}" ng-selected="$first">
+                            {{range}}
+                        </md-option>
+                    </md-select>
+                </span>
+            </div>
+        </div>
+        <div class="card md-card-margin-top-bottom-none">
+            <div layout="row" layout-align="center center" ng-show="vm.circularLoader">
+                <md-progress-circular md-mode="indeterminate" md-diameter="80" class="md-warn"></md-progress-circular>
+            </div>
+            <div id="crew-fuel-consumption-container" class="graph-container" ng-hide="vm.circularLoader">
+                <h2 class="no-data-text" ng-hide="vm.circularLoader">{{noDataAvailable}}</h2>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="md-whiteframe-4dp">
+    <div class="ph-5 card-block" flex-xs="100" flex-sm="100" flex-md="100" flex="100" ng-hide="vm.loadingProgress">
+
+        <div class="card card-header">
+            <div class="md-title graph-title">
+                Marorka 6 hours Timeseries
+                <span class="export">
+                    <md-select name="duration" class="simplified font-size-16 change-duration" ng-model="vm.currentExportOption" aria-label="Export Graph" ng-change="vm.exportData('fuel-hour-container','Marorka 6 hours Timeseries')">
+                        <md-option class="duration-options" ng-repeat="(key, range) in vm.exportGraphOptions"
+                            value="{{key}}" ng-selected="$first">
+                            {{range}}
+                        </md-option>
+                    </md-select>
+                </span>
+            </div>
+        </div>
+        <div class="card md-card-margin-top-bottom-none">
+            <div layout="row" layout-align="center center" ng-show="vm.circularLoader">
+                <md-progress-circular md-mode="indeterminate" md-diameter="80" class="md-warn"></md-progress-circular>
+            </div>
+            <div id="fuel-hour-container" class="graph-container" ng-hide="vm.circularLoader">
+                <h2 class="no-data-text" ng-hide="vm.circularLoader">{{noDataAvailable}}</h2>
+            </div>
+        </div>
+
+    </div>
+</div>

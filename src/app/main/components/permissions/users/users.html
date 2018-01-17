@@ -1,0 +1,122 @@
+<div id="users-list" class="page-layout simple fullwidth doc-page chart-doc-page">
+
+    <!-- HEADER -->
+    <div class="md-accent-bg header-msml-bg" layout="row" layout-align="space-between">
+        <div layout="row" layout-align="start start" flex-xs="15" flex-sm="6" flex="6" hide-gt-sm>
+            <md-button id="navigation-toggle" class="md-icon-button" ng-click="vm.toggleSidenav('navigation')"
+                        aria-label="Toggle navigation" translate
+                       translate-attr-aria-label="TOOLBAR.TOGGLE_NAVIGATION">
+                <md-icon md-font-icon="icon-menu" class="icon"></md-icon>
+            </md-button>
+        </div>
+        <div class="ph-10" layout="column" layout-align="start start" layout-wrap flex>
+            <div class="title">Manage Users</div>
+            <div class="description">Last updated on: {{vm.date | date: 'dd/MM/yyyy HH:mm:ss'}}</div>
+        </div>
+        <div layout="row" layout-align="end center" layout-wrap flex>
+            <md-menu-bar id="user-menu">
+                <md-menu md-position-mode="left bottom">
+                    <md-button class="user-menu-button" ng-click="$mdOpenMenu()"
+                               aria-label="User settings"
+                               translate translate-attr-aria-label="TOOLBAR.USER_SETTINGS">
+                        <div layout="row" layout-align="space-between center">
+                            <span class="username">{{ vm.username }}</span>
+                            <md-icon md-font-icon="icon-chevron-down"
+                                     class="icon s16"></md-icon>
+                        </div>
+                    </md-button>
+
+                    <md-menu-content width="3">
+                        <md-menu-item class="md-indent">
+                            <md-icon md-font-icon="icon-logout" class="icon"></md-icon>
+                            <md-button ng-click="vm.logout()">Logout</md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+            </md-menu-bar>
+        </div>
+    </div>
+    <!-- / HEADER -->
+
+    <!-- TOOLBAR -->
+    <md-toolbar id="toolbar" class="md-menu-toolbar md-whiteframe-1dp ng-scope _md md-default-theme toolbar-header">
+
+        <div class="ph-5" layout="row" layout-xs="row" layout-align="start center" style="min-height:64px">
+            <div class="ph-5" flex="60" layout-align="center center" layout-xs="row">
+                <md-button id="btn-graph" class="md-button-data-view md-raised active md-button md-default-theme md-ink-ripple" ng-click="vm.addUser()"> 
+                    Add User 
+                </md-button>
+            </div>
+        </div>
+    </md-toolbar>
+    
+    <!-- / TOOLBAR -->
+
+    <!-- CONTENT -->
+    <md-progress-linear md-mode="indeterminate" ng-show="vm.loadingProgress" class="md-warn"></md-progress-linear>
+    <div class="content" ng-hide="vm.loadingProgress">
+       <!--  <div class="md-title mb-32">Zero Configuration</div> -->
+        <div class="white-bg md-whiteframe-4dp" ng-show="vm.showTable">
+            <table class="dataTable row-border hover" datatable="ng" dt-options="vm.dtOptions">
+                <thead>
+                    <tr>
+                        <th class="secondary-text">
+                            <div class="table-header">
+                                <span class="column-title">Username</span>
+                            </div>
+                        </th>
+                        <th class="secondary-text">
+                            <div class="table-header">
+                                <span class="column-title">Full Name</span>
+                            </div>
+                        </th>
+                        <th class="secondary-text">
+                            <div class="table-header">
+                                <span class="column-title">Designation</span>
+                            </div>
+                        </th>
+                        <th class="secondary-text">
+                            <div class="table-header">
+                                <span class="column-title">Department</span>
+                            </div>
+                        </th>
+                        <th class="secondary-text">
+                            <div class="table-header">
+                                <span class="column-title">Status</span>
+                            </div>
+                        </th>
+                        <th class="secondary-text">
+                            <div class="table-header">
+                                <span class="column-title">Actions</span>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="user in vm.users">
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.fullname }}</td>
+                        <td>{{ user.designation }}</td>
+                        <td>{{ user.department }}</td>
+                        <td>
+                            <md-switch ng-model="user.active" ng-change="vm.changeStatus(user.id,user.active)" aria-label="User Status"></md-switch>
+                        </td>
+                        <td>
+                            <div class="ph-5" flex="100" layout-align="center center" layout-xs="colmn">
+                                <md-button id="edit-user" class="md-icon-button md-accent md-raised" aria-label="Edit User" ng-click="vm.editUser(user.id)">
+                                    <md-icon md-font-icon="icon-table-edit" class="s20"></md-icon>
+                                </md-button>
+
+                                <md-button id="edit-user" class="md-icon-button md-warn md-raised" aria-label="Delete User" ng-click="vm.deleteUser($event,user.id)">
+                                    <md-icon md-font-icon="icon-delete" class="s20"></md-icon>
+                                </md-button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- / CONTENT -->
+
+</div>

@@ -1,0 +1,80 @@
+md-dialog.search-vessel-dialog {
+
+    &.search-vessel-dialog {
+        max-width: 720px;
+        width: 400px;
+        min-width: 320px;
+        
+        md-dialog-content {
+            display: block;
+            position: relative;
+        }
+
+        .loader-wrapperp{
+            min-height: 200px;                
+        }
+
+        md-toolbar {
+
+            .title {
+                font-size: 17px;
+            }
+        }
+
+        md-input-container {
+
+            textarea {
+                min-height: 150px;
+            }
+        }
+
+        .date-container {
+            padding: 16px 0 24px 0;
+        }
+
+        md-dialog-actions {
+            position: relative;
+            overflow-y: hidden;
+            overflow-x: auto;
+            justify-content: space-between;
+            background-color: rgba(0, 0, 0, 0.03);
+            border-top: 1px solid rgba(0, 0, 0, 0.12);
+        }
+
+        .margin-5{
+            margin: 5px;
+        }
+
+        .filter-header{
+            background-color: #09486B;
+        }
+
+        md-dialog-content{
+            min-height: 135px;
+        }
+        md-select{
+            line-height: 78px;
+        }
+    }
+}
+
+// RESPONSIVE
+@media screen and (max-width: $layout-breakpoint-md) {
+
+    md-dialog {
+
+        &.task-dialog {
+            width: 80%;
+        }
+    }
+}
+
+@media screen and (max-width: $layout-breakpoint-sm) {
+
+    md-dialog {
+
+        &.task-dialog {
+            width: 90%;
+        }
+    }
+}

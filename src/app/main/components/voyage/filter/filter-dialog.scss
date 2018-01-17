@@ -1,0 +1,350 @@
+md-dialog.filter-vessel-voyage {
+
+    &.filter-vessel-voyage {
+        max-width: 720px;
+        width: 720px;
+
+        md-dialog-content {
+            display: block;
+            position: relative;
+            min-height: 256px;
+        }
+
+        .loader-wrapper{
+            min-height: 200px;                
+        }
+
+        md-toolbar {
+
+            .title {
+                font-size: 17px;
+            }
+        }
+
+        md-input-container {
+
+            textarea {
+                min-height: 150px;
+            }
+        }
+
+        .date-container {
+            padding: 16px 0 24px 0;
+        }
+
+        .notes {
+
+            > label {
+                color: rgba(0, 0, 0, 0.54);
+            }
+
+            .mce-tinymce {
+                margin-top: 8px;
+            }
+        }
+
+        .tags {
+            margin: 8px 0;
+
+            label {
+                font-size: 11px;
+                color: rgba(0, 0, 0, 0.54);
+            }
+
+            .md-chips {
+                font-size: 13px;
+
+                .md-chip {
+
+                    md-chip-template {
+
+                        .color {
+                            display: inline-block;
+                            position: relative;
+                            width: 8px;
+                            height: 8px;
+                            top: -1px;
+                            border-radius: 50%;
+                            margin: -2px 4px 0 0;
+                        }
+                    }
+                }
+            }
+        }
+
+        .attachment-list {
+            font-size: 13px;
+            padding-top: 16px;
+
+            .attachment {
+                background-color: rgba(0, 0, 0, 0.08);
+                border: 1px solid rgba(0, 0, 0, 0.12);
+                padding-left: 16px;
+                margin-top: 8px;
+                border-radius: 2px;
+
+                .filename {
+                    font-weight: 500;
+                }
+
+                .size {
+
+                }
+
+                .md-button {
+                    margin: 0;
+                }
+
+                &:last-child {
+                    margin-bottom: 0;
+                }
+            }
+        }
+
+        md-dialog-actions {
+            position: relative;
+            overflow-y: hidden;
+            overflow-x: auto;
+            justify-content: space-between;
+            background-color: rgba(0, 0, 0, 0.03);
+            border-top: 1px solid rgba(0, 0, 0, 0.12);
+        }
+
+        .margin-5{
+            margin: 5px;
+        }
+
+        .filter-header{
+            background-color: #09486B;
+        }
+
+        
+        
+    }
+
+    md-autocomplete[md-floating-label] md-input-container {
+        padding-bottom: 2px !important;
+        margin: 0px !important; 
+    }
+    
+}
+//ADDED BY SAGAR : 12-SEP:2017
+.voyage-filter-slider {
+  margin-top: 40px;
+  margin-bottom: 20px;
+}
+.sailing-Condition
+{
+    margin-top: 20px;
+}
+
+md-dialog .voyage-filter-vessel-name
+{
+    md-input-container
+    {
+        margin-top: 20px;
+    }
+    
+}
+.blue-slider
+{
+    .irs
+    {
+        .irs-bar
+        {
+            background: #43b3ef;
+        }
+        .irs-from,
+        .irs-to
+        {
+            background: #1080bc;
+            
+        }
+        .irs-from::after,
+        .irs-to::after
+        {
+            border-top-color: #1080bc;
+        }
+    }
+}
+.cyan-slider
+{
+    .irs
+    {
+        .irs-bar
+        {
+            background: #00ccbb;
+        }
+        .irs-from,
+        .irs-to
+        {
+            background: #008075;
+            
+        }
+        .irs-from::after,
+        .irs-to::after
+        {
+            border-top-color: #008075;
+        }
+    }
+}
+.dark-cyan-slider
+{
+    .irs
+    {
+        .irs-bar
+        {
+            background: #00BCD4;
+        }
+        .irs-from,
+        .irs-to
+        {
+            background: #00838F;
+            
+        }
+        .irs-from::after,
+        .irs-to::after
+        {
+            border-top-color: #00838F;
+        }
+    }
+}
+.dark-blue-slider
+{
+    .irs
+    {
+        .irs-bar
+        {
+            background: #03A9F4;
+        }
+        .irs-from,
+        .irs-to
+        {
+            background: #0277BD;
+            
+        }
+        .irs-from::after,
+        .irs-to::after
+        {
+            border-top-color: #0277BD;
+        }
+    }
+}
+.pink-slider
+{
+    .irs
+    {
+        .irs-bar
+        {
+            background: #ff4dd2;
+        }
+        .irs-from,
+        .irs-to
+        {
+            background: #66004d;
+            
+        }
+        .irs-from::after,
+        .irs-to::after
+        {
+            border-top-color: #66004d;
+        }
+    }
+}
+.orange-slider
+{
+    .irs
+    {
+        .irs-bar
+        {
+            background: #FF9800;
+        }
+        .irs-from,
+        .irs-to
+        {
+            background: #E65100;
+            
+        }
+        .irs-from::after,
+        .irs-to::after
+        {
+            border-top-color: #E65100;
+        }
+    }
+}
+.dark-purple-slider
+{
+    .irs
+    {
+        .irs-bar
+        {
+            background: #673AB7;
+        }
+        .irs-from,
+        .irs-to
+        {
+            background: #4527A0;
+            
+        }
+        .irs-from::after,
+        .irs-to::after
+        {
+            border-top-color: #4527A0;
+        }
+    }
+}
+
+
+.dialog-label {
+    
+    color: $orange-label;
+    font-weight: 500;
+    font-size: 16px;
+    margin-bottom: 3px;
+    
+}
+
+.fleet-list-select-container
+{
+    box-shadow: 0 0 3px #cccccc inset;
+    padding: 5px 10px;
+    
+
+    .fleet-list-select
+    {
+        max-height: 150px;
+        overflow: auto;
+        width: 100%;
+
+        .demo-select-all-checkboxes {
+            md-checkbox {
+                margin-top: 0;
+                margin-bottom: 5px;
+            }
+        }
+
+    }
+
+}
+
+
+// RESPONSIVE
+@media screen and (max-width: $layout-breakpoint-md) {
+
+    md-dialog {
+
+        &.task-dialog {
+            width: 80%;
+        }
+    }
+}
+
+@media screen and (max-width: $layout-breakpoint-sm) {
+
+    md-dialog {
+
+        &.task-dialog {
+            width: 90%;
+        }
+    }
+}

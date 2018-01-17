@@ -1,0 +1,282 @@
+<md-dialog class="tooltip-dialog" aria-label="Filter" style="width:500px;max-width:576px;position: absolute;right: 5px;top:10px">
+    <md-dialog-content>
+        <md-tabs md-dynamic-height md-swipe-content md-enable-disconnect md-stretch-tabs="always" class="md-accent tooltip" md-selected="vm.selectedIndex">
+            <md-tab label="Vessel" md-on-select="vm.onTabChanges(1)">
+                <md-content class="md-padding">
+                    <div class="loader-wrapper" layout-xs="column" layout="row" ng-show="vm.loadingProgress" layout-align="center center" flex>
+                        <md-progress-circular  md-mode="indeterminate" class="md-warn" md-diameter="60"></md-progress-circular>
+                    </div>
+                    <div class="bahri-vessel-details" ng-hide="(vm.markerDetails.vesselInfo.is_ais_vessel)">
+                        <span style="float:right">
+                            <img src="{{ vm.markerDetails.vesselInfo.vessel_image }}" height="150" width="150" ng-show="{{vm.markerDetails.vesselInfo.vessel_image != '' }}" />
+                        </span>
+                        <p>
+                            Vessel Name : 
+                            <span style="font-weight:500" ng-show="{{ (vm.markerDetails.vesselInfo.vessel_id != '')  }}">
+                                <a href="javascript:void(0);" ng-click="vm.navigateToVoyage(vm.markerDetails.vesselInfo.vessel_id)" >{{ vm.markerDetails.vesselInfo.vessel_name }}</a>
+                            </span>
+                            <span style="font-weight:500" ng-show="{{ (vm.markerDetails.vesselInfo.vessel_id == '')  }}">
+                                {{ vm.markerDetails.vesselInfo.vessel_name }}
+                            </span>
+                        </p>
+                        <p>
+                            Vessel Type : 
+                            <span style="font-weight:500"> 
+                                {{ vm.markerDetails.vesselInfo.vessel_type }} 
+                            </span>
+                        </p>
+                        <p>
+                            Voyage Start At :
+                            <span style="font-weight:500"> 
+                                {{ vm.markerDetails.vesselInfo.departure_port }} 
+                            </span>
+                        </p>
+
+                        <p>
+                            Voyage End At :
+                            <span style="font-weight:500"> 
+                                {{ vm.markerDetails.vesselInfo.destination_port }} 
+                            </span>
+                        </p>
+                        <p>
+                            Last Port:
+                            <span style="font-weight:500"> 
+                                {{ vm.markerDetails.vesselInfo.last_port }} 
+                            </span>
+                        </p>
+                        <p>
+                            Next Port:
+                            <span style="font-weight:500"> 
+                                {{ vm.markerDetails.vesselInfo.eta }} 
+                            </span>
+                        </p>
+                        <p>
+                            Alert Type :
+                            <span style="font-weight:500"> 
+                                {{ vm.markerDetails.vesselInfo.alert_type }} 
+                            </span>
+                        </p>
+                        <p>
+                            Status :
+                            <span style="font-weight:500"> 
+                                {{ vm.markerDetails.vesselInfo.status }} 
+                            </span>
+                        </p>
+                        <p ng-show="{{vm.markerDetails.vesselInfo.vessel_category == 'BDBAIS' }}">
+                            Cargo : 
+                            <span style="font-weight:500"> 
+                                {{ vm.markerDetails.vesselInfo.cargo }} 
+                            </span>
+                        </p>
+                        <p ng-show="{{vm.markerDetails.vesselInfo.vessel_category == 'BDBAIS' }}">
+                            Charterer : 
+                            <span style="font-weight:500"> 
+                                {{ vm.markerDetails.vesselInfo.charterer }} 
+                            </span>
+                        </p>
+                        <p ng-show="{{vm.markerDetails.vesselInfo.vessel_category == 'BDBAIS' }}">
+                            Chartering Specialist : 
+                            <span style="font-weight:500"> 
+                                {{ vm.markerDetails.vesselInfo.chartering_specialist }} 
+                            </span>
+                        </p>
+                        <p>
+                            Voyage Manager : 
+                            <span style="font-weight:500"> 
+                                {{ vm.markerDetails.vesselInfo.voyagemanager_name }} 
+                            </span>
+                        </p>
+                        <p ng-show="{{vm.markerDetails.vesselInfo.vessel_category != 'BDBAIS' }}">
+                            Superintendent : 
+                            <span style="font-weight:500"> 
+                                {{ vm.markerDetails.vesselInfo.superintendent_name }} 
+                            </span>
+                        </p>
+                    </div>
+                    <div class="ais-vessel-details" ng-show="(vm.markerDetails.vesselInfo.is_ais_vessel && !vm.loadingProgress)">
+                        <span style="float:right" class="pt-15">
+                            <img src="{{ vm.markerDetails.vesselInfo.vessel_image }}" height="150" width="150" ng-show="{{vm.markerDetails.vesselInfo.vessel_image != '' }}" />
+                        </span>
+                        <p>
+                            Vessel Name : 
+                            <span style="font-weight:500">
+                                {{ vm.aisMarkerDetails.vessel_name }}
+                            </span>
+                        </p>
+                        <p>
+                            Vessel Type : 
+                            <span style="font-weight:500"> 
+                                {{ vm.aisMarkerDetails.vessel_type }} 
+                            </span>
+                        </p>
+                        <p>
+                            Dest. Port :
+                            <span style="font-weight:500"> 
+                                {{ vm.aisMarkerDetails.destination_port }} 
+                            </span>
+                        </p>
+                        <p>
+                            ETA:
+                            <span style="font-weight:500"> 
+                                {{ vm.aisMarkerDetails.eta }} 
+                            </span>
+                        </p>
+                        <p>
+                            Speed:
+                            <span style="font-weight:500"> 
+                                {{ vm.aisMarkerDetails.speed }} 
+                            </span>
+                        </p>
+                        <p>
+                            Year Built:
+                            <span style="font-weight:500"> 
+                                {{ vm.aisMarkerDetails.year_built }} 
+                            </span>
+                        </p>
+                        <p>
+                            Gross Tonnage:
+                            <span style="font-weight:500"> 
+                                {{ vm.aisMarkerDetails.gross_tonnage }} 
+                            </span>
+                        </p>
+                        <p>
+                            Dead Weight:
+                            <span style="font-weight:500"> 
+                                {{ vm.aisMarkerDetails.deadweight }} 
+                            </span>
+                        </p>
+                        <p>
+                            Manager:
+                            <span style="font-weight:500"> 
+                                {{ vm.aisMarkerDetails.manager_name }} 
+                            </span>
+                        </p>
+                        <p>
+                            Owner:
+                            <span style="font-weight:500"> 
+                                {{ vm.aisMarkerDetails.owner }} 
+                            </span>
+                        </p>
+                        <p>
+                            TCE Prediction (L to D):
+                            <span style="font-weight:500"> 
+                                {{ vm.aisMarkerDetails.tce }} 
+                            </span>
+                        </p>
+                    </div>
+                    
+                </md-content>
+            </md-tab>
+            <md-tab label="Port Call" md-on-select="vm.onTabChanges(2)">
+                <md-content>
+                    <div class="loader-wrapper" layout-xs="column" layout="row" ng-show="vm.loadingProgress" layout-align="center center" flex>
+                        <md-progress-circular  md-mode="indeterminate" class="md-warn" md-diameter="60"></md-progress-circular>
+                    </div>
+                    <div ng-cloak calss="port-calls table-wrapper pt-5" ng-hide="(vm.markerDetails.vesselInfo.port_calls.length == 0 || vm.loadingProgress)">
+                        <table class="simple table-data-right" ms-responsive-table>
+                            <thead>
+                                <tr>
+                                    <th>
+                                        No.
+                                    </th>
+                                    <th>
+                                        Port
+                                    </th>
+                                    <th>
+                                        Start Time
+                                    </th>
+                                    <th>
+                                        End Time
+                                    </th>
+                                    <th>
+                                        Activity 
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="{{ (port_details.port_status == 1) ? 'current-port' : '' }}" ng-repeat="(port_key,port_details) in vm.markerDetails.vesselInfo.port_calls track by $index">
+                                    <td class="name">
+                                        {{ port_key+1 }}
+                                    </td>
+                                    <td class="name">
+                                        {{ port_details.port_name }}
+                                    </td>
+                                    <td class="name">
+                                        {{ port_details.arrival }}
+                                    </td>
+                                    <td class="name">
+                                        {{ port_details.departure }}
+                                    </td>
+                                    <td class="name">
+                                        {{ port_details.activity }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="port-calls" ng-show="(vm.markerDetails.vesselInfo.port_calls.length == 0 || vm.loadingProgress)" ng-cloak>
+                        <h2 align="center" class="ng-cloak no-record">No Port Calls Found.</h2>
+                    </div>
+                </md-content>
+            </md-tab>
+            <md-tab label="Alert" md-on-select="vm.onTabChanges(3)">
+                <md-content>
+                    <div class="loader-wrapper" layout-xs="column" layout="row" ng-show="vm.loadingProgress" layout-align="center center" flex>
+                        <md-progress-circular  md-mode="indeterminate" class="md-warn" md-diameter="60"></md-progress-circular>
+                    </div>
+                    <div calss="alert-calls table-wrapper" ng-hide="((vm.markerAlerts.length == 0 && vm.markerDetails.vesselInfo.is_ais_vessel == false && !vm.loadingProgress) || vm.markerDetails.vesselInfo.is_ais_vessel == true)" ng-cloak>
+                        <table class="simple table-data-right" ms-responsive-table>
+                            <thead>
+                                <tr>
+                                    <th>
+                                        No.
+                                    </th>
+                                    <th>
+                                        Port
+                                    </th>
+                                    <th>
+                                        Start Time
+                                    </th>
+                                    <th>
+                                        End Time
+                                    </th>
+                                    <th>
+                                        Alert Type 
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="(alert_ket,alert_details) in vm.markerAlerts track by $index">
+                                    <td class="name">
+                                        {{ alert_ket+1 }}
+                                    </td>
+                                    <td class="name">
+                                        {{ alert_details.port_name }}
+                                    </td>
+                                    <td class="name">
+                                        {{ alert_details.arrival }}
+                                    </td>
+                                    <td class="name">
+                                        {{ alert_details.departure }}
+                                    </td>
+                                    <td class="name">
+                                        {{ alert_details.activity }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="alert-calls table-wrapper" ng-show="((vm.markerAlerts.length == 0 && vm.markerDetails.vesselInfo.is_ais_vessel == false && !vm.loadingProgress) || vm.markerDetails.vesselInfo.is_ais_vessel == true)" ng-cloak>
+                        <h2 align="center" class="no-record">No Alerts Found.</h2>
+                    </div>
+                </md-content>
+            </md-tab>
+            <md-tab ng-click="vm.closeDialog()">
+                <md-tab-label>
+                    <md-icon md-font-icon="icon-close" aria-label="Close dialog"></md-icon>
+                </md-tab-label>
+          </md-tab>
+        </md-tabs>            
+    </md-dialog-content>
+
+</md-dialog>

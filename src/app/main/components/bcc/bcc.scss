@@ -1,0 +1,25 @@
+.content {
+    .graph-container{
+    	width:100%;
+    	margin:0 auto;
+    }
+}
+#bcc-chartering{
+    .grouped_first_row .not-a-firstchild {
+        text-align: right;
+        color: #424242;
+        font-size: 16px;
+        font-weight: 400;
+    }
+    .month-center-align tbody tr:nth-child(1) td:nth-child(2) {
+        text-align: center;
+        font-weight: 500;
+    }
+    .month-center-align tbody tr:nth-child(n+2) td:nth-child(1) {
+        text-align: center;
+        font-weight: 500;
+    }
+}
+.table-data table thead th{
+    text-transform: capitalize;
+}

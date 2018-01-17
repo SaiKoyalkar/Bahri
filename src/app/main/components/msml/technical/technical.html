@@ -1,0 +1,204 @@
+<div id="msml-technical-performance" class="page-layout simple fullwidth doc-page chart-doc-page">
+
+    <!-- HEADER -->
+   <div class="md-accent-bg header-msml-bg" layout="row" layout-align="space-between">
+        <div layout="row" layout-align="start start" flex-xs="15" flex-sm="6" flex="6" hide-gt-sm>
+            <md-button id="navigation-toggle" class="md-icon-button" ng-click="vm.toggleSidenav('navigation')"
+                        aria-label="Toggle navigation" translate
+                       translate-attr-aria-label="TOOLBAR.TOGGLE_NAVIGATION">
+                <md-icon md-font-icon="icon-menu" class="icon"></md-icon>
+            </md-button>
+        </div>
+        <div class="ph-10" layout="column" layout-align="start start" layout-wrap flex>
+            <div class="title">Mideast Technical Performance</div>
+            <div class="description">Last updated on: {{vm.date | date: 'dd/MM/yyyy HH:mm:ss'}}</div>
+        </div>
+        <div layout="row" layout-align="end center" layout-wrap flex>
+            <md-menu-bar id="user-menu">
+                <md-menu md-position-mode="left bottom">
+                    <md-button class="user-menu-button" ng-click="$mdOpenMenu()"
+                               aria-label="User settings"
+                               translate translate-attr-aria-label="TOOLBAR.USER_SETTINGS">
+                        <div layout="row" layout-align="space-between center">
+                            <span class="username">{{ vm.username }}</span>
+                            <md-icon md-font-icon="icon-chevron-down"
+                                     class="icon s16"></md-icon>
+                        </div>
+                    </md-button>
+
+                    <md-menu-content width="3">
+                        <md-menu-item class="md-indent">
+                            <md-icon md-font-icon="icon-logout" class="icon"></md-icon>
+                            <md-button ng-click="vm.logout()">Logout</md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+            </md-menu-bar>
+        </div>
+    </div>
+    <!-- / HEADER -->
+
+    <!-- TOOLBAR -->
+    <md-toolbar id="toolbar" class="md-menu-toolbar md-whiteframe-1dp ng-scope _md md-default-theme toolbar-header">
+        <div layout="row" layout-xs="row" layout-align="start center" style="min-height:64px">
+            
+            <div class="ph-5" flex="100" layout-xs="row">
+                <div layout="row" layout-xs="column" layout-align="end center">
+                    <md-button id="navigation-toggle" class="md-icon-button btn-filter" ng-click="vm.showAdvanced($event)"
+                                aria-label="Filter Vessel">
+                        <md-icon md-font-icon="icon-filter" class="icon filter-icon"></md-icon>
+                    </md-button>
+
+                    <md-select name="duration" class="simplified font-size-16 change-duration" ng-model="vm.currentDuration" aria-label="Change Duration" ng-change="vm.changeDuration()">
+                        <md-option class="duration-options" ng-repeat="(key, range) in vm.durations"
+                             value="{{key}}" ng-selected="$first">
+                            {{range}}
+                        </md-option>
+                    </md-select>
+                </div>
+            </div>
+        </div>
+    </md-toolbar>
+    
+    <!-- / TOOLBAR -->
+
+    <!-- CONTENT -->
+    <md-progress-linear md-mode="indeterminate" ng-show="vm.loadingProgress" class="md-warn"></md-progress-linear>
+    <div class="content" ng-hide="vm.loadingProgress">
+        <div class="graph-data" ng-show="vm.dataGraphView">  
+
+            <div class="card-wrapper" layout="row" layout-wrap>
+
+                <div class="ph-5 card-block" flex-xs="100" flex-sm="100" flex-md="50" flex="50">
+                    <div class="md-whiteframe-4dp">
+                        <div class="card card-header">
+                            <div class="md-title graph-title">
+                                Bulk Carrier
+                                <span class="export">
+                                    <md-select name="duration" class="simplified font-size-16 change-duration" ng-model="vm.currentExportOption" aria-label="Export Graph" ng-change="vm.exportData('bulk-carrier-container','Bulk Carrier')">
+                                        <md-option class="duration-options" ng-repeat="(key, range) in vm.exportGraphOptions"
+                                             value="{{key}}" ng-selected="$first">
+                                            {{range}}
+                                        </md-option>
+                                    </md-select>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card md-card-margin-top-bottom-none">
+                            <div id="bulk-carrier-container" class="graph-container"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ph-5 card-block" flex-xs="100" flex-sm="100" flex-md="50" flex="50">
+                    <div class="md-whiteframe-4dp">
+                        <div class="card card-header">
+                            <div class="md-title graph-title">
+                                Chemical Product Tanker
+                                <span class="export">
+                                    <md-select name="duration" class="simplified font-size-16 change-duration" ng-model="vm.currentExportOption" aria-label="Export Graph" ng-change="vm.exportData('chemical-product-tanker-container','Chemical Product Tanker')">
+                                        <md-option class="duration-options" ng-repeat="(key, range) in vm.exportGraphOptions"
+                                             value="{{key}}" ng-selected="$first">
+                                            {{range}}
+                                        </md-option>
+                                    </md-select>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card md-card-margin-top-bottom-none">
+                            <div id="chemical-product-tanker-container" class="graph-container"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ph-5 card-block" flex-xs="100" flex-sm="100" flex-md="50" flex="50">
+                    <div class="md-whiteframe-4dp">
+                        <div class="card card-header">
+                            <div class="md-title graph-title">
+                                Chemical Tanker
+                                <span class="export">
+                                    <md-select name="duration" class="simplified font-size-16 change-duration" ng-model="vm.currentExportOption" aria-label="Export Graph" ng-change="vm.exportData('chemical-tanker-container','Chemical Tanker')">
+                                        <md-option class="duration-options" ng-repeat="(key, range) in vm.exportGraphOptions"
+                                             value="{{key}}" ng-selected="$first">
+                                            {{range}}
+                                        </md-option>
+                                    </md-select>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card md-card-margin-top-bottom-none">
+                            <div id="chemical-tanker-container" class="graph-container"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ph-5 card-block" flex-xs="100" flex-sm="100" flex-md="50" flex="50">
+                    <div class="md-whiteframe-4dp">
+                        <div class="card card-header">
+                            <div class="md-title graph-title">
+                                Crude Oil Tanker
+                                <span class="export">
+                                    <md-select name="duration" class="simplified font-size-16 change-duration" ng-model="vm.currentExportOption" aria-label="Export Graph" ng-change="vm.exportData('crude-oil-tanker-container','Crude Oil Tanker')">
+                                        <md-option class="duration-options" ng-repeat="(key, range) in vm.exportGraphOptions"
+                                             value="{{key}}" ng-selected="$first">
+                                            {{range}}
+                                        </md-option>
+                                    </md-select>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card md-card-margin-top-bottom-none">
+                            <div id="crude-oil-tanker-container" class="graph-container"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ph-5 card-block" flex-xs="100" flex-sm="100" flex-md="50" flex="50">
+                    <div class="md-whiteframe-4dp">
+                        <div class="card card-header">
+                            <div class="md-title graph-title">
+                                Product Tanker
+                                <span class="export">
+                                    <md-select name="duration" class="simplified font-size-16 change-duration" ng-model="vm.currentExportOption" aria-label="Export Graph" ng-change="vm.exportData('product-tanker-container','Product Tanker')">
+                                        <md-option class="duration-options" ng-repeat="(key, range) in vm.exportGraphOptions"
+                                             value="{{key}}" ng-selected="$first">
+                                            {{range}}
+                                        </md-option>
+                                    </md-select>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card md-card-margin-top-bottom-none">
+                            <div id="product-tanker-container" class="graph-container"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ph-5 card-block" flex-xs="100" flex-sm="100" flex-md="50" flex="50">
+                    <div class="md-whiteframe-4dp">
+                        <div class="card card-header">
+                            <div class="md-title graph-title">
+                                Ro-Ro
+                                <span class="export">
+                                    <md-select name="duration" class="simplified font-size-16 change-duration" ng-model="vm.currentExportOption" aria-label="Export Graph" ng-change="vm.exportData('ro-ro-container','Ro Ro')">
+                                        <md-option class="duration-options" ng-repeat="(key, range) in vm.exportGraphOptions"
+                                             value="{{key}}" ng-selected="$first">
+                                            {{range}}
+                                        </md-option>
+                                    </md-select>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card md-card-margin-top-bottom-none">
+                            <div id="ro-ro-container" class="graph-container"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    <!-- / CONTENT -->
+
+</div>

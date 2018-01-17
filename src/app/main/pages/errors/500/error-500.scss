@@ -1,0 +1,40 @@
+#content{
+    background-color: #FFFFFF;
+}
+#error-500 {
+    background-color: #FFFFFF;
+
+    .content {
+        width: 90%;
+        max-width: 512px;
+        margin-top: 128px;
+
+        .error-code {
+            font-size: 112px;
+            line-height: 1;
+            text-align: center;
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+
+        .message {
+            font-size: 30px;
+            font-weight: 500;
+            color: #FF6600;   
+            text-align: center;
+            /*color: rgba(0, 0, 0, 0.54);*/
+        }
+
+        .sub-message {
+            font-size: 17px;
+            text-align: center;
+            color: rgba(0, 0, 0, 0.54);
+            margin: 15px auto 15px auto;
+        }
+
+        .back-link {
+            text-align: center;
+            font-size: 15px;
+        }
+    }
+}

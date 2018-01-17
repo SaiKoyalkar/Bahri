@@ -1,0 +1,174 @@
+<md-dialog class="commodity-dialog" aria-label="Filter">
+    <form name="filterForm" class="md-inline-form" novalidate ng-submit="vm.submit()">
+        <md-toolbar class="md-accent md-hue-2">
+            <div class="md-toolbar-tools filter-header" layout="row" layout-align="space-between">
+                <span class="title">Filter</span>
+                <md-button class="md-icon-button" ng-click="vm.closeDialog()">
+                    <md-icon md-font-icon="icon-close" aria-label="Close dialog"></md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content ms-scroll>
+
+            <div class="loader-wrapper" layout-xs="column" layout="row" ng-show="vm.loadingProgress" layout-align="center center" flex>
+                <md-progress-circular  md-mode="indeterminate" class="md-warn" md-diameter="80"></md-progress-circular>
+            </div>
+
+            <div layout-align="start start" layout="row" layout-md="row" layout-sm="column" layout-xs="column" ng-hide="vm.loadingProgress" ng-cloak flex>
+
+
+                <div layout-xs="column" layout="column" layout-sm="column" layout-xs="column" flex="100">
+                    <div class="filter-autocomplete" layout="column" layout-wrap>
+
+                        <md-autocomplete flex class="md-block"
+                            md-input-name="import_country_name"
+                            md-input-minlength="2"
+                            md-no-cache="vm.noCache"
+                            md-selected-item="vm.import_country_name"
+                            md-search-text="vm.searchImportCountryText"
+                            md-items="item in vm.queryImportCountrySearch('import_country',vm.searchImportCountryText)"
+                            md-item-text="item.display"
+                            md-require-match
+                            md-floating-label="Import Country">
+                        <md-item-template>
+                            <span md-highlight-text="vm.searchImportCountryText">{{item.display}}</span>
+                        </md-item-template>
+                        <div ng-messages="filterForm.import_country_name.$error" ng-if="filterForm.import_country_name.$touched">
+                            <div ng-message="minlength">Your entry is not long enough.</div>
+                          </div>
+                        </md-autocomplete>
+
+
+                        <md-autocomplete flex class="md-block"
+                            md-input-name="import_port"
+                            md-input-minlength="2"
+                            md-no-cache="vm.noCache"
+                            md-selected-item="vm.import_port"
+                            md-search-text="vm.searchImportPortText"
+                            md-items="item in vm.queryImportPortSearch('import_port',vm.searchImportPortText)"
+                            md-item-text="item.display"
+                            md-require-match
+                            md-floating-label="Import Port">
+                        <md-item-template>
+                            <span md-highlight-text="vm.searchImportPortText">{{item.display}}</span>
+                        </md-item-template>
+                        <div ng-messages="filterForm.import_port.$error" ng-if="filterForm.import_port.$touched">
+                            <div ng-message="minlength">Your entry is not long enough.</div>
+                          </div>
+                        </md-autocomplete>
+
+                        <md-autocomplete flex class="md-block"
+                            md-input-name="export_country_name"
+                            md-input-minlength="2"
+                            md-no-cache="vm.noCache"
+                            md-selected-item="vm.export_country_name"
+                            md-search-text="vm.searchExportCountryText"
+                            md-items="item in vm.queryExportCountrySearch('export_country',vm.searchExportCountryText)"
+                            md-item-text="item.display"
+                            md-require-match
+                            md-floating-label="Export Country">
+                        <md-item-template>
+                            <span md-highlight-text="vm.searchExportCountryText">{{item.display}}</span>
+                        </md-item-template>
+                        <div ng-messages="filterForm.export_country_name.$error" ng-if="filterForm.export_country_name.$touched">
+                            <div ng-message="minlength">Your entry is not long enough.</div>
+                          </div>
+                        </md-autocomplete>
+
+
+                        <md-autocomplete flex class="md-block"
+                            md-input-name="export_port"
+                            md-input-minlength="2"
+                            md-no-cache="vm.noCache"
+                            md-selected-item="vm.export_port"
+                            md-search-text="vm.searchExportPortText"
+                            md-items="item in vm.queryExportPortSearch('export_port',vm.searchExportPortText)"
+                            md-item-text="item.display"
+                            md-require-match
+                            md-floating-label="Export Port">
+                        <md-item-template>
+                            <span md-highlight-text="vm.searchExportPortText">{{item.display}}</span>
+                        </md-item-template>
+                        <div ng-messages="filterForm.export_port.$error" ng-if="filterForm.export_port.$touched">
+                            <div ng-message="minlength">Your entry is not long enough.</div>
+                          </div>
+                        </md-autocomplete>
+
+                        <md-input-container flex class="draft-method-select">
+                            <label>Draft Methods</label>
+                            <md-select ng-model="vm.currentDraftMethod">
+                                <md-option ng-repeat="(key,value) in vm.draftMethods" value="{{key}}">
+                                    {{value}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+
+                        <md-input-container flex>
+                            <label>Period</label>
+                            <md-select ng-model="vm.currentPeriod">
+                                <md-option ng-repeat="(key,value) in vm.periods" value="{{key}}">
+                                    {{value}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+
+                        <md-input-container flex>
+                            <label>Utilization</label>
+                            <md-select ng-model="vm.currentUtilization">
+                                <md-option ng-repeat="(key,value) in vm.sailingStatus" value="{{key}}">
+                                    {{value}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+
+                    </div>
+                    <div flex="100" layout="row" layou-wrap flex>
+
+                        <div layout="column" flex="50" ng-repeat="(item_key,item) in vm.items track by $index">
+                            <div flex-xs flex="50">
+                                <md-checkbox aria-label="{{item.title}}"
+                                             ng-checked="vm.isChecked(item_key)"
+                                             md-indeterminate="vm.isIndeterminate(item_key)"
+                                             ng-click="vm.toggleAll(item_key)">
+                                    <span class="commodity-text">{{item.title}}</span>
+                                </md-checkbox>
+                            </div>
+                            <div class="demo-select-all-checkboxes ph-20" flex="100" ng-repeat="(vessel_size_key,vessel_size) in item.values track by $index">
+                                <md-checkbox aria-label="{{(item.title != '') ? item.title : 'Vessel Size'}}" ng-hide="(vessel_size == '')" ng-checked="vm.exists(vessel_size, vm.selected,item_key)" ng-click="vm.toggle(vessel_size, vm.selected,item_key)" ng-disabled="vm.disabledCategories[item_key]">
+                                    {{vessel_size}}
+                                </md-checkbox>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row" layout-align="space-between center">
+            <div layout="row" layout-align="start center">
+                <!-- <md-button type="submit"
+                           class="send-button md-button-orange md-raised"
+                           ng-disabled="taskForm.$invalid || taskForm.$pristine || vm.loadingProgress || (vm.filterForm.categories.length == 0)"
+                           aria-label="Apply">
+                    Apply
+                </md-button> -->
+                <md-button type="submit"
+                           class="send-button md-button-orange md-raised"
+                           ng-disabled="taskForm.$invalid || taskForm.$pristine || vm.loadingProgress"
+                           aria-label="Apply">
+                    Apply
+                </md-button>
+                <md-button type="reset"  class="md-raised" aria-label="Cancel">
+                    Reset
+                </md-button>
+                <md-button type="button" ng-click="vm.closeDialog()" class="md-raised" aria-label="Cancel">
+                    Cancel
+                </md-button>
+            </div>
+        </md-dialog-actions>
+
+    </form>
+</md-dialog>

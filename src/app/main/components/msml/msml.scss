@@ -1,0 +1,66 @@
+.content {
+    .graph-container{
+    	width:100%;
+    	margin:0 auto;
+    }
+}
+
+#msml-technical-performance{
+	.btn-filter{
+	    cursor: pointer;
+	}
+	md-icon.filter-icon{
+	    color: #ff6600;
+	}
+}
+#msml-operational{
+    .grouped_first_row table.table-data-left tbody td{
+        font-size: 12px;
+        text-align: left;
+    }
+    .grouped_first_row table.table-data-left tbody tr td:first-child{
+        font-size: 12px;
+    }
+    .grouped_first_row table.table-data-left thead th{
+    	font-size: 14px !important;
+    	font-weight: 500;
+    }
+    .grouped_first_row table.table-data-left thead tr:first-child th:first-child {
+        width: 264px;
+        color: #000 !important;
+        font-size: 14px !important;
+        font-weight: 500;
+        text-align: center;
+        height: 92px;
+        background-color: #FFF;
+        border-right: 1px solid rgba(0, 0, 0, 0.12);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    }
+    .calendar table tbody td{ 
+        border: 1px solid #CCC;
+        text-align:center;
+    }
+    .calendar table thead tr{
+    border: 1px solid #FFF;
+    background-color: #CCC;
+    }
+    .calendar table thead tr:first-child{
+        background-color: #09486b;
+        color: #FFF;
+        text-align:center;
+    }
+    .calendar table{
+        width: 100%;
+        height: 100%;
+    }
+    .calendar md-input-container.md-default-theme:not(.md-input-invalid).md-input-has-value label, md-input-container:not(.md-input-invalid).md-input-has-value label {
+        color: #000;
+        font-size: 18px;
+        min-width: 200px;
+    }
+    .calendar .card.card-header {
+        margin: 10px !important;
+        border-bottom: 1px solid #E0E0E0;
+        padding: 0px;
+    }
+}

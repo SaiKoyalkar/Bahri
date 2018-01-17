@@ -1,0 +1,70 @@
+<md-dialog class="task-dialog" aria-label="Filter">
+    <form name="filterForm" class="md-inline-form" novalidate ng-submit="vm.submit()">
+        <md-toolbar class="md-accent md-hue-2">
+            <div class="md-toolbar-tools filter-header" layout="row" layout-align="space-between">
+                <span class="title">Filter</span>
+                <md-button class="md-icon-button" ng-click="vm.closeDialog()">
+                    <md-icon md-font-icon="icon-close" aria-label="Close dialog"></md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content ms-scroll>
+
+            <div class="loader-wrapper" layout-xs="column" layout="row" ng-show="vm.loadingProgress" layout-align="center center" flex>
+                <md-progress-circular  md-mode="indeterminate" class="md-warn" md-diameter="80"></md-progress-circular>
+            </div>
+
+
+            <div layout-xs="column" layout="row" ng-hide="vm.loadingProgress" ng-cloak>
+                <div layout="column" flex="50" layout-wrap>
+                    <div ng-repeat="item in vm.items">
+                      <md-checkbox class="margin-5" ng-checked="vm.exists(item, vm.selected)" ng-click="vm.toggle(item, vm.selected)">
+                        {{ item.fleet_name }}
+                      </md-checkbox>
+                    </div>
+                </div>
+                <div layout="column" flex="50" ng-hide="vm.loadingProgress" ng-init="vm.loadingProgress = true" ng-cloak>
+                    <md-autocomplete flex class="md-block"
+                        md-input-name="port_name"
+                        md-input-minlength="2"
+                        md-no-cache="vm.noCache"
+                        md-selected-item="vm.port_name"
+                        md-search-text="vm.searchText"
+                        md-items="item in vm.querySearch(vm.searchText)"
+                        md-item-text="item.display"
+                        md-require-match
+                        md-floating-label="Port">
+                    <md-item-template>
+                        <span md-highlight-text="vm.searchText">{{item.display}}</span>
+                    </md-item-template>
+                    <div ng-messages="filterForm.port_name.$error" ng-if="filterForm.port_name.$touched">
+                        <div ng-message="md-require-match">Please select an existing port name.</div>
+                        <div ng-message="minlength">Your entry is not long enough.</div>
+                      </div>
+                    </md-autocomplete>
+                    <div flex class="date-container">
+                        <label>ETA</label>
+                        <md-datepicker ng-model="vm.date" md-placeholder="ETA" md-current-view="year"></md-datepicker>
+                    </div>
+                </div>
+            </div>
+
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row" layout-align="space-between center">
+            <div layout="row" layout-align="start center">
+                <md-button type="submit"
+                           class="send-button md-button-orange md-raised"
+                           ng-disabled="taskForm.$invalid || taskForm.$pristine || vm.loadingProgress || (vm.filterForm.categories.length == 0)"
+                           aria-label="Apply">
+                    Apply
+                </md-button>
+                <md-button type="button" ng-click="vm.closeDialog()" class="md-raised" aria-label="Cancel">
+                    Cancel
+                </md-button>
+            </div>
+        </md-dialog-actions>
+
+    </form>
+</md-dialog>

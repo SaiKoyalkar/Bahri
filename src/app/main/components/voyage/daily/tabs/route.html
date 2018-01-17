@@ -1,0 +1,53 @@
+<div class="md-whiteframe-4dp">
+    <ui-gmap-google-map center="vm.satelliteMap.center" zoom="vm.satelliteMap.zoom" options="vm.satelliteMap.options">
+    <ui-gmap-polyline ng-repeat="p in vm.polylines" path="p.path" stroke="p.stroke" visible='p.visible' geodesic='p.geodesic' fit="false"
+        editable="p.editable" draggable="p.draggable" icons='p.icons'></ui-gmap-polyline>
+</ui-gmap-google-map>
+
+
+    <div flex="100" class="port-calls table-wrapper route-table" ng-hide="(vm.loadingProgress)">
+        <table class="simple table-data-right" ms-responsive-table>
+            <thead>
+                <tr>
+                    <th>
+                        No.
+                    </th>
+                    <th>
+                        Port
+                    </th>
+                    <th>
+                        Start Time
+                    </th>
+                    <th>
+                        End Time
+                    </th>
+                    <th>
+                        Activity
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="{{ (port_details.port_status == 1) ? 'current-port' : '' }}" ng-repeat="(port_key,port_details) in vm.portCalls track by $index">
+                    <td class="name">
+                        {{ port_key+1 }}
+                    </td>
+                    <td class="name">
+                        {{ port_details.port_name }}
+                    </td>
+                    <td class="name">
+                        {{ port_details.arrival }}
+                    </td>
+                    <td class="name">
+                        {{ port_details.departure }}
+                    </td>
+                    <td class="name">
+                        {{ port_details.activity }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="port-calls" ng-show="(vm.portCalls.length == 0)">
+            <h2 align="center" class="ng-cloak no-record">No Port Calls Found.</h2>
+        </div>
+    </div>
+</div>

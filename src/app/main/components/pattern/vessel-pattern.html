@@ -1,0 +1,116 @@
+<div id="vessel-pattern" class="page-layout simple tabbed doc-page" layout="column">
+
+    <!-- HEADER -->
+    <div class="md-accent-bg header-vessel-bg" layout="row" layout-align="space-between">
+        <div layout="row" layout-align="start start" flex-xs="15" flex-sm="6" flex="6" hide-gt-sm>
+            <md-button id="navigation-toggle" class="md-icon-button" ng-click="vm.toggleSidenav('navigation')"
+                        aria-label="Toggle navigation" translate
+                       translate-attr-aria-label="TOOLBAR.TOGGLE_NAVIGATION">
+                <md-icon md-font-icon="icon-menu" class="icon"></md-icon>
+            </md-button>
+        </div>
+        <div class="ph-10" layout="column" layout-align="start start" layout-wrap flex>
+            <div class="title">Vessel Trade Pattern</div>
+            <div class="description">
+                Last updated on: {{vm.date | date: 'dd/MM/yyyy HH:mm:ss'}}
+            </div>
+        </div>
+        <div layout="row" layout-align="end center" layout-wrap flex>
+            <md-menu-bar id="user-menu">
+                <md-menu md-position-mode="left bottom">
+                    <md-button class="user-menu-button" ng-click="$mdOpenMenu()"
+                               aria-label="User settings"
+                               translate translate-attr-aria-label="TOOLBAR.USER_SETTINGS">
+                        <div layout="row" layout-align="space-between center">
+                            <span class="username">{{ vm.username }}</span>
+                            <md-icon md-font-icon="icon-chevron-down"
+                                     class="icon s16"></md-icon>
+                        </div>
+                    </md-button>
+
+                    <md-menu-content width="3">
+                        <md-menu-item class="md-indent">
+                            <md-icon md-font-icon="icon-logout" class="icon"></md-icon>
+                            <md-button ng-click="vm.logout()">Logout</md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+            </md-menu-bar>
+        </div>
+    </div>
+    <!-- / HEADER -->
+
+    <!-- TOOLBAR -->
+    <md-toolbar id="toolbar" class="md-menu-toolbar md-whiteframe-4dp ng-scope _md md-default-theme toolbar-header">
+        <div class="ph-5" layout="row" layout-xs="row" layout-align="end center" style="min-height:64px">
+            <div>
+                <md-button id="navigation-toggle" class="md-icon-button btn-filter" ng-click="vm.showAdvanced($event)"
+                            aria-label="Filter Vessel" ng-show="!vm.loadingProgress">
+                    <md-icon md-font-icon="icon-filter" class="icon filter-icon"></md-icon>
+                </md-button>
+            </div>
+        </div>
+
+    </md-toolbar>
+    <!-- / TOOLBAR -->
+
+    <!-- CONTENT -->
+    <md-progress-linear md-mode="indeterminate" ng-show="vm.loadingProgress" class="md-warn"></md-progress-linear>
+    <div class="content">
+
+        <md-content ui-view="tabContent" flex class="card md-whiteframe-4dp"></md-content>
+    
+        <div class="ph-15 card-wrapper" layout="row" layout-wrap>
+            <div class="card-block" flex-xs="100" flex-sm="100" flex-md="100" flex="100">
+
+                <div class="card-wrapper" layout="row">
+                    <div class="ph-5 card-block overview-header" flex="100">
+                        <div class="md-whiteframe-4dp">
+                            <div class="md-title">
+                                VLCC Average Load to Discharge TCE Prediction for Global Fleet on various Trade Routes
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-wrapper" layout="row" layout-wrap layout-align="left">
+
+                    <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="20" ng-repeat="tradeArea in vm.marketPrediction">
+                        <div class="md-whiteframe-4dp">
+                            <div class="card small-card-header {{ tradeArea.background }}-box">
+                                <div class="md-title small-card-title">
+                                    {{ tradeArea.name }}
+                                </div>
+                            </div>
+                            <div class="card small-card-header-content {{ tradeArea.background }}-box-gradient">
+                                <div class="large-content">
+                                    <div ng-hide="tradeArea.content == 'NA'" class="icon-thumbs-{{ tradeArea.content }}"></div>
+                                    <div ng-hide="tradeArea.content == 'NA'" class="vessel-trade-percentage">
+                                            {{ tradeArea.percentage }} %
+                                        </div>
+                                    <span ng-show="tradeArea.content == 'NA'">
+                                        Not Available
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<style type="text/css">
+angular-google-map-container{
+    height: 100%;
+}
+/* angular-google-map-container{
+    position: absolute !important;
+    height: 100%;
+    width: 100%;
+}
+#map_canvas img { max-width: none !important; } */
+</style>

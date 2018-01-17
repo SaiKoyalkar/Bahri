@@ -1,0 +1,154 @@
+<div id="msml-financial" class="page-layout simple fullwidth doc-page chart-doc-page">
+
+    <!-- HEADER -->
+    <div class="md-accent-bg header-msml-bg" layout="row" layout-align="space-between">
+        <div layout="column" layout-align="center start">
+            <div class="title">Mideast Financial Performance</div>
+            <div class="description">Last updated on: 5/16/2016, 11:09:43 AM</div>
+        </div>
+    </div>
+    <!-- / HEADER -->
+
+    <!-- TOOLBAR -->
+    <md-toolbar id="toolbar" class="md-menu-toolbar md-whiteframe-1dp ng-scope _md md-default-theme toolbar-header">
+        <div layout="row" layout-xs="row" layout-align="start center" style="min-height:64px">
+            <div class="ph-16" flex layout-align="center center" layout-xs="column">
+                <md-button id="btn-graph" class="md-button-data-view md-raised active md-button md-default-theme md-ink-ripple" ng-click="vm.setGraphView()"> 
+                    Graph View 
+                </md-button>
+                <md-button id="btn-table" class="md-button-data-view md-raised md-button md-default-theme md-ink-ripple" ng-click="vm.setTableView()"> 
+                    Tabular View 
+                </md-button>
+            </div>
+            <div class="ph-16" flex layout-xs="column">
+                <div layout="row" layout-xs="column" layout-align="end center">
+                    <md-select name="duration" class="simplified font-size-16 change-duration" ng-model="vm.currentDuration" aria-label="Change Duration" ng-change="vm.changeDuration()">
+                        <md-option class="duration-options" ng-repeat="(key, range) in vm.durations"
+                             value="{{key}}" ng-selected="$first">
+                            {{range}}
+                        </md-option>
+                    </md-select>
+                </div>
+            </div>
+        </div>
+    </md-toolbar>
+    
+    <!-- / TOOLBAR -->
+
+    <!-- CONTENT -->
+    <div class="content">
+        <div class="graph-data" ng-show="vm.dataGraphView">  
+            <div class="md-whiteframe-4dp">
+                <div class="card card-header">
+                    <div class="md-title graph-title">Key Mideast Expense Per Day</div>
+                </div>
+                <div class="card md-card-margin-top-none">
+                    <div id="key-mideast-expense-container" style="width:100%;margin:0 auto;"></div>
+                </div>
+            </div>
+
+            <div class="md-whiteframe-4dp">
+                <div class="card card-header">
+                    <div class="md-title graph-title">VLCC Expense Per Day</div>
+                </div>
+                <div class="card md-card-margin-top-none">
+                    <div id="vlcc-expense-container" style="width:100%;margin:0 auto;"></div>
+                </div>
+            </div>
+
+            <div class="md-whiteframe-4dp">
+                <div class="card card-header">
+                    <div class="md-title graph-title">MR Expense Per Day</div>
+                </div>
+                <div class="card md-card-margin-top-none">
+                    <div id="mr-expense-container" style="width:100%;margin:0 auto;"></div>
+                </div>
+            </div>
+
+            <div class="md-whiteframe-4dp">
+                <div class="card card-header">
+                    <div class="md-title graph-title">Dry Bulk Expense Per Day</div>
+                </div>
+                <div class="card md-card-margin-top-none">
+                    <div id="drybulk-expense-container" style="width:100%;margin:0 auto;"></div>
+                </div>
+            </div>
+
+            <div class="md-whiteframe-4dp">
+                <div class="card card-header">
+                    <div class="md-title graph-title">RoCons Expense Per Day</div>
+                </div>
+                <div class="card md-card-margin-top-none">
+                    <div id="rocons-expense-container" style="width:100%;margin:0 auto;"></div>
+                </div>
+            </div>
+
+            <div class="md-whiteframe-4dp">
+                <div class="card card-header">
+                    <div class="md-title graph-title">Chemical Expense Per Day</div>
+                </div>
+                <div class="card md-card-margin-top-none">
+                    <div id="chemical-expense-container" style="width:100%;margin:0 auto;"></div>
+                </div>
+            </div>
+
+            <div class="md-whiteframe-4dp">
+                <div class="card card-header">
+                    <div class="md-title graph-title">Chemical Product Expense Per Day</div>
+                </div>
+                <div class="card md-card-margin-top-none">
+                    <div id="chemical-product-expense-container" style="width:100%;margin:0 auto;"></div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="table-data" ng-show="!(vm.dataGraphView)">
+            <div class="md-whiteframe-4dp">
+                <div class="card card-header">
+                    <div class="md-title graph-title">Key Mideast Expense Per Day</div>
+                </div>
+                <div class="card md-card-margin-top-none" style="padding:0">
+                    <table class="simple table-data" ms-responsive-table>
+                        <thead>
+                            <tr>
+                                <th ng-repeat="category in vm.categories">{{category}}</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr ng-repeat="y in vm.series track by $index">
+                                <td class="name" ng-repeat="x in y track by $index">{{x}}</td>
+                            </tr>
+                        </tbody>
+                    </table>  
+                </div>
+            </div>
+
+            <div class="md-whiteframe-4dp">
+                <div class="card card-header">
+                    <div class="md-title graph-title">Average Ship Running Expense Per Day</div>
+                </div>
+                <div class="card md-card-margin-top-none" style="padding:0">
+                    <table class="simple table-data" ms-responsive-table>
+                        <thead>
+                            <tr>
+                                <th ng-repeat="category in vm.avg_ship_categories">{{category}}</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr ng-repeat="y in vm.avg_ship_series track by $index">
+                                <td class="name" ng-repeat="x in y track by $index">{{x}}</td>
+                            </tr>
+                        </tbody>
+                    </table>  
+                </div>
+            </div>
+        </div>
+
+        
+    </div>
+    <!-- / CONTENT -->
+
+</div>

@@ -1,0 +1,42 @@
+<md-dialog class="search-fleet-dialog" aria-label="Filter">
+    <form name="filterForm" class="md-inline-form" novalidate ng-submit="vm.submit()">
+        <md-toolbar class="md-accent md-hue-2">
+            <div class="md-toolbar-tools filter-header header-box-shadow" layout="row" layout-align="space-between">
+                <span class="title">Select Vessel</span>
+                <md-button class="md-icon-button" ng-click="vm.closeDialog()">
+                    <md-icon md-font-icon="icon-close" aria-label="Close dialog"></md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content ms-scroll>
+
+            <div layout-xs="column" layout="row" ng-show="vm.loadingProgress" layout-align="center center" flex>
+                <md-progress-circular  md-mode="indeterminate" class="md-warn" md-diameter="80"></md-progress-circular>
+            </div>
+
+            <md-select name="duration" class="simplified font-size-16 change-duration" ng-model="vm.currentVessel" aria-label="Select Fleets" ng-hide="vm.loadingProgress">
+                <md-option class="duration-options" ng-repeat="(key, range) in vm.units"
+                     value="{{range.unit_id}}" ng-selected="$first">
+                    {{range.unit_name}}
+                </md-option>
+            </md-select>
+
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row" layout-align="space-between center">
+            <div layout="row" layout-align="start center">
+                <md-button type="submit"
+                           class="send-button md-button-orange md-raised"
+                           ng-disabled="taskForm.$invalid || taskForm.$pristine || vm.loadingProgress"
+                           aria-label="Apply">
+                    Apply
+                </md-button>
+                <md-button type="button" ng-click="vm.closeDialog()" class="md-raised" aria-label="Cancel">
+                    Cancel
+                </md-button>
+            </div>
+        </md-dialog-actions>
+
+    </form>
+</md-dialog>

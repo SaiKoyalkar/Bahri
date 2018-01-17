@@ -1,0 +1,127 @@
+md-dialog {
+
+    &.tooltip-dialog {
+        max-width: 720px;
+        width: 720px;
+
+        md-dialog-content {
+            display: block;
+            position: relative;
+            min-height: 256px;
+            padding: 0;
+        }
+
+        .dialogdemoBasicUsage div#status {
+          color: #ffffff; 
+        }
+
+        .loader-wrapper{
+            min-height: 200px;                
+        }
+
+        md-toolbar {
+            .title {
+                font-size: 17px;
+            }
+        }
+
+        md-input-container {
+
+            textarea {
+                min-height: 150px;
+            }
+        }
+
+        .date-container {
+            padding: 16px 0 24px 0;
+        }
+
+        md-dialog-actions {
+            position: relative;
+            overflow-y: hidden;
+            overflow-x: auto;
+            justify-content: space-between;
+            background-color: #09486B;
+            border-top: 1px solid rgba(0, 0, 0, 0.12);
+        }
+
+        .margin-5{
+            margin: 5px;
+        }
+
+        .filter-header{
+            background-color: #09486b;
+        }
+
+        md-tabs.tooltip {
+            md-tabs-canvas{
+                background-color: #09486b;
+                
+                md-tab-label{
+                    color: #ffffff;
+                }
+            }
+
+            md-tab-item:hover,md-tab-item:active{
+                background-color: #ff6600;
+                color: #ffffff;
+
+                md-icon{
+                    color: #ffffff;    
+                }
+            }
+
+
+            md-tab-item md-icon{
+                color: #92c7e0;
+            }            
+
+            table.table-data-right tr th,table.table-data-right tr td {
+                text-align: center !important;
+                padding: 5px 0px 5px 0px !important;
+                font-size: 1.3rem !important;
+                min-width:initial !important;
+            }
+
+            table.simple tbody tr td,table.table-data-right thead{
+                height: 0 !important;
+            }
+
+            table.simple tbody tr:last-child td{
+                border-bottom: 1px solid #e0e0e0;
+            }
+
+            table tr.current-port td{
+                background-color: #ff6600;
+                color: #09486b;
+            }
+
+        }
+
+        md-tabs.md-default-theme md-ink-bar, md-tabs md-ink-bar {
+            color: #ff6600 !important;
+            background-color: #ff6600 !important;
+        }
+    }
+}
+
+// RESPONSIVE
+@media screen and (max-width: $layout-breakpoint-md) {
+
+    md-dialog {
+
+        &.task-dialog {
+            width: 80%;
+        }
+    }
+}
+
+@media screen and (max-width: $layout-breakpoint-sm) {
+
+    md-dialog {
+
+        &.task-dialog {
+            width: 90%;
+        }
+    }
+}

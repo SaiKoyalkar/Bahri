@@ -1,0 +1,389 @@
+<div id="voyage-vessel" class="page-layout simple fullwidth doc-page chart-doc-page">
+
+    <!-- HEADER -->
+    <div class="md-accent-bg header-bcc-bg" layout="row" layout-align="space-between">
+        <div layout="row" layout-align="start start" flex-xs="15" flex-sm="6" flex="6" hide-gt-sm>
+            <md-button id="navigation-toggle" class="md-icon-button" ng-click="vm.toggleSidenav('navigation')"
+                        aria-label="Toggle navigation" translate
+                       translate-attr-aria-label="TOOLBAR.TOGGLE_NAVIGATION">
+                <md-icon md-font-icon="icon-menu" class="icon"></md-icon>
+            </md-button>
+        </div>
+        <div class="ph-10" layout="column" layout-align="start start" layout-wrap flex>
+            <div class="title">{{ vm.vesselDetails.vessel_name }} Voyage Economy</div>
+            <div class="description">Last updated on: {{vm.date | date: 'dd/MM/yyyy HH:mm:ss'}}</div>
+        </div>
+        <div layout="row" layout-align="end center" layout-wrap flex>
+            <md-menu-bar id="user-menu">
+                <md-menu md-position-mode="left bottom">
+                    <md-button class="user-menu-button" ng-click="$mdOpenMenu()"
+                               aria-label="User settings"
+                               translate translate-attr-aria-label="TOOLBAR.USER_SETTINGS">
+                        <div layout="row" layout-align="space-between center">
+                            <span class="username">{{ vm.username }}</span>
+                            <md-icon md-font-icon="icon-chevron-down"
+                                     class="icon s16"></md-icon>
+                        </div>
+                    </md-button>
+
+                    <md-menu-content width="3">
+                        <md-menu-item class="md-indent">
+                            <md-icon md-font-icon="icon-logout" class="icon"></md-icon>
+                            <md-button ng-click="vm.logout()">Logout</md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+            </md-menu-bar>
+        </div>
+    </div>
+    <!-- / HEADER -->
+
+    <!-- TOOLBAR -->
+    <md-toolbar id="toolbar" class="md-menu-toolbar md-whiteframe-1dp ng-scope _md md-default-theme toolbar-header">
+        <div layout="row" layout-xs="row" layout-align="start center" style="min-height:64px">
+
+            <div layout="row" layout-align="start center" flex="50" class=" " layout-xs="column">
+
+                <md-select name="duration" placeholder="Change Vessel" class="simplified font-size-16 change-duration float-left" ng-model="vm.currentVessel"
+                    aria-label="Select Vessels" ng-hide="vm.loadingProgress" ng-change="vm.changeVessel()" ng-model-options="{updateOn: 'onload default'}">
+
+                    <md-option class="duration-options" ng-repeat="(key, range) in vm.vessels" value="{{range.vessel_id}}">
+                        {{range.vessel_name}}
+                    </md-option>
+                </md-select>
+            </div>
+            <div layout="row" layout-xs="column" flex="50" layout-align="end center">
+
+
+                <md-button id="navigation-toggle" class="md-icon-button btn-filter" ng-click="vm.showAdvanced($event)" ng-hide="true" aria-label="Filter Vessel">
+                    <md-icon md-font-icon="icon-filter" class="icon filter-icon"></md-icon>
+                </md-button>
+
+                <md-select name="duration" class="simplified font-size-16 change-duration" ng-model="vm.currentDuration" ng-hide="true" aria-label="Change Duration"
+                    ng-change="vm.changeDuration()">
+                    <md-option class="duration-options" ng-repeat="(key, range) in vm.durations" value="{{key}}" ng-selected="key == 'year'">
+                        {{range}}
+                    </md-option>
+                </md-select>
+            </div>
+
+        </div>
+    </md-toolbar>
+    
+    <!-- / TOOLBAR -->
+
+    <!-- CONTENT -->
+    <md-progress-linear md-mode="indeterminate" ng-show="vm.loadingProgress" class="md-warn"></md-progress-linear>
+    <div class="content">
+        <div class="graph-data" ng-show="vm.dataGraphView">  
+            <div class="card-wrapper" layout-xs="row" layout="row" layout-wrap layout-align=" left">
+
+                <!--TOP LEFT GRAPH-->
+                <div class="ph-5 card-block" flex-xs="100" flex-sm="100" flex-gt-md="33" flex-md="50" flex="100">
+                    <div class="md-whiteframe-4dp" ng-hide="vm.loadingProgress">
+                        <!--<div class="card card-header">
+                            <div class="md-title graph-title">
+                                Vessel Name : {{ vm.defaultGraphInfo.vessel_name }}
+                            </div>
+                        </div>-->
+                        <div class="card card-header voyage-vessel-table-card">
+
+                            <div class="card md-card-margin-top-bottom-none graph-details-wrapper" layout="row">
+                                <div flex-xs="100" flex-sm="100" flex-md="100" flex="100">
+                                    
+                                    <table class="simple table-data-right voyage-vessel-table ellipsis-table" ms-responsive-table>
+                                        <tbody>
+                                            <tr>
+                                                <td class="name">
+                                                    Mewis Duct
+                                                    <md-tooltip md-direction="right">
+                                                        Mewis Duct
+                                                    </md-tooltip>
+                                                </td>
+                                                <td class="name">
+                                                    <b>{{ (vm.vesselDetails.mewis_duct != '') ? 'Yes' : 'No' }}</b>
+                                                    <md-tooltip md-direction="bottom">
+                                                       {{ (vm.vesselDetails.mewis_duct != '') ? 'Yes' : 'No' }}
+                                                    </md-tooltip>
+                                                </td>                                                
+                                            </tr>
+                                            <tr>
+                                                <td class="name">
+                                                    Hull Coating Type
+                                                    <md-tooltip md-direction="bottom">
+                                                        Hull Coating Type
+                                                    </md-tooltip>
+                                                </td>
+                                                <td class="name">
+                                                    {{ vm.vesselDetails.hull_paint_type }}
+                                                    <md-tooltip md-direction="bottom">
+                                                        {{ vm.vesselDetails.hull_paint_type }}
+                                                    </md-tooltip>
+                                                </td>                                                
+                                            </tr>
+                                            <tr>
+                                                <td class="name">
+                                                    Last Dry Dock
+                                                    <md-tooltip md-direction="bottom">
+                                                        Last Dry Dock
+                                                    </md-tooltip>
+                                                </td>
+                                                <td class="name">
+                                                    {{ vm.vesselDetails.last_dry_dock }}
+                                                    <md-tooltip md-direction="bottom">
+                                                        {{ vm.vesselDetails.last_dry_dock }}
+                                                    </md-tooltip>
+                                                </td>                                                
+                                            </tr>
+                                            <tr>
+                                                <td class="name">
+                                                    Next Dry Dock
+                                                    <md-tooltip md-direction="bottom">
+                                                        Next Dry Dock
+                                                    </md-tooltip>
+                                                </td>
+                                                <td class="name">
+                                                    {{ vm.vesselDetails.next_dry_dock }}
+                                                    <md-tooltip md-direction="bottom">
+                                                        {{ vm.vesselDetails.next_dry_dock }}
+                                                    </md-tooltip>
+                                                </td>                                                
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+
+                                </div>
+
+                               
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--TOP MIDDLE GRAPH-->
+                <div class="ph-5 card-block" flex-xs="100" flex-sm="100" flex-gt-md="33" flex-md="50" flex="100">
+                    <div class="md-whiteframe-4dp" ng-hide="vm.loadingProgress">
+                        <!--<div class="card card-header">
+                            <div class="md-title graph-title">
+                                Vessel Name : {{ vm.defaultGraphInfo.vessel_name }}
+                            </div>
+                        </div>-->
+                        <div class="card card-header voyage-vessel-table-card">
+
+                            <div class="card md-card-margin-top-bottom-none graph-details-wrapper" layout="row">
+                                <div flex-xs="100" flex-sm="100" flex-md="100" flex="100">
+                                    
+                                    <table class="simple table-data-right voyage-vessel-table table-layout-fixed ellipsis-table" ms-responsive-table>
+                                        <tbody>
+                                            <tr>
+                                                <td class="name">
+                                                    Voyage Order Speed
+                                                    <md-tooltip md-direction="bottom">
+                                                        Voyage Order Speed
+                                                    </md-tooltip>
+                                                </td>
+                                                <td class="name">
+                                                    {{ vm.voyage_detail.voyage_order_speed }}
+                                                    <md-tooltip md-direction="bottom">
+                                                        {{ vm.voyage_detail.voyage_order_speed }}
+                                                    </md-tooltip>
+                                                </td>                                                
+                                            </tr>
+                                            <tr>
+                                                <td class="name">
+                                                    Draft
+                                                    <md-tooltip md-direction="bottom">
+                                                        Draft
+                                                    </md-tooltip>
+                                                </td>
+                                                <td class="name">
+                                                    <!--{{ vm.defaultGraphInfo.hull_paint_type }}-->
+                                                    {{ vm.voyage_detail.draft }}
+                                                    <md-tooltip md-direction="bottom">
+                                                        {{ vm.voyage_detail.draft }}
+                                                    </md-tooltip>
+                                                </td>                                                
+                                            </tr>
+                                            <tr>
+                                                <td class="name">
+                                                    Wind Force
+                                                    <md-tooltip md-direction="bottom">
+                                                        Wind Force
+                                                    </md-tooltip>
+                                                </td>
+                                                <td class="name">
+                                                    <!--{{ vm.defaultGraphInfo.last_dry_dock }}-->
+                                                    {{ vm.voyage_detail.wind_force }}
+                                                    <md-tooltip md-direction="bottom">
+                                                        {{ vm.voyage_detail.wind_force }}
+                                                    </md-tooltip>
+                                                </td>                                                
+                                            </tr>
+                                            <tr>
+                                                <td class="name">
+                                                    Vessel State
+                                                    <md-tooltip md-direction="bottom">
+                                                        Vessel State
+                                                    </md-tooltip>
+                                                </td>
+                                                <td class="name">
+                                                    {{ vm.voyage_detail.vessel_state }}
+                                                    <md-tooltip md-direction="bottom">
+                                                        {{ vm.voyage_detail.vessel_state }}
+                                                    </md-tooltip>
+                                                </td>                                                
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+
+                                </div>
+
+                               
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!--TOP RIGHT Team Container-->
+                <div class="ph-5 card-block " flex-xs="100" flex-sm="100" flex-gt-md="33" flex-md="50"  flex="100">
+                    <div class="md-whiteframe-4dp" ng-hide="vm.loadingProgress">
+                        <div class="card card-header voyage-vessel-table-card">
+
+                            <div class="card md-card-margin-top-bottom-none graph-details-wrapper" layout="row">
+                                <div flex-xs="100" flex-sm="100" flex-md="100" flex="100">
+                                    
+                                    <table class="simple table-data-right voyage-vessel-table table-layout-fixed ellipsis-table" ms-responsive-table>
+                                        <tbody>
+                                            <tr>
+                                                <td class="name">
+                                                    Voyage Manager
+                                                    <md-tooltip md-direction="bottom">
+                                                        Voyage Manager
+                                                    </md-tooltip>
+                                                </td>
+                                                <td class="name">
+                                                    {{ vm.vesselDetails.voyage_manager }}
+                                                    <md-tooltip md-direction="bottom">
+                                                        {{ vm.vesselDetails.voyage_manager }}
+                                                    </md-tooltip>
+                                                </td>                                                
+                                            </tr>
+                                            <tr>
+                                                <td class="name">
+                                                    Superintendent
+                                                    <md-tooltip md-direction="bottom">
+                                                        Superintendent
+                                                    </md-tooltip>
+                                                </td>
+                                                <td class="name">
+                                                    <!--{{ vm.defaultGraphInfo.hull_paint_type }}-->
+                                                    {{ vm.vesselDetails.superintendent }}
+                                                    <md-tooltip md-direction="bottom">
+                                                        {{ vm.vesselDetails.superintendent }}
+                                                    </md-tooltip>
+                                                </td>                                                
+                                            </tr>
+                                            <tr>
+                                                <td class="name">
+                                                    Master
+                                                    <md-tooltip md-direction="bottom">
+                                                        Master
+                                                    </md-tooltip>
+                                                </td>
+                                                <td class="name">
+                                                    {{ vm.vesselDetails.master }}
+                                                    <md-tooltip md-direction="bottom">
+                                                        {{ vm.vesselDetails.master }}
+                                                    </md-tooltip>
+                                                </td>                                                
+                                            </tr>
+                                            <tr>
+                                                <td class="name">
+                                                    Chief Engineer
+                                                    <md-tooltip md-direction="bottom">
+                                                        Chief Engineer
+                                                    </md-tooltip>
+                                                </td>
+                                                <td class="name">
+                                                    <!--{{ vm.defaultGraphInfo.last_dry_dock }}-->
+                                                    {{ vm.vesselDetails.cheif_engineer }}
+                                                    <md-tooltip md-direction="bottom">
+                                                        {{ vm.vesselDetails.cheif_engineer }}
+                                                    </md-tooltip>
+                                                </td>                                                
+                                            </tr>
+                                            
+                                        </tbody>
+                                    </table>
+
+
+                                </div>
+
+                               
+                            </div>
+                        </div>
+                        <!--<div class="card card-header">
+                            <div class="md-title graph-title">
+                                Team
+                            </div>
+                        </div>
+                        <div class="card card-header voyage-vessel-table-card">
+
+                            <div class="card md-card-margin-top-bottom-none " layout="row">
+                                <div flex-xs="100" flex-sm="100" flex-md="100" flex="100">
+                                    
+                                    Voyage Manager : <b>{{ vm.defaultGraphInfo.voyage_manager }}</b> <br />
+                                    Superintendent : <b>{{ vm.defaultGraphInfo.superintendent }}</b> <br />
+                                    Chief Engineer : <b>{{ vm.defaultGraphInfo.cheif_engineer }}</b> <br />
+                                    Master  : <b> John Cruz</b> <br />
+                                   
+
+
+                                </div>
+
+                                
+                            </div>
+                        </div>-->
+                    </div>
+                </div>
+
+                <!--TABS-->
+                <div class="card-block" flex-xs="100" flex-sm="100" flex-md="100" flex="100" >
+                    
+                    <!--<div class="md-whiteframe-4dp">-->
+                    
+                        <div class="card tabs-container">
+                            
+                            <div ng-cloak>
+                            
+                                    <md-tabs md-stretch-tabs md-selected="vm.selectedIndex" class="" ng-hide="vm.loadingProgress">
+                                        <md-tab ui-sref="app.components_voyage_daily" ng-click="vm.getFuelConsumption()">Status</md-tab>
+                                        <md-tab ui-sref="app.components_voyage_daily.satellite" ng-click="">Route</md-tab>
+                                        <md-tab ui-sref="app.components_voyage_daily.terrain" ng-click="vm.reInitializeGraphs()">Analytics</md-tab>
+                                        
+                                    </md-tabs>
+                                    
+                                    
+                                    
+                                    <md-content ui-view="tabContent" flex class="tabs-content"></md-content>
+                                     <!--</div>-->
+                            </div>
+                        </div>
+                    <!--</div>-->
+                    
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <!-- / CONTENT -->
+
+</div>
+
+<style type="text/css">
+.angular-google-map-container{
+    height: 512px;
+}
+</style>

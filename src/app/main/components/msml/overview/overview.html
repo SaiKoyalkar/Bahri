@@ -1,0 +1,624 @@
+<div id="msml-overview" class="page-layout simple fullwidth doc-page chart-doc-page">
+
+    <!-- HEADER -->
+   <div class="md-accent-bg header-msml-bg" layout="row" layout-align="space-between">
+        <div layout="row" layout-align="start start" flex-xs="15" flex-sm="6" flex="6" hide-gt-sm>
+            <md-button id="navigation-toggle" class="md-icon-button" ng-click="vm.toggleSidenav('navigation')"
+                        aria-label="Toggle navigation" translate
+                       translate-attr-aria-label="TOOLBAR.TOGGLE_NAVIGATION">
+                <md-icon md-font-icon="icon-menu" class="icon"></md-icon>
+            </md-button>
+        </div>
+        <div class="ph-10" layout="column" layout-align="start start" layout-wrap flex>
+            <div class="title">Mideast at a glance</div>
+            <div class="description">Last updated on: {{vm.date | date: 'dd/MM/yyyy HH:mm:ss'}}</div>
+        </div>
+        <div layout="row" layout-align="end center" layout-wrap flex>
+            <md-menu-bar id="user-menu">
+                <md-menu md-position-mode="left bottom">
+                    <md-button class="user-menu-button" ng-click="$mdOpenMenu()"
+                               aria-label="User settings"
+                               translate translate-attr-aria-label="TOOLBAR.USER_SETTINGS">
+                        <div layout="row" layout-align="space-between center">
+                            <span class="username">{{ vm.username }}</span>
+                            <md-icon md-font-icon="icon-chevron-down"
+                                     class="icon s16"></md-icon>
+                        </div>
+                    </md-button>
+
+                    <md-menu-content width="3">
+                        <md-menu-item class="md-indent">
+                            <md-icon md-font-icon="icon-logout" class="icon"></md-icon>
+                            <md-button ng-click="vm.logout()">Logout</md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+            </md-menu-bar>
+        </div>
+    </div>
+    <!-- / HEADER -->
+
+    <!-- TOOLBAR -->
+    <md-toolbar id="toolbar" class="md-menu-toolbar md-whiteframe-1dp ng-scope _md md-default-theme toolbar-header">
+        <div class="ph-5" layout="row" layout-xs="row" layout-align="start center" style="min-height:64px">
+            
+            <div class="ph-5" flex="60" layout-align="center center" layout-xs="row">
+                <md-button id="btn-graph" class="md-button-data-view md-raised active md-button md-default-theme md-ink-ripple" ng-click="vm.setGraphView()"> 
+                    Month 
+                </md-button>
+                <md-button id="btn-table" class="md-button-data-view md-raised md-button md-default-theme md-ink-ripple" ng-click="vm.setTableView()"> 
+                    YTD
+                </md-button>
+            </div>
+
+            <div class="ph-15" flex="40" layout-xs="row">
+                <div class="ph-10 current-month" layout="row" layout-xs="column" layout-align="end center">
+                    {{vm.current_month}}
+                </div>
+            </div>
+        </div>
+    </md-toolbar>
+    
+    <!-- / TOOLBAR -->
+
+    <!-- CONTENT -->
+    <md-progress-linear md-mode="indeterminate" ng-show="vm.loadingProgress" class="md-warn"></md-progress-linear>
+    <div class="content" ng-hide="vm.loadingProgress">
+        <div class="graph-data" ng-show="vm.dataGraphView">  
+            <div class="card-wrapper" layout="row" layout-wrap>
+                <div class="card-block" flex-xs="100" flex-sm="100" flex-md="100" flex="100" ng-click="vm.navigateToModules('financial')">
+
+                    <div class="card-wrapper" layout="row">
+                        <div class="ph-5 card-block overview-header" flex="100">
+                            <div class="md-whiteframe-4dp">
+                                <div class="md-title">Ship Running Expenses at a Glance</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-wrapper" layout="row" layout-wrap layout-align="space-between center">
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="15" ng-repeat="financialMonth in vm.financialPerformanceMonth">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header black-box">
+                                    <div class="md-title small-card-title">{{financialMonth.name}}</div>
+                                </div>
+                                <div class="card small-card-header-content black-box-gradient">
+                                    <div class="large-content">
+                                        {{ financialMonth.content == 'nil' ? 'NA' : '$'+(financialMonth.content | number) }}
+                                    </div>
+                                    <div class="small-text">per day</div>
+                                    <span class="{{'percentage-' + financialMonth.color}}">
+                                        <md-icon md-font-icon="{{'icon-menu-' + financialMonth.arrow}}" class="icon s55"></md-icon> 
+                                        {{financialMonth.percentage}} % 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="15">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header black-box">
+                                    <div class="md-title small-card-title">MR</div>
+                                </div>
+                                <div class="card small-card-header-content black-box-gradient">
+                                    <div class="large-content">$421.44</div>
+                                    <div class="small-text">per day</div>
+                                    <span class="percentage-down">
+                                        <md-icon md-font-icon="icon-menu-down" class="icon s55"></md-icon> 0.61 % 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="15">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header black-box">
+                                    <div class="md-title small-card-title">Dry Bulk</div>
+                                </div>
+                                <div class="card small-card-header-content black-box-gradient">
+                                    <div class="large-content">$421.44</div>
+                                    <div class="small-text">per day</div>
+                                    <span class="percentage-down">
+                                        <md-icon md-font-icon="icon-menu-down" class="icon s55"></md-icon> 0.61 % 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="15">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header black-box">
+                                    <div class="md-title small-card-title">RoCons</div>
+                                </div>
+                                <div class="card small-card-header-content black-box-gradient">
+                                    <div class="large-content">$421.44</div>
+                                    <div class="small-text">per day</div>
+                                    <span class="percentage-down">
+                                        <md-icon md-font-icon="icon-menu-down" class="icon s55"></md-icon> 0.61 % 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="15">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header black-box">
+                                    <div class="md-title small-card-title">Chemical</div>
+                                </div>
+                                <div class="card small-card-header-content black-box-gradient">
+                                    <div class="large-content">$421.44</div>
+                                    <div class="small-text">per day</div>
+                                    <span class="percentage-up">
+                                        <md-icon md-font-icon="icon-menu-up" class="icon s55"></md-icon> 0.61 % 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="15">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header black-box">
+                                    <div class="md-title small-card-title">Chemical Product</div>
+                                </div>
+                                <div class="card small-card-header-content black-box-gradient">
+                                    <div class="large-content">$421.44</div>
+                                    <div class="small-text">per day</div>
+                                    <span class="percentage-up">
+                                        <md-icon md-font-icon="icon-menu-up" class="icon s55"></md-icon> 0.61 % 
+                                    </span>
+                                </div>
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-wrapper" layout="row" layout-wrap>
+                <div class="card-block" flex-xs="100" flex-sm="100" flex-md="100" flex="100" ng-click="vm.navigateToModules('operational')">
+
+                    <div class="card-wrapper" layout="row">
+                        <div class="ph-5 card-block overview-header" flex="100">
+                            <div class="md-whiteframe-4dp">
+                                <div class="md-title">Mideast Operations at a Glance</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-wrapper" layout="row" layout-wrap layout-align="space-between center">
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="15" ng-repeat="operationalMonth in vm.operationalPerformanceMonth">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header orange-box">
+                                    <div class="md-title small-card-title">{{operationalMonth.name}}</div>
+                                </div>
+                                <div class="card small-card-header-content orange-box-gradient">
+                                    <div class="large-content">
+                                        {{operationalMonth.name != "Total Incidents" ? (operationalMonth.color == 'nil' ? 'NA' : operationalMonth.content | number)  : ""}}
+                                        
+                                        <div class="small-text">{{operationalMonth.name != "Total Incidents" && operationalMonth.name != "Safety & Quality-SIRE"  ? "days"  : ""}} </div>
+                                    </div>
+                                    <span class="{{'percentage-' + operationalMonth.color}}">
+                                        <md-icon md-font-icon="{{'icon-menu-' + operationalMonth.arrow}}" class="icon s55" ng-show="{{operationalMonth.name != 'Total Incidents'}}"></md-icon> 
+                                        {{operationalMonth.name != "Total Incidents" ? operationalMonth.percentage+"%"  : ""}} 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="15">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header orange-box">
+                                    <div class="md-title small-card-title">Downtime</div>
+                                </div>
+                                <div class="card small-card-header-content orange-box-gradient">
+                                    <div class="large-content">421.44</div>
+                                    <span class="percentage-down">
+                                        <md-icon md-font-icon="icon-menu-down" class="icon s55"></md-icon> 0.61 % 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="15">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header orange-box">
+                                    <div class="md-title small-card-title">Off Hire Days</div>
+                                </div>
+                                <div class="card small-card-header-content orange-box-gradient">
+                                    <div class="large-content">421.44</div>
+                                    <span class="percentage-up">
+                                        <md-icon md-font-icon="icon-menu-up" class="icon s55"></md-icon> 0.61 % 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="15">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header orange-box">
+                                    <div class="md-title small-card-title">Dry Dock Days</div>
+                                </div>
+                                <div class="card small-card-header-content orange-box-gradient">
+                                    <div class="large-content">421.44</div>
+                                    <span class="percentage-down">
+                                        <md-icon md-font-icon="icon-menu-down" class="icon s55"></md-icon> 0.61 % 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="15">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header orange-box">
+                                    <div class="md-title small-card-title">Major Repairs</div>
+                                </div>
+                                <div class="card small-card-header-content orange-box-gradient">
+                                    <div class="large-content">421.44</div>
+                                    <span class="percentage-up">
+                                        <md-icon md-font-icon="icon-menu-up" class="icon s55"></md-icon> 0.61 % 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="15">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header orange-box">
+                                    <div class="md-title small-card-title">
+                                        Safty & Quality-SIRE
+                                    </div>
+                                </div>
+                                <div class="card small-card-header-content orange-box-gradient">
+                                    <div class="large-content">421.44</div>
+                                    <span class="percentage-down">
+                                        <md-icon md-font-icon="icon-menu-down" class="icon s55"></md-icon> 0.61 % 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="15">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header orange-box">
+                                    <div class="md-title small-card-title">
+                                        Total Incidents
+                                    </div>
+                                </div>
+                                <div class="card small-card-header-content orange-box-gradient">
+                                    <div class="large-content">&nbsp;</div>
+                                    <span class="percentage-down">
+                                        &nbsp;
+                                    </span>
+                                </div>
+                            </div>
+                        </div> -->
+
+        
+
+                    </div>
+                </div>
+            </div>
+
+             <!-- Bunker prediction -->
+            <div class="card-wrapper" layout="row" layout-wrap>
+                <div class="card-block" flex-xs="100" flex-sm="100" flex-md="100" flex="100">
+
+                    <div class="card-wrapper" layout="row">
+                        <div class="ph-5 card-block overview-header" flex="100">
+                            <div class="md-whiteframe-4dp">
+                                <div class="md-title">Bunker Price Prediction(Date +15days)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-wrapper" layout="row" layout-wrap layout-align="left">
+                        <div ng-show="vm.bunkerPrediction.length" class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="20" ng-repeat="tradeArea in vm.bunkerPrediction">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header {{ tradeArea.background }}-box">
+                                    <div class="md-title small-card-title">
+                                        {{ tradeArea.name }}
+                                    </div>
+                                </div>
+                                <div class="card small-card-header-content {{ tradeArea.background }}-box-gradient">
+                                    <div class="large-content">
+                                        <div ng-hide="tradeArea.content == 'NA'" class="icon-thumbs-{{ tradeArea.content }}"></div>
+                                        
+                                        <span ng-show="tradeArea.content == 'NA'">
+                                            Not Available
+                                        </span>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card md-card-margin-top-bottom-none small-card-header" ng-show="(vm.bunkerPrediction.length == 0)">
+                            <h2 align="center" class="no-record">{{ noDataAvailable }}</h2>
+                    </div>
+                </div>
+            </div>
+            <!-- end of Bunker prediction -->
+
+        </div>
+
+        <div class="table-data" ng-show="!(vm.dataGraphView)">
+            
+            <div class="card-wrapper" layout="row" layout-wrap>
+                <div class="card-block" flex-xs="100" flex-sm="100" flex-md="100" flex="100" ng-click="vm.navigateToModules('financial')">
+
+                    <div class="card-wrapper" layout="row">
+                        <div class="ph-5 card-block overview-header" flex="100">
+                            <div class="md-whiteframe-4dp">
+                                <div class="md-title">Ship Running Expenses at a Glance</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-wrapper" layout="row" layout-wrap layout-align="space-between center">
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="15" ng-repeat="financialYTD in vm.financialPerformanceYTD">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header black-box">
+                                    <div class="md-title small-card-title">{{financialYTD.name}}</div>
+                                </div>
+                                <div class="card small-card-header-content black-box-gradient">
+                                    <div class="large-content">
+                                        {{ financialYTD.content == 'nil' ? 'NA' : '$'+(financialYTD.content | number) }}
+                                    </div>
+                                    <div class="small-text">per day</div>
+                                    <span class="{{'percentage-' + financialYTD.color}}">
+                                        <md-icon md-font-icon="{{'icon-menu-' + financialYTD.arrow}}" class="icon s55"></md-icon> 
+                                        {{financialYTD.percentage}} % 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="15">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header black-box">
+                                    <div class="md-title small-card-title">VLCC</div>
+                                </div>
+                                <div class="card small-card-header-content black-box-gradient">
+                                    <div class="large-content">$578.65</div>
+                                    <div class="small-text">per day</div>
+                                    <span class="percentage-down">
+                                        <md-icon md-font-icon="icon-menu-down" class="icon s55"></md-icon> 59.65 % 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="15">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header black-box">
+                                    <div class="md-title small-card-title">MR</div>
+                                </div>
+                                <div class="card small-card-header-content black-box-gradient">
+                                    <div class="large-content">$578.65</div>
+                                    <div class="small-text">per day</div>
+                                    <span class="percentage-down">
+                                        <md-icon md-font-icon="icon-menu-down" class="icon s55"></md-icon> 59.65 % 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="15">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header black-box">
+                                    <div class="md-title small-card-title">Dry Bulk</div>
+                                </div>
+                                <div class="card small-card-header-content black-box-gradient">
+                                    <div class="large-content">$578.65</div>
+                                    <div class="small-text">per day</div>
+                                    <span class="percentage-down">
+                                        <md-icon md-font-icon="icon-menu-down" class="icon s55"></md-icon> 59.65 % 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="15">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header black-box">
+                                    <div class="md-title small-card-title">RoCons</div>
+                                </div>
+                                <div class="card small-card-header-content black-box-gradient">
+                                    <div class="large-content">$578.65</div>
+                                    <div class="small-text">per day</div>
+                                    <span class="percentage-down">
+                                        <md-icon md-font-icon="icon-menu-down" class="icon s55"></md-icon> 59.65 % 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="15">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header black-box">
+                                    <div class="md-title small-card-title">Chemical</div>
+                                </div>
+                                <div class="card small-card-header-content black-box-gradient">
+                                    <div class="large-content">$578.65</div>
+                                    <div class="small-text">per day</div>
+                                    <span class="percentage-up">
+                                        <md-icon md-font-icon="icon-menu-up" class="icon s55"></md-icon> 59.65 % 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="15">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header black-box">
+                                    <div class="md-title small-card-title">Chemical Product</div>
+                                </div>
+                                <div class="card small-card-header-content black-box-gradient">
+                                    <div class="large-content">$578.65</div>
+                                    <div class="small-text">per day</div>
+                                    <span class="percentage-up">
+                                        <md-icon md-font-icon="icon-menu-up" class="icon s55"></md-icon> 59.65 % 
+                                    </span>
+                                </div>
+                            </div>
+                        </div> -->
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-wrapper" layout="row" layout-wrap>
+                <div class="card-block" flex-xs="100" flex-sm="100" flex-md="100" flex="100" ng-click="vm.navigateToModules('operational')">
+
+                    <div class="card-wrapper" layout="row">
+                        <div class="ph-5 card-block overview-header" flex="100">
+                            <div class="md-whiteframe-4dp">
+                                <div class="md-title">Mideast Operations at a Glance</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-wrapper" layout="row" layout-wrap layout-align="space-between center">
+                        
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="15" ng-repeat="operationalYTD in vm.operationalPerformanceYTD">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header orange-box">
+                                    <div class="md-title small-card-title">{{operationalYTD.name}}</div>
+                                </div>
+                                <div class="card small-card-header-content orange-box-gradient">
+                                    <div class="large-content">
+                                        {{operationalYTD.name != "Total Incidents" ? (operationalYTD.color == 'nil' ? 'NA' : operationalYTD.content)  : ""}}
+                                        
+                                        <div class="small-text">
+                                            {{operationalYTD.name != "Total Incidents" && operationalYTD.name != "Safety & Quality-SIRE"  ? "days"  : ""}} 
+                                        </div>
+                                    </div>
+                                    <span class="{{'percentage-' + operationalYTD.color}}">
+                                        <md-icon md-font-icon="{{'icon-menu-' + operationalYTD.arrow}}" class="icon s55" ng-show="{{operationalYTD.name != 'Total Incidents'}}"></md-icon> 
+                                        {{operationalYTD.name != "Total Incidents" ? operationalYTD.percentage+"%"  : ""}} 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                       <!--  <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="15">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header orange-box">
+                                    <div class="md-title small-card-title">Off Hire Days</div>
+                                </div>
+                                <div class="card small-card-header-content orange-box-gradient">
+                                    <div class="large-content">578.65</div>
+                                    <span class="percentage-up">
+                                        <md-icon md-font-icon="icon-menu-up" class="icon s55"></md-icon> 59.65 % 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="15">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header orange-box">
+                                    <div class="md-title small-card-title">Dry Dock Days</div>
+                                </div>
+                                <div class="card small-card-header-content orange-box-gradient">
+                                    <div class="large-content">578.65</div>
+                                    <span class="percentage-down">
+                                        <md-icon md-font-icon="icon-menu-down" class="icon s55"></md-icon> 59.65 % 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="15">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header orange-box">
+                                    <div class="md-title small-card-title">Major Repairs</div>
+                                </div>
+                                <div class="card small-card-header-content orange-box-gradient">
+                                    <div class="large-content">578.65</div>
+                                    <span class="percentage-up">
+                                        <md-icon md-font-icon="icon-menu-up" class="icon s55"></md-icon> 59.65 % 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="15">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header orange-box">
+                                    <div class="md-title small-card-title">
+                                        Safty & Quality-SIRE
+                                    </div>
+                                </div>
+                                <div class="card small-card-header-content orange-box-gradient">
+                                    <div class="large-content">578.65</div>
+                                    <span class="percentage-down">
+                                        <md-icon md-font-icon="icon-menu-down" class="icon s55"></md-icon> 59.65 % 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="15">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header orange-box">
+                                    <div class="md-title small-card-title">
+                                        Total Incidents
+                                    </div>
+                                </div>
+                                <div class="card small-card-header-content orange-box-gradient">
+                                    <div class="large-content">&nbsp;</div>
+                                    <span class="percentage-down">
+                                        &nbsp;
+                                    </span>
+                                </div>
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+
+             <!-- Bunker prediction -->
+            <div class="card-wrapper" layout="row" layout-wrap>
+                <div class="card-block" flex-xs="100" flex-sm="100" flex-md="100" flex="100">
+
+                    <div class="card-wrapper" layout="row">
+                        <div class="ph-5 card-block overview-header" flex="100">
+                            <div class="md-whiteframe-4dp">
+                                <div class="md-title">Bunker Price Prediction(Date +15days)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-wrapper" layout="row" layout-wrap layout-align="left">
+                        <div ng-show="vm.bunkerPrediction.length" class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="20" ng-repeat="tradeArea in vm.bunkerPrediction">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header {{ tradeArea.background }}-box">
+                                    <div class="md-title small-card-title">
+                                        {{ tradeArea.name }}
+                                    </div>
+                                </div>
+                                <div class="card small-card-header-content {{ tradeArea.background }}-box-gradient">
+                                    <div class="large-content">
+                                        <div ng-hide="tradeArea.content == 'NA'" class="icon-thumbs-{{ tradeArea.content }}"></div>
+                                        
+                                        <span ng-show="tradeArea.content == 'NA'">
+                                            Not Available
+                                        </span>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card md-card-margin-top-bottom-none small-card-header" ng-show="(vm.bunkerPrediction.length == 0)">
+                            <h2 align="center" class="no-record">{{ noDataAvailable }}</h2>
+                    </div>
+                </div>
+            </div>
+            <!-- end of Bunker prediction -->
+        </div>
+
+    </div>
+    <!-- / CONTENT -->
+
+</div>

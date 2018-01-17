@@ -1,0 +1,776 @@
+<div id="corporate-overview" class="page-layout simple fullwidth doc-page chart-doc-page">
+
+    <!-- HEADER -->
+   <div class="md-accent-bg header-corporate-bg" layout="row" layout-align="space-between">
+        <div layout="row" layout-align="start start" flex-xs="15" flex-sm="6" flex="6" hide-gt-sm>
+            <md-button id="navigation-toggle" class="md-icon-button" ng-click="vm.toggleSidenav('navigation')"
+                        aria-label="Toggle navigation" translate
+                       translate-attr-aria-label="TOOLBAR.TOGGLE_NAVIGATION">
+                <md-icon md-font-icon="icon-menu" class="icon"></md-icon>
+            </md-button>
+        </div>
+        <div class="ph-10" layout="column" layout-align="start start" layout-wrap flex>
+            <div class="title">Bahri Group at a glance</div>
+            <div class="description">Last updated on: {{vm.date | date: 'dd/MM/yyyy HH:mm:ss'}}</div>
+        </div>
+        <div layout="row" layout-align="end center" layout-wrap flex>
+            <md-menu-bar id="user-menu">
+                <md-menu md-position-mode="left bottom">
+                    <md-button class="user-menu-button" ng-click="$mdOpenMenu()"
+                               aria-label="User settings"
+                               translate translate-attr-aria-label="TOOLBAR.USER_SETTINGS">
+                        <div layout="row" layout-align="space-between center">
+                            <span class="username">{{ vm.username }}</span>
+                            <md-icon md-font-icon="icon-chevron-down"
+                                     class="icon s16"></md-icon>
+                        </div>
+                    </md-button>
+
+                    <md-menu-content width="3">
+                        <md-menu-item class="md-indent">
+                            <md-icon md-font-icon="icon-logout" class="icon"></md-icon>
+                            <md-button ng-click="vm.logout()">Logout</md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+            </md-menu-bar>
+        </div>
+    </div>
+    <!-- / HEADER -->
+
+    <!-- TOOLBAR -->
+    <md-toolbar id="toolbar" class="md-menu-toolbar md-whiteframe-1dp ng-scope _md md-default-theme toolbar-header">
+        <div class="ph-5" layout="row" layout-xs="row" layout-align="start center" style="min-height:64px">
+            
+            <div class="ph-5" flex="60" layout-align="center center" layout-xs="row">
+                <md-button id="btn-graph" class="md-button-data-view md-raised active md-button md-default-theme md-ink-ripple" ng-click="vm.setGraphView()"> 
+                    Month 
+                </md-button>
+                <md-button id="btn-table" class="md-button-data-view md-raised md-button md-default-theme md-ink-ripple" ng-click="vm.setTableView()"> 
+                    YTD
+                </md-button>
+            </div>
+
+            <div class="ph-15" flex="40" layout-xs="row">
+                <div class="ph-10 current-month" layout="row" layout-xs="column" layout-align="end center">
+                    {{vm.current_month}}
+                </div>
+            </div>
+        </div>
+    </md-toolbar>
+    
+    <!-- / TOOLBAR -->
+
+    <!-- CONTENT -->
+    <md-progress-linear md-mode="indeterminate" ng-show="vm.loadingProgress" class="md-warn"></md-progress-linear>
+    <div class="content" ng-hide="vm.loadingProgress">
+        <div class="graph-data" ng-show="vm.dataGraphView">  
+            <div class="card-wrapper" layout="row" layout-wrap>
+                <div class="card-block" flex-xs="100" flex-sm="100" flex-md="100" flex="100">
+
+                    <div class="card-wrapper" layout="row" ng-click="vm.navigateToModules('financial')">
+                        <div class="ph-5 card-block overview-header" flex="100">
+                            <div class="md-whiteframe-4dp">
+                                <div class="md-title">
+                                    Bahri Group Financial's at a Glance
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-wrapper" layout="row" layout-wrap layout-align="left">
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="20" ng-click="vm.navigateToModules('financial')">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header black-box">
+                                    <div class="md-title small-card-title">
+                                        {{ vm.groupRevenueMonth.name }}
+                                    </div>
+                                </div>
+                                <div class="card small-card-header-content black-box-gradient">
+                                    <div class="large-content">
+                                        {{ vm.groupRevenueMonth.color == 'nil' ? 'NA' : (vm.groupRevenueMonth.content | number) }}
+                                    </div>
+                                    <div class="small-text">SAR (M)</div>
+                                    <span class="percentage-{{vm.groupRevenueMonth.color }}">
+                                        <md-icon class="icon s55 {{ 'icon-menu-'+vm.groupRevenueMonth.arrow }}"></md-icon> {{ vm.groupRevenueMonth.percentage }} %
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="20" ng-click="vm.navigateToModules('financial')">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header black-box">
+                                    <div class="md-title small-card-title">
+                                        {{ vm.groupEbitdaMonth.name }}
+                                    </div>
+                                </div>
+                                <div class="card small-card-header-content black-box-gradient">
+                                    <div class="large-content">
+                                        {{ vm.groupEbitdaMonth.color == 'nil' ? 'NA' : (vm.groupEbitdaMonth.content | number) }}
+                                    </div>
+                                    <div class="small-text">SAR (M)</div>
+                                    <span class="percentage-{{ vm.groupEbitdaMonth.color }}">
+                                        <md-icon class="icon s55 {{ 'icon-menu-'+vm.groupEbitdaMonth.arrow }}"></md-icon> {{ vm.groupEbitdaMonth.percentage }} %
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="20" ng-click="vm.navigateToModules('financial')">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header black-box">
+                                    <div class="md-title small-card-title">{{vm.groupEbitdaMarginMonth.name}}</div>
+                                </div>
+                                <div class="card small-card-header-content black-box-gradient">
+                                    <div class="large-content">
+                                        {{ vm.groupEbitdaMarginMonth.color == 'nil' ? 'NA' : (vm.groupEbitdaMarginMonth.content)+'%' }}
+                                    </div>
+                                    <div class="small-text">margin</div>
+                                    <span class="percentage-{{vm.groupEbitdaMarginMonth.color}}">
+                                        <md-icon class="icon s55 {{ 'icon-menu-'+vm.groupEbitdaMarginMonth.arrow }}"></md-icon> {{vm.groupEbitdaMarginMonth.percentage}} % 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="20" ng-click="vm.navigateToModules('financial')">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header black-box">
+                                    <div class="md-title small-card-title">
+                                    </div>
+                                </div>
+                                <div class="card small-card-header-content black-box-gradient">
+                                    <div class="large-content">
+                                    </div>
+                                    <div class="small-text">
+                                    </div>
+                                    <span class="percentage-">
+                                        <md-icon class="icon s55 {{ 'icon-menu-'}}"></md-icon>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="20">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card md-card-margin-top-bottom-none chart-block">
+                                    <div class="md-title card-title chart-block">
+                                        Bu Revenue/EBITDA contbr.
+                                    </div>
+                                    <div id="bu-revenue-ebitda-month-container" class="overview-activity-graph-container"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-wrapper" layout="row" layout-wrap>
+                <div class="card-block" flex-xs="100" flex-sm="100" flex-md="100" flex="100">
+
+                    <div class="card-wrapper" layout="row" ng-click="vm.navigateToModules('financial')">
+                        <div class="ph-5 card-block overview-header" flex="100">
+                            <div class="md-whiteframe-4dp">
+                                <div class="md-title">
+                                    Bahri Segments' EBITDA Contribution at a Glance
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-wrapper" layout="row" layout-wrap layout-align="left">
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="20" ng-click="vm.navigateToModules('financial')">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header orange-box">
+                                    <div class="md-title small-card-title">
+                                        {{ vm.bahriOilMonth.name }}
+                                    </div>
+                                </div>
+                                <div class="card small-card-header-content orange-box-gradient">
+                                    <div class="large-content">
+                                        {{ vm.bahriOilMonth.color == 'nil' ? 'NA' : (vm.bahriOilMonth.content | number) }}
+                                    </div>
+                                    <div class="small-text">
+                                        SAR (M)
+                                    </div>
+                                    <span class="percentage-{{ vm.bahriOilMonth.color }}">
+                                        <md-icon class="icon s55 {{'icon-menu-'+ vm.bahriOilMonth.arrow }}"></md-icon> {{ vm.bahriOilMonth.percentage }} % 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="20" ng-click="vm.navigateToModules('financial')">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header orange-box">
+                                    <div class="md-title small-card-title">
+                                        {{ vm.bahriChemicalMonth.name }}
+                                    </div>
+                                </div>
+                                <div class="card small-card-header-content orange-box-gradient">
+                                    <div class="large-content">
+                                        {{ vm.bahriChemicalMonth.color == 'nil' ? 'NA' : (vm.bahriChemicalMonth.content | number) }}
+                                    </div>
+                                    <div class="small-text">
+                                        SAR (M)
+                                    </div>
+                                    <span class="percentage-{{ vm.bahriChemicalMonth.color }}">
+                                        <md-icon class="icon s55 {{'icon-menu-'+ vm.bahriChemicalMonth.arrow }}"></md-icon> {{ vm.bahriChemicalMonth.percentage }} % 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="20" ng-click="vm.navigateToModules('financial')">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header orange-box">
+                                    <div class="md-title small-card-title">
+                                        {{ vm.bahriDryBulkMonth.name }}
+                                    </div>
+                                </div>
+                                <div class="card small-card-header-content orange-box-gradient">
+                                    <div class="large-content">
+                                        {{ vm.bahriDryBulkMonth.color == 'nil' ? 'NA' : (vm.bahriDryBulkMonth.content | number) }}
+                                    </div>
+                                    <div class="small-text">
+                                        SAR (M)
+                                    </div>
+                                    <span class="percentage-{{ vm.bahriDryBulkMonth.color }}">
+                                        <md-icon class="icon s55 {{'icon-menu-'+vm.bahriDryBulkMonth.arrow }}"></md-icon> {{ vm.bahriDryBulkMonth.percentage }} % 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="20" ng-click="vm.navigateToModules('financial')">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header orange-box">
+                                    <div class="md-title small-card-title">
+                                        {{ vm.bahriGeneralCargoMonth.name }}
+                                    </div>
+                                </div>
+                                <div class="card small-card-header-content orange-box-gradient">
+                                    <div class="large-content">
+                                        {{ vm.bahriGeneralCargoMonth.color == 'nil' ? 'NA' : (vm.bahriGeneralCargoMonth.content | number) }}
+                                    </div>
+                                    <div class="small-text">
+                                        SAR (M)
+                                    </div>
+                                    <span class="percentage-{{ vm.bahriGeneralCargoMonth.color }}">
+                                        <md-icon class="icon s55 {{'icon-menu-'+vm.bahriGeneralCargoMonth.arrow }}"></md-icon> {{ vm.bahriGeneralCargoMonth.percentage }} % 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>  
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="20" ng-click="vm.navigateToModules('financial')">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header orange-box">
+                                    <div class="md-title small-card-title">
+                                        {{ vm.bahriMideastMonth.name }}
+                                    </div>
+                                </div>
+                                <div class="card small-card-header-content orange-box-gradient">
+                                    <div class="large-content">
+                                        {{ vm.bahriMideastMonth.color == 'nil' ? 'NA' : (vm.bahriMideastMonth.content | number) }}
+                                    </div>
+                                    <div class="small-text">
+                                        SAR (M)
+                                    </div>
+                                    <span class="percentage-{{ vm.bahriMideastMonth.color }}">
+                                        <md-icon class="icon s55 {{'icon-menu-'+vm.bahriMideastMonth.arrow }}"></md-icon> {{ vm.bahriMideastMonth.percentage }} % 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>  
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-wrapper" layout="row" layout-wrap>
+                <div class="card-block" flex-xs="100" flex-sm="100" flex-md="100" flex="100">
+                    <div class="card-wrapper" layout="row">
+                        <div class="ph-5 card-block overview-header" flex="100">
+                            <div class="md-whiteframe-4dp">
+                                <div class="md-title">Ship Running Expenses Per Day</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-wrapper" layout="row" layout-wrap layout-align="space-between left">
+                        <div class="ph-5 card-block small-card" layout="column" flex="100" flex-gt-xs="33" flex-gt-md="15">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card md-card-margin-top-bottom-none chart-block" layout-wrap>
+                                    <div class="md-title card-title chart-block">VLCC</div>
+                                    <div id="vlcc-expense-month-container" style="width:100%;margin:0 auto;min-height:150px;height:auto;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card" layout="column" flex="100" flex-gt-xs="33" flex-gt-md="15">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card md-card-margin-top-bottom-none chart-block">
+                                    <div class="md-title card-title chart-block">Product Tanker</div>
+                                    <div id="rocons-expense-month-container" style="width:100%;margin:0 auto;min-height:150px;height:auto;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="ph-5 card-block small-card" layout="column" flex="100" flex-gt-xs="33" flex-gt-md="15">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card md-card-margin-top-bottom-none chart-block">
+                                    <div class="md-title card-title chart-block">Dry Bulk</div>
+                                    <div id="drybulk-expense-month-container" style="width:100%;margin:0 auto;min-height:150px;height:auto;"></div>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="ph-5 card-block small-card" layout="column" flex="100" flex-gt-xs="33" flex-gt-md="15">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card md-card-margin-top-bottom-none chart-block">
+                                    <div class="md-title card-title chart-block">General Cargo</div>
+                                    <div id="mr-expense-month-container" style="width:100%;margin:0 auto;min-height:150px;height:auto;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card" layout="column" flex="100" flex-gt-xs="33" flex-gt-md="15">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card md-card-margin-top-bottom-none chart-block">
+                                    <div class="md-title card-title chart-block">Chemical</div>
+                                    <div id="chemical-expense-month-container" style="width:100%;margin:0 auto;min-height:150px;height:auto;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card" layout="column" flex="100" flex-gt-xs="33" flex-gt-md="15">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card md-card-margin-top-bottom-none chart-block">
+                                    <div class="md-title card-title chart-block">Chemical Product</div>
+                                    <div id="chemical-product-expense-month-container" style="width:100%;margin:0 auto;min-height:150px;height:auto;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                </div>
+            </div>
+
+            <div class="card-wrapper" layout="row" layout-wrap>
+                <div class="card-block" flex-xs="100" flex-sm="100" flex-md="100" flex="100">
+
+                    <div class="card-wrapper" layout="row" ng-click="vm.navigateToModules('financial')">
+                        <div class="ph-5 card-block overview-header" flex="100">
+                            <div class="md-whiteframe-4dp">
+                                <div class="md-title">
+                                    Market Sentiment Next Week
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-wrapper" layout="row" layout-wrap layout-align="space-between left">
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="15" ng-repeat="tradeArea in vm.marketPrediction">
+                            <div class="md-whiteframe-4dp chart-block">
+                                <div class="card small-card-header {{ tradeArea.background }}-box">
+                                    <div class="md-title small-card-title">
+                                        {{ tradeArea.name }}
+                                    </div>
+                                </div>
+                                <div class="card small-card-header-content {{ tradeArea.background }}-box-gradient">
+                                    <div class="large-content">
+                                        <div ng-hide="tradeArea.content == 'NA'" class="sentiments">
+                                            {{ tradeArea.polarity }} %
+                                        </div>
+                                        <span ng-show="tradeArea.content == 'NA'">
+                                            Not Available
+                                        </span>
+                                    </div>
+                                    <div class="small-text" ng-hide="tradeArea.content == 'NA'">
+                                        polarity
+                                    </div>
+                                    <div class="large-content">
+                                        <div ng-hide="tradeArea.content == 'NA'" class="sentiments">
+                                            {{ tradeArea.magnitude }}
+                                        </div>
+                                    </div>
+                                    <div class="small-text" ng-hide="tradeArea.content == 'NA'">
+                                        emotion magnitude
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-data" ng-show="!(vm.dataGraphView)">
+            
+            <div class="card-wrapper" layout="row" layout-wrap>
+                <div class="card-block" flex-xs="100" flex-sm="100" flex-md="100" flex="100">
+
+                    <div class="card-wrapper" layout="row" ng-click="vm.navigateToModules('financial')">
+                        <div class="ph-5 card-block overview-header" flex="100">
+                            <div class="md-whiteframe-4dp">
+                                <div class="md-title">
+                                    Bahri Group Financial's at a Glance
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-wrapper" layout="row" layout-wrap layout-align="left">
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="20" ng-click="vm.navigateToModules('financial')">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header black-box">
+                                    <div class="md-title small-card-title">
+                                        {{ vm.groupRevenueYTD.name }}
+                                    </div>
+                                </div>
+                                <div class="card small-card-header-content black-box-gradient">
+                                    <div class="large-content">
+                                        {{ vm.groupRevenueYTD.color == 'nil' ? 'NA' : (vm.groupRevenueYTD.content | number) }}
+                                    </div>
+                                    <div class="small-text">SAR (M)</div>
+                                    <span class="percentage-{{vm.groupRevenueYTD.color }}">
+                                        <md-icon class="icon s55 {{ 'icon-menu-'+vm.groupRevenueYTD.arrow }}"></md-icon> {{ vm.groupRevenueYTD.percentage }} %
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="20" ng-click="vm.navigateToModules('financial')">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header black-box">
+                                    <div class="md-title small-card-title">
+                                        {{ vm.groupEbitdaYTD.name }}
+                                    </div>
+                                </div>
+                                <div class="card small-card-header-content black-box-gradient">
+                                    <div class="large-content">
+                                        {{ vm.groupEbitdaYTD.color == 'nil' ? 'NA' : (vm.groupEbitdaYTD.content | number) }}
+                                    </div>
+                                    <div class="small-text">SAR (M)</div>
+                                    <span class="percentage-{{ vm.groupEbitdaYTD.color }}">
+                                        <md-icon class="icon s55 {{ 'icon-menu-'+vm.groupEbitdaYTD.arrow }}"></md-icon> {{ vm.groupEbitdaYTD.percentage }} %
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="20" ng-click="vm.navigateToModules('financial')">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header black-box">
+                                    <div class="md-title small-card-title">{{vm.groupEbitdaMarginYTD.name}}</div>
+                                </div>
+                                <div class="card small-card-header-content black-box-gradient">
+                                    <div class="large-content">
+                                        {{ vm.groupEbitdaMarginYTD.color == 'nil' ? 'NA' : (vm.groupEbitdaMarginYTD.content)+'%'  }}
+                                    </div>
+                                    <div class="small-text">margin</div>
+                                    <span class="percentage-{{vm.groupEbitdaMarginYTD.color}}">
+                                        <md-icon class="icon s55 {{ 'icon-menu-'+vm.groupEbitdaMarginYTD.arrow }}"></md-icon> {{vm.groupEbitdaMarginYTD.percentage}} % 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="20" ng-click="vm.navigateToModules('financial')">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header black-box">
+                                    <div class="md-title small-card-title">
+                                    </div>
+                                </div>
+                                <div class="card small-card-header-content black-box-gradient">
+                                    <div class="large-content">
+                                    </div>
+                                    <div class="small-text">
+                                    
+                                    </div>
+                                    <span class="percentage-">
+                                        <md-icon class="icon s55 {{ 'icon-menu-'}}"></md-icon> 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="20">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card md-card-margin-top-bottom-none chart-block">
+                                    <div class="md-title card-title chart-block">
+                                        Bu Revenue/EBITDA contbr.
+                                    </div>
+                                    <div id="bu-revenue-ebitda-ytd-container" class="overview-activity-graph-container"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-wrapper" layout="row" layout-wrap>
+                <div class="card-block" flex-xs="100" flex-sm="100" flex-md="100" flex="100">
+
+                    <div class="card-wrapper" layout="row" ng-click="vm.navigateToModules('financial')">
+                        <div class="ph-5 card-block overview-header" flex="100">
+                            <div class="md-whiteframe-4dp">
+                                <div class="md-title">
+                                    Bahri Segments' EBITDA Contribution at a Glance
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-wrapper" layout="row" layout-wrap layout-align="left">
+                        
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="20" ng-click="vm.navigateToModules('financial')">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header orange-box">
+                                    <div class="md-title small-card-title">
+                                        {{ vm.bahriOilYTD.name }}
+                                    </div>
+                                </div>
+                                <div class="card small-card-header-content orange-box-gradient">
+                                    <div class="large-content">
+                                        {{ vm.bahriOilYTD.color == 'nil' ? 'NA' : (vm.bahriOilYTD.content | number) }}
+                                    </div>
+                                    <div class="small-text">
+                                        SAR (M)
+                                    </div>
+                                    <span class="percentage-{{ vm.bahriOilYTD.color }}">
+                                        <md-icon class="icon s55 {{'icon-menu-'+ vm.bahriOilYTD.arrow }}"></md-icon> {{ vm.bahriOilYTD.percentage }} % 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="20" ng-click="vm.navigateToModules('financial')">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header orange-box">
+                                    <div class="md-title small-card-title">
+                                        {{ vm.bahriChemicalYTD.name }}
+                                    </div>
+                                </div>
+                                <div class="card small-card-header-content orange-box-gradient">
+                                    <div class="large-content">
+                                        {{ vm.bahriChemicalYTD.color == 'nil' ? 'NA' : (vm.bahriChemicalYTD.content | number) }}
+                                    </div>
+                                    <div class="small-text">
+                                        SAR (M)
+                                    </div>
+                                    <span class="percentage-{{ vm.bahriChemicalYTD.color }}">
+                                        <md-icon class="icon s55 {{'icon-menu-'+ vm.bahriChemicalYTD.arrow }}"></md-icon> {{ vm.bahriChemicalYTD.percentage }} % 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="20" ng-click="vm.navigateToModules('financial')">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header orange-box">
+                                    <div class="md-title small-card-title">
+                                        {{ vm.bahriDryBulkYTD.name }}
+                                    </div>
+                                </div>
+                                <div class="card small-card-header-content orange-box-gradient">
+                                    <div class="large-content">
+                                        {{ vm.bahriDryBulkYTD.color == 'nil' ? 'NA' : (vm.bahriDryBulkYTD.content | number) }}
+                                    </div>
+                                    <div class="small-text">
+                                        SAR (M)
+                                    </div>
+                                    <span class="percentage-{{ vm.bahriDryBulkYTD.color }}">
+                                        <md-icon class="icon s55 {{'icon-menu-'+vm.bahriDryBulkYTD.arrow }}"></md-icon> {{ vm.bahriDryBulkYTD.percentage }} % 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="20" ng-click="vm.navigateToModules('financial')">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header orange-box">
+                                    <div class="md-title small-card-title">
+                                        {{ vm.bahriGeneralCargoYTD.name }}
+                                    </div>
+                                </div>
+                                <div class="card small-card-header-content orange-box-gradient">
+                                    <div class="large-content">
+                                        {{ vm.bahriGeneralCargoYTD.color == 'nil' ? 'NA' : (vm.bahriGeneralCargoYTD.content | number) }}
+                                    </div>
+                                    <div class="small-text">
+                                        SAR (M)
+                                    </div>
+                                    <span class="percentage-{{ vm.bahriGeneralCargoYTD.color }}">
+                                        <md-icon class="icon s55 {{'icon-menu-'+vm.bahriGeneralCargoYTD.arrow }}"></md-icon> {{ vm.bahriGeneralCargoYTD.percentage }} % 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>  
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="20" ng-click="vm.navigateToModules('financial')">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header orange-box">
+                                    <div class="md-title small-card-title">
+                                        {{ vm.bahriMideastYTD.name }}
+                                    </div>
+                                </div>
+                                <div class="card small-card-header-content orange-box-gradient">
+                                    <div class="large-content">
+                                        {{ vm.bahriMideastYTD.color == 'nil' ? 'NA' : (vm.bahriMideastYTD.content | number) }}
+                                    </div>
+                                    <div class="small-text">
+                                        SAR (M)
+                                    </div>
+                                    <span class="percentage-{{ vm.bahriMideastYTD.color }}">
+                                        <md-icon class="icon s55 {{'icon-menu-'+vm.bahriMideastYTD.arrow }}"></md-icon> {{ vm.bahriMideastYTD.percentage }} % 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>                    
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-wrapper" layout="row" layout-wrap>
+                <div class="card-block" flex-xs="100" flex-sm="100" flex-md="100" flex="100">
+                    <div class="card-wrapper" layout="row">
+                        <div class="ph-5 card-block overview-header" flex="100">
+                            <div class="md-whiteframe-4dp">
+                                <div class="md-title">Ship Running Expenses Per Day</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-wrapper" layout="row" layout-wrap layout-align="space-between left">
+                        <div class="ph-5 card-block small-card" layout="column" flex="100" flex-gt-xs="33" flex-gt-md="15">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card md-card-margin-top-bottom-none chart-block" layout-wrap>
+                                    <div class="md-title card-title chart-block">VLCC</div>
+                                    <div id="vlcc-expense-ytd-container" style="width:100%;margin:0 auto;min-height:150px;height:auto;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card" layout="column" flex="100" flex-gt-xs="33" flex-gt-md="15">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card md-card-margin-top-bottom-none chart-block">
+                                    <div class="md-title card-title chart-block">Product Tanker</div>
+                                    <div id="rocons-expense-ytd-container" style="width:100%;margin:0 auto;min-height:150px;height:auto;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="ph-5 card-block small-card" layout="column" flex="100" flex-gt-xs="33" flex-gt-md="15">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card md-card-margin-top-bottom-none chart-block">
+                                    <div class="md-title card-title chart-block">Dry Bulk</div>
+                                    <div id="drybulk-expense-ytd-container" style="width:100%;margin:0 auto;min-height:150px;height:auto;"></div>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="ph-5 card-block small-card" layout="column" flex="100" flex-gt-xs="33" flex-gt-md="15">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card md-card-margin-top-bottom-none chart-block">
+                                    <div class="md-title card-title chart-block">General Cargo</div>
+                                    <div id="mr-expense-ytd-container" style="width:100%;margin:0 auto;min-height:150px;height:auto;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card" layout="column" flex="100" flex-gt-xs="33" flex-gt-md="15">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card md-card-margin-top-bottom-none chart-block">
+                                    <div class="md-title card-title chart-block">Chemical</div>
+                                    <div id="chemical-expense-ytd-container" style="width:100%;margin:0 auto;min-height:150px;height:auto;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card" layout="column" flex="100" flex-gt-xs="33" flex-gt-md="15">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card md-card-margin-top-bottom-none chart-block">
+                                    <div class="md-title card-title chart-block">Chemical Product</div>
+                                    <div id="chemical-product-expense-ytd-container" style="width:100%;margin:0 auto;min-height:150px;height:auto;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                </div>
+            </div>
+
+            <div class="card-wrapper" layout="row" layout-wrap>
+                <div class="card-block" flex-xs="100" flex-sm="100" flex-md="100" flex="100">
+
+                    <div class="card-wrapper" layout="row" ng-click="vm.navigateToModules('financial')">
+                        <div class="ph-5 card-block overview-header" flex="100">
+                            <div class="md-whiteframe-4dp">
+                                <div class="md-title">
+                                    Market Sentiment Next Week
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-wrapper" layout="row" layout-wrap layout-align="space-between left">
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="15" ng-repeat="tradeArea in vm.marketPrediction">
+                            <div class="md-whiteframe-4dp chart-block">
+                                <div class="card small-card-header {{ tradeArea.background }}-box">
+                                    <div class="md-title small-card-title">
+                                        {{ tradeArea.name }}
+                                    </div>
+                                </div>
+                                <div class="card small-card-header-content {{ tradeArea.background }}-box-gradient">
+                                    <div class="large-content">
+                                        <div ng-hide="tradeArea.content == 'NA'" class="sentiments">
+                                            {{ tradeArea.polarity }} %
+                                        </div>
+                                        <span ng-show="tradeArea.content == 'NA'">
+                                            Not Available
+                                        </span>
+                                    </div>
+                                    <div class="small-text" ng-hide="tradeArea.content == 'NA'">
+                                        polarity
+                                    </div>
+                                    <div class="large-content">
+                                        <div ng-hide="tradeArea.content == 'NA'" class="sentiments">
+                                            {{ tradeArea.magnitude }}
+                                        </div>
+                                    </div>
+                                    <div class="small-text" ng-hide="tradeArea.content == 'NA'">
+                                        emotion magnitude
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="pb-16 ph-5 notes">
+            <span class="note-title">
+                {{ noteTitle }} <br />
+            </span>
+            <span class="note-description">
+                {{ noteDesctiptionLine1 }}
+            </span>
+        </div>
+
+    </div>
+    <!-- / CONTENT -->
+
+</div>

@@ -1,0 +1,57 @@
+
+md-input-container
+{
+    &.md-default-theme.md-input-focused:not(.md-input-invalid) .md-input, &.md-input-focused:not(.md-input-invalid) .md-input
+    {
+        border-color: rgb(255,102,0);
+    }
+}
+
+.header-box-shadow
+{
+     box-shadow: 0 0 6px grey;
+}
+.float-left
+{
+	float:left;
+}
+
+//MOdel Popup 
+.task-dialog, .pattern-dialog, .commodity-dialog , .search-vessel-dialog
+{
+    .filter-header 
+    {
+        box-shadow: 0 0 6px grey;
+    }
+   /* md-dialog-actions
+    {
+        box-shadow: 0 0 3px #cccccc;
+        border-top: 0;
+    }*/
+    .send-button:hover
+    {
+        background-color: #da5e0b !important;
+    }
+}
+
+/*normal  button hover*/
+button.md-button-data-view:hover
+{
+    background-color: #dfe5ec !important;
+}
+button.md-button-data-view.active:hover , .send-button:hover
+{
+    background-color: #da5e0b !important;
+}
+
+
+/*filter Icon*/
+#navigation-toggle:hover md-icon
+{
+    color:#f06600 !important;
+}
+/*OPACITY TEST*/
+ md-select-menu
+{
+    opacity: .9;
+}

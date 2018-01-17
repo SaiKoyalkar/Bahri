@@ -1,0 +1,387 @@
+<div id="voyage-vessel" class="page-layout simple fullwidth doc-page chart-doc-page">
+
+    <!-- HEADER -->
+    <div class="md-accent-bg header-bcc-bg" layout="row" layout-align="space-between">
+        <div layout="row" layout-align="start start" flex-xs="15" flex-sm="6" flex="6" hide-gt-sm>
+            <md-button id="navigation-toggle" class="md-icon-button" ng-click="vm.toggleSidenav('navigation')"
+                        aria-label="Toggle navigation" translate
+                       translate-attr-aria-label="TOOLBAR.TOGGLE_NAVIGATION">
+                <md-icon md-font-icon="icon-menu" class="icon"></md-icon>
+            </md-button>
+        </div>
+        <div class="ph-10" layout="column" layout-align="start start" layout-wrap flex>
+            <div class="title">{{ vm.defaultGraphInfo.vessel_name }} Voyage Economy</div>
+            <div class="description">Last updated on: {{vm.date | date: 'dd/MM/yyyy HH:mm:ss'}}</div>
+        </div>
+        <div layout="row" layout-align="end center" layout-wrap flex>
+            <md-menu-bar id="user-menu">
+                <md-menu md-position-mode="left bottom">
+                    <md-button class="user-menu-button" ng-click="$mdOpenMenu()"
+                               aria-label="User settings"
+                               translate translate-attr-aria-label="TOOLBAR.USER_SETTINGS">
+                        <div layout="row" layout-align="space-between center">
+                            <span class="username">{{ vm.username }}</span>
+                            <md-icon md-font-icon="icon-chevron-down"
+                                     class="icon s16"></md-icon>
+                        </div>
+                    </md-button>
+
+                    <md-menu-content width="3">
+                        <md-menu-item class="md-indent">
+                            <md-icon md-font-icon="icon-logout" class="icon"></md-icon>
+                            <md-button ng-click="vm.logout()">Logout</md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+            </md-menu-bar>
+        </div>
+    </div>
+    <!-- / HEADER -->
+
+    <!-- TOOLBAR -->
+    <md-toolbar id="toolbar" class="md-menu-toolbar md-whiteframe-1dp ng-scope _md md-default-theme toolbar-header">
+        <div layout="row" layout-xs="row" layout-align="start center" style="min-height:64px">
+
+
+
+            <div layout="row" layout-align="start center" flex="50" class=" " layout-xs="column">
+
+                <md-select name="duration" placeholder="Change Vessel" class="simplified font-size-16 change-duration float-left" ng-model="vm.currentVessel"
+                    aria-label="Select Vessels" ng-hide="vm.loadingProgress" ng-change="vm.changeVessel()" ng-model-options="{updateOn: 'onload default'}">
+
+                    <md-option class="duration-options" ng-repeat="(key, range) in vm.vessels" value="{{range.vessel_id}}">
+                        {{range.vessel_name}}
+                    </md-option>
+                </md-select>
+            </div>
+            <div layout="row" layout-xs="column" flex="50" layout-align="end center">
+
+
+                <md-button id="navigation-toggle" class="md-icon-button btn-filter" ng-click="vm.showAdvanced($event)" aria-label="Filter Vessel">
+                    <md-icon md-font-icon="icon-filter" class="icon filter-icon"></md-icon>
+                </md-button>
+
+                <md-select name="duration" class="simplified font-size-16 change-duration" ng-model="vm.currentDuration" aria-label="Change Duration"
+                    ng-change="vm.changeDuration()">
+                    <md-option class="duration-options" ng-repeat="(key, range) in vm.durations" value="{{key}}" ng-selected="key == 'month'">
+                        {{range}}
+                    </md-option>
+                </md-select>
+            </div>
+
+        </div>
+    </md-toolbar>
+    <!-- / TOOLBAR -->
+
+    <!-- CONTENT -->
+    <md-progress-linear md-mode="indeterminate" ng-show="vm.loadingProgress" class="md-warn"></md-progress-linear>
+    <div class="content">
+       
+        
+        <div class="graph-data" ng-show="vm.dataGraphView">  
+            <div class="card-wrapper" layout-xs="row" layout="row" layout-wrap layout-align=" left">
+
+
+                <div class="ph-5 card-block small-card cursor-pointer" layout="column" flex="100" flex-gt-xs="33" flex-gt-md="20"  ng-init="vm.changeGraph('bu-revenue')" ng-hide="vm.loadingProgress">
+                    <div class="md-whiteframe-4dp">
+                        <div class="card md-card-margin-top-bottom-none chart-block" layout-wrap>
+                            <div class="md-title card-title chart-block">YTD Consumption<br>(MT/24h)</div>
+                            <div id="ytd-consumption" class="activity-graph-container"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ph-5 card-block small-card cursor-pointer" layout="column" flex="100" flex-gt-xs="33" flex-gt-md="20"  ng-init="vm.changeGraph('bu-revenue')" ng-hide="vm.loadingProgress">
+                    <div class="md-whiteframe-4dp">
+                        <div class="card md-card-margin-top-bottom-none chart-block" layout-wrap>
+                            <div class="md-title card-title chart-block">YTD Speed <br>(Knots/24hrs)</div>
+                            <div id="ytd-speed" class="activity-graph-container"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ph-5 card-block small-card cursor-pointer" layout="column" flex="100" flex-gt-xs="33" flex-gt-md="20"  ng-init="vm.changeGraph('bu-revenue')" ng-hide="vm.loadingProgress">
+                    <div class="md-whiteframe-4dp">
+                        <div class="card md-card-margin-top-bottom-none chart-block" layout-wrap>
+                            <div class="md-title card-title chart-block">YTD Savings<br> (MT)</div>
+                            <div id="ytd-savings" class="activity-graph-container"></div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="ph-5 card-block" flex-xs="100" flex-sm="100" flex-gt-md="40" flex="100">
+                    <div class="md-whiteframe-4dp" ng-hide="vm.loadingProgress">
+                        <!--<div class="card card-header">
+                            <div class="md-title graph-title">
+                                Vessel Name : {{ vm.defaultGraphInfo.vessel_name }}
+                            </div>
+                        </div>-->
+                        <div class="card card-header voyage-vessel-table-card">
+
+                            <div class="card md-card-margin-top-bottom-none graph-details-wrapper" layout="row">
+                                <div flex-xs="100" flex-sm="100" flex-md="100" flex="100">
+                                    <!--Year build : <b>{{ vm.defaultGraphInfo.year_built }}</b> <br />-->
+                                    <!--Mewis Duct : <b>{{ (vm.defaultGraphInfo.mewis_duct != '') ? 'Yes' : 'No' }} (MIPS)</b> <br />
+                                    Hull Coating Type : <b>{{ vm.defaultGraphInfo.hull_paint_type }}</b> <br />
+                                    Last Dry Dock : <b>{{ vm.defaultGraphInfo.last_dry_dock }}</b> <br />
+                                    Next Dry Dock : <b>{{ vm.defaultGraphInfo.next_dry_dock }}</b> <br />-->
+                                    
+                                    <!--Voyage Order Speed : <b>{{ vm.defaultGraphInfo.voyage_order_speed }}</b> <br /> <br />
+                                    <b>TEAM : </b> <br />
+                                    Voyage Manager : <b>{{ vm.defaultGraphInfo.voyage_manager }}</b> <br />
+                                    Superintendent : <b>{{ vm.defaultGraphInfo.superintendent }}</b> <br />
+                                    Chief Engineer : <b>{{ vm.defaultGraphInfo.cheif_engineer }}</b> <br />-->
+                                    <table class="simple table-data-right voyage-vessel-table vessel-performance" ms-responsive-table>
+                                        <tbody>
+                                            <tr>
+                                                <td class="name">
+                                                    Mewis Duct
+                                                </td>
+                                                <td class="name">
+                                                    <b>{{ (vm.defaultGraphInfo.mewis_duct != '') ? 'Yes' : 'No' }}</b>
+                                                </td>                                                
+                                            </tr>
+                                            <tr>
+                                                <td class="name">
+                                                    Hull Coating Type
+                                                </td>
+                                                <td class="name">
+                                                    {{ vm.defaultGraphInfo.hull_paint_type }}
+                                                </td>                                                
+                                            </tr>
+                                            <tr>
+                                                <td class="name">
+                                                    Last Dry Dock
+                                                </td>
+                                                <td class="name">
+                                                    {{ vm.defaultGraphInfo.last_dry_dock }}
+                                                </td>                                                
+                                            </tr>
+                                            <tr>
+                                                <td class="name">
+                                                    Next Dry Dock
+                                                </td>
+                                                <td class="name">
+                                                    {{ vm.defaultGraphInfo.next_dry_dock }}
+                                                </td>                                                
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+
+                                </div>
+
+                                <!--<div flex="50" calss="port-calls table-wrapper" ng-hide="(vm.loadingProgress)">
+                                    <table class="simple table-data-right" ms-responsive-table>
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    No.
+                                                </th>
+                                                <th>
+                                                    Port
+                                                </th>
+                                                <th>
+                                                    Start Time
+                                                </th>
+                                                <th>
+                                                    End Time
+                                                </th>
+                                                <th>
+                                                    Activity 
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="{{ (port_details.port_status == 1) ? 'current-port' : '' }}" ng-repeat="(port_key,port_details) in vm.portCalls track by $index">
+                                                <td class="name">
+                                                    {{ port_key+1 }}
+                                                </td>
+                                                <td class="name">
+                                                    {{ port_details.port_name }}
+                                                </td>
+                                                <td class="name">
+                                                    {{ port_details.arrival }}
+                                                </td>
+                                                <td class="name">
+                                                    {{ port_details.departure }}
+                                                </td>
+                                                <td class="name">
+                                                    {{ port_details.activity }}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="port-calls" ng-show="(vm.portCalls.length == 0)">
+                                        <h2 align="center" class="ng-cloak no-record">No Port Calls Found.</h2>
+                                    </div>
+                                </div>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--<div class="voyage-vessel-graph" flex-xs="100" flex-sm="100" flex-md="100" flex="100">
+                    <md-content ui-view="tabContent" flex class="md-whiteframe-4dp" style="height: 512px;"></md-content>
+                </div>-->
+
+                <div class="ph-5 card-block" flex-xs="100" flex-sm="100" flex-md="100" flex="100" >
+                    <div class="md-whiteframe-4dp">
+                        <div class="card card-header">
+                            <div class="md-title graph-title">
+                                Fuel Consumption Performance
+                                <span class="export">
+                                    <md-select name="duration" class="simplified font-size-16 change-duration" ng-model="vm.currentExportOption" aria-label="Export Graph" ng-change="vm.exportData('fuel-consumption-container','Fuel Consumption Performance')">
+                                        <md-option class="duration-options" ng-repeat="(key, range) in vm.exportGraphOptions"
+                                             value="{{key}}" ng-selected="$first">
+                                            {{range}}
+                                        </md-option>
+                                    </md-select>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card md-card-margin-top-bottom-none">
+                            
+                            <div layout="row" layout-align="center center" ng-show="vm.circularLoader">
+                                <md-progress-circular md-mode="indeterminate" md-diameter="80" class="md-warn"></md-progress-circular>
+                            </div>
+
+                            <div id="fuel-consumption-container" class="graph-container" ng-hide="vm.circularLoader">
+                                <h2 class="no-data-text">{{noDataAvailable}}</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ph-5 card-block" flex-xs="100" flex-sm="100" flex-md="100" flex="100" >
+                    <div class="md-whiteframe-4dp">
+                        <div class="card card-header">
+                            <div class="md-title graph-title">
+                                Crew Vessel Fuel Consumption  Performance
+                                <span class="export">
+                                    <md-select name="duration" class="simplified font-size-16 change-duration" ng-model="vm.currentExportOption" aria-label="Export Graph" ng-change="vm.exportData('crew-fuel-consumption-container','Crew Fuel Consumption Performance')">
+                                        <md-option class="duration-options" ng-repeat="(key, range) in vm.exportGraphOptions"
+                                             value="{{key}}" ng-selected="$first">
+                                            {{range}}
+                                        </md-option>
+                                    </md-select>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card md-card-margin-top-bottom-none">
+                            <div layout="row" layout-align="center center" ng-show="vm.circularLoader">
+                                <md-progress-circular md-mode="indeterminate" md-diameter="80" class="md-warn"></md-progress-circular>
+                            </div>
+
+                            <div id="crew-fuel-consumption-container" class="graph-container" ng-hide="vm.circularLoader">
+                                <h2 class="no-data-text">{{noDataAvailable}}</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- <div class="card-wrapper" layout="row" ng-hide="vm.loadingProgress">
+                <div class="ph-5 card-block overview-header" flex="100">
+                    <div class="md-whiteframe-4dp">
+                        <div class="md-title">Comparison with Fleet Performance</div>
+                    </div>
+                </div>
+            </div> -->
+
+            <div class="card-wrapper" layout-xs="row" layout="row" layout-wrap layout-align=" left">
+
+                <div class="ph-5 card-block" flex-xs="100" flex-sm="100" flex-md="100" flex="100" >
+                    <div class="md-whiteframe-4dp">
+                        <div class="card card-header">
+                            <div class="md-title graph-title">
+                                Comparison with sister ships
+                                <span class="export">
+                                    <md-select name="duration" class="simplified font-size-16 change-duration" ng-model="vm.currentExportOption" aria-label="Export Graph" ng-change="vm.exportData('fuel-consumption-new-sister-ship-container','Comparison with Fleet Performance')">
+                                        <md-option class="duration-options" ng-repeat="(key, range) in vm.exportGraphOptions"
+                                             value="{{key}}" ng-selected="$first">
+                                            {{range}}
+                                        </md-option>
+                                    </md-select>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card md-card-margin-top-bottom-none">
+                            <div layout="row" layout-align="center center" ng-show="vm.circularLoader">
+                                <md-progress-circular md-mode="indeterminate" md-diameter="80" class="md-warn"></md-progress-circular>
+                            </div>
+
+                            <div id="fuel-consumption-new-sister-ship-container" class="graph-container" ng-hide="vm.circularLoader || vm.hideSisterShip">
+                            </div>
+                            <h2 class="no-data-text" ng-hide="vm.circularLoader || !vm.hideSisterShip">{{noDataAvailable}}</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- <div class="ph-5 card-block" flex-xs="100" flex-sm="100" flex-md="50" flex="50" ng-repeat="(sister_ship_key,sister_ship) in vm.sisteShips">
+                    <div class="md-whiteframe-4dp">
+                        <div class="card card-header">
+                            <div class="md-title graph-title">
+                                {{ sister_ship.graph.params.graph_name }} - {{ sister_ship.vessel_detail.vessel_name }}
+                                <span class="export">
+                                    <md-select name="duration" class="simplified font-size-16 change-duration" ng-model="vm.currentExportOption" aria-label="Export Graph" ng-change="vm.exportData('comparision-fleet-container-{{sister_ship_key}}','{{sister_ship.graph.params.graph_name}}')">
+                                        <md-option class="duration-options" ng-repeat="(key, range) in vm.exportGraphOptions"
+                                             value="{{key}}" ng-selected="$first">
+                                            {{range}}
+                                        </md-option>
+                                    </md-select>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card md-card-margin-top-bottom-none padding-bottom-0">
+                            <div id="comparision-fleet-container-{{ sister_ship_key }}" class="graph-container"></div>
+                        </div>
+                        <div class="card md-card-margin-top-bottom-none graph-details">
+                            Year build : <b>{{ sister_ship.vessel_detail.year_built }}</b> <br />
+                            Mewis Duct : <b>{{ (sister_ship.vessel_detail.mewis_duct != null) ? 'Yes' : 'No' }}</b> <br />
+                            Date of Last Dry Dock : <b>{{ sister_ship.vessel_detail.last_dry_dock }}</b> <br />
+                            Date of Next Dry Dock : <b>{{ sister_ship.vessel_detail.next_dry_dock }}</b> <br />
+                            Hull Coating Type : <b>{{ sister_ship.vessel_detail.hull_paint_type }}</b>
+                        </div>
+                    </div>
+                </div>
+ -->
+
+            </div>
+
+            <div class="ph-5 card-block" flex-xs="100" flex-sm="100" flex-md="100" flex="100" ng-hide="vm.loadingProgress">
+                <div class="md-whiteframe-4dp">
+                    <div class="card card-header">
+                        <div class="md-title graph-title">
+                            Main Engine RPM and Pitch Propeller
+                            <span class="export">
+                                <md-select name="duration" class="simplified font-size-16 change-duration" ng-model="vm.currentExportOption" aria-label="Export Graph" ng-change="vm.exportData('fuel-consumption-container','Fuel Consumption Performance')">
+                                    <md-option class="duration-options" ng-repeat="(key, range) in vm.exportGraphOptions"
+                                         value="{{key}}" ng-selected="$first">
+                                        {{range}}
+                                    </md-option>
+                                </md-select>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card md-card-margin-top-bottom-none">
+                        <div layout="row" layout-align="center center" ng-show="vm.circularLoader">
+                            <md-progress-circular md-mode="indeterminate" md-diameter="80" class="md-warn"></md-progress-circular>
+                        </div>
+                        <div id="lineGraph" class="graph-container" ng-hide="vm.circularLoader">
+                            <h2 class="no-data-text">{{noDataAvailable}}</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- / CONTENT -->
+
+</div>
+
+<style type="text/css">
+.angular-google-map-container{
+    height: 512px;
+}
+</style>

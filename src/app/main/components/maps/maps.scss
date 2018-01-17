@@ -1,0 +1,40 @@
+#maps {
+
+    > .content {
+
+        md-tabs {
+            box-shadow: $whiteframe-shadow-1dp;
+        }
+
+        .card {
+            max-width: 1200px;
+            padding: 16px;
+            margin: 24px;
+
+            .angular-google-map-container {
+                height: 400px;
+            }
+        }
+    }
+}
+
+#vessel{
+    .btn-filter{
+        cursor: pointer;
+    }
+    md-icon.filter-icon{
+        color: #ff6600;
+    }
+}
+//ADDED BY SAGAR
+.maps-vessel-name
+{
+    margin-left: 10px;
+    box-shadow: 0 0 0;
+    padding-right: 0;
+    md-autocomplete-wrap
+    {
+        box-shadow: 0 1px 3px 1px #cccccc;
+    }
+    
+}

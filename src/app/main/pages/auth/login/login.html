@@ -1,0 +1,68 @@
+<div id="login" class="flex-scrollable" layout="column" ms-scroll>
+    <div id="login-form-wrapper" layout="column" layout-align="center center">
+        <div id="login-form" class="md-whiteframe-8dp">
+            <div class="logo login-logo"></div>
+
+            <div class="title" translate="LOGIN.TITLE">Log in to your account</div>
+                
+
+            <form name="loginForm" novalidate ng-submit="vm.doLogin(loginForm)">
+                <md-input-container class="md-block" md-no-float>
+                    <input type="username" name="username" ng-model="vm.loginForm.username" placeholder="Username"
+                           translate translate-attr-placeholder="LOGIN.USERNAME" required>
+                    <div ng-messages="loginForm.username.$error" role="alert" multiple>
+                        <div ng-message="required">
+                            <span translate="LOGIN.ERRORS.USERNAME_REQUIRED">
+                                Username field is required
+                            </span>
+                        </div>
+                        <div ng-message="pattern">
+                            <span translate="LOGIN.ERRORS.USERNAME_MUST_VALID">
+                                Username must be a valid e-mail address
+                            </span>
+                        </div>
+                    </div>
+                </md-input-container>
+
+                <md-input-container class="md-block" md-no-float>
+                    <input type="{{vm.password}}" name="password" ng-model="vm.loginForm.password" placeholder="Password"
+                           translate translate-attr-placeholder="LOGIN.PASSWORD"
+                           required>
+                    <span class="password-input-addon">
+                        <md-icon class="icon icon-eye s22" ng-click="vm.togglePassword()"></md-icon>
+                    </span>
+                    <div ng-messages="loginForm.password.$error" role="alert">
+                        <div ng-message="required">
+                            <span translate="LOGIN.ERRORS.PASSWORD_REQUIRED">Password field is required</span>
+                        </div>
+                        <div ng-show="vm.loginError != ''">
+                            <span>{{vm.loginError}}</span>
+                        </div>
+                    </div>
+                </md-input-container>
+
+                <div class="remember-forgot-password" layout="row" layout-xs="column"
+                     layout-align="space-between center">
+                    <md-checkbox class="remember-me" ng-model="data.cb1" aria-label="Remember Me">
+                        <span class="label-text" translate="LOGIN.REMEMBER_ME">Remember Me</span>
+                    </md-checkbox>
+                </div>
+
+                <md-button type="submit" class="md-raised submit-button login-submit-button" aria-label="LOG IN"
+                           ng-disabled="loginForm.$invalid || loginForm.$pristine"
+                           translate="LOGIN.LOG_IN" translate-attr-aria-label="LOGIN.LOG_IN">
+                    LOGIN
+                </md-button>
+            </form>
+        </div>
+    </div>
+
+    <div layout="column" layout-align="center center">
+        <footer>
+            <div id="footer-wrapper"></div>
+            <div class="footer-content" layout="row" layout-align="center center">
+                <span class="footer-description">&copy; 2016 Briso. All Rights Reserved</span>
+            </div>
+        </footer>
+    </div>
+</div>

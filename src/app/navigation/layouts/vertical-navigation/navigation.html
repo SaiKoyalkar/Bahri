@@ -1,0 +1,14 @@
+<!-- <md-toolbar class="navigation-header md-whiteframe-1dp logo-header-wrapper" layout="row" layout-align="space-between center"> -->
+<md-toolbar class="navigation-header logo-header-wrapper" layout="row" layout-align="space-between center">
+    <div class="logo" layout="row" layout-align="start center">
+        <span class="logo-image"></span>
+        <span class="logo-text">Briso</span>
+    </div>
+
+   <!--  <md-progress-circular id="toolbar-progress" ng-if="$root.loadingProgress" class="md-accent md-warn" md-mode="indeterminate" md-diameter="50"></md-progress-circular> -->
+
+    <md-icon class="fold-toggle s18" md-font-icon="icon-backburger" hide show-gt-sm
+             ng-click="vm.toggleMsNavigationFolded()"></md-icon>
+</md-toolbar>
+
+<ms-navigation class="scrollable" folded="vm.folded" ms-scroll="vm.msScrollOptions"></ms-navigation>

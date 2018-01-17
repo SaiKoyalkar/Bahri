@@ -1,0 +1,787 @@
+<div id="msml-operational" class="page-layout simple fullwidth doc-page chart-doc-page">
+
+    <!-- HEADER -->
+    <div class="md-accent-bg header-msml-bg" layout="row" layout-align="space-between">
+        <div layout="row" layout-align="start start" flex-xs="15" flex-sm="6" flex="6" hide-gt-sm>
+            <md-button id="navigation-toggle" class="md-icon-button" ng-click="vm.toggleSidenav('navigation')"
+                        aria-label="Toggle navigation" translate
+                       translate-attr-aria-label="TOOLBAR.TOGGLE_NAVIGATION">
+                <md-icon md-font-icon="icon-menu" class="icon"></md-icon>
+            </md-button>
+        </div>
+        <div class="ph-10" layout="column" layout-align="start start" layout-wrap flex>
+            <div class="title">Mideast Operational Performance</div>
+            <div class="description">Last updated on: {{vm.date | date: 'dd/MM/yyyy HH:mm:ss'}}</div>
+        </div>
+        <div layout="row" layout-align="end center" layout-wrap flex>
+            <md-menu-bar id="user-menu">
+                <md-menu md-position-mode="left bottom">
+                    <md-button class="user-menu-button" ng-click="$mdOpenMenu()"
+                               aria-label="User settings"
+                               translate translate-attr-aria-label="TOOLBAR.USER_SETTINGS">
+                        <div layout="row" layout-align="space-between center">
+                            <span class="username">{{ vm.username }}</span>
+                            <md-icon md-font-icon="icon-chevron-down"
+                                     class="icon s16"></md-icon>
+                        </div>
+                    </md-button>
+
+                    <md-menu-content width="3">
+                        <md-menu-item class="md-indent">
+                            <md-icon md-font-icon="icon-logout" class="icon"></md-icon>
+                            <md-button ng-click="vm.logout()">Logout</md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+            </md-menu-bar>
+        </div>
+    </div>
+    <!-- / HEADER -->
+
+    <!-- TOOLBAR -->
+     <md-toolbar id="toolbar" class="md-menu-toolbar md-whiteframe-1dp ng-scope _md md-default-theme toolbar-header">
+        <div class="ph-5" layout="row" layout-xs="row" layout-align="start center" style="min-height:64px">
+            
+            <div class="ph-5" flex="60" layout-align="center center" layout-xs="row">
+                <md-button id="btn-graph" class="md-button-data-view md-raised active md-button md-default-theme md-ink-ripple" ng-click="vm.setGraphView()"> 
+                    Graph 
+                </md-button>
+                <md-button id="btn-table" class="md-button-data-view md-raised md-button md-default-theme md-ink-ripple" ng-click="vm.setTableView()" ng-disabled="vm.loadingProgress"> 
+                    Table
+                </md-button>
+            </div>
+
+            <div class="ph-15" flex="40" layout-xs="row">
+                <div layout="row" layout-xs="column" layout-align="end center">
+                    <md-select name="duration" class="simplified font-size-16 change-duration" ng-model="vm.currentDuration" aria-label="Change Duration" ng-change="vm.changeDuration()">
+                        <md-option class="duration-options" ng-repeat="(key, range) in vm.durations"
+                             value="{{key}}" ng-selected="$first">
+                            {{range}}
+                        </md-option>
+                    </md-select>
+                </div>
+            </div>
+        </div>
+    </md-toolbar>
+    
+    <!-- / TOOLBAR -->
+
+    <!-- CONTENT -->
+    <md-progress-linear md-mode="indeterminate" ng-show="vm.loadingProgress" class="md-warn"></md-progress-linear>
+    <div class="content" ng-hide="vm.loadingProgress">
+        <div class="graph-data" ng-show="vm.dataGraphView">  
+            <div class="card-wrapper" layout="row" layout-wrap>
+                <div class="ph-5 card-block" flex-xs="100" flex-sm="100" flex-md="100" flex="100">
+                    <div class="md-whiteframe-4dp">
+                        <div class="card card-header">
+                            <div class="md-title graph-title">
+                                Technical Operation
+                                <span class="export">
+                                    <md-select name="duration" class="simplified font-size-16 change-duration" ng-model="vm.currentExportOption" aria-label="Export Graph" ng-change="vm.exportData('technical-operation-container','Technical Operation')">
+                                        <md-option class="duration-options" ng-repeat="(key, range) in vm.exportGraphOptions"
+                                             value="{{key}}" ng-selected="$first">
+                                            {{range}}
+                                        </md-option>
+                                    </md-select>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card md-card-margin-top-bottom-none">
+                            <div id="technical-operation-container" class="graph-container"></div>
+                        </div>
+                    </div>
+                </div>
+
+                 <div class="ph-5 card-block calendar" flex-xs="100" flex-sm="100" flex-md="100" flex="100">
+                    <div class="md-whiteframe-4dp">
+                      <md-content layout-padding>
+                      <div class="card card-header">
+                        <div layout="row" layout-sm="column" layout-xs="column" ng-show="vm.cal_data">
+                            
+                                <div flex="25" flex-md="33" flex-sm="50" flex-xs="50">
+                                    <div class="md-title graph-title">
+                                        DryDocking
+                                    </div>
+                                </div>
+                                <div flex="25" flex-md="33" flex-sm="50" flex-xs="50">
+                                   <md-button id="btn-graph" class="md-button-data-view md-raised md-button md-default-theme md-ink-ripple" ng-class="{'active': vm.cur_year == vm.year}" ng-click="vm.getCalendarData(vm.cur_year)"> 
+                                        {{ vm.cur_year }} 
+                                    </md-button>
+                                    <md-button id="btn-table" class="md-button-data-view md-raised md-button md-default-theme md-ink-ripple" ng-class="{'active': vm.cur_year + 1 == vm.year}" ng-click="vm.getCalendarData(vm.cur_year + 1)" ng-disabled="vm.loadingProgress"> 
+                                        {{ vm.cur_year + 1 }} 
+                                    </md-button>
+                                </div>
+                                <div flex="25" flex-md="33" flex-sm="50" flex-xs="50" class="calendarOptions">
+                                    <md-input-container>
+                                         <label>Select VesselName</label>
+                                       <md-select class="simplified font-size-16 change-duration" ng-model="vm.selectedvessel" aria-label="Select Vessel" ng-change="vm.getCalendarData(vm.year)">
+                                       <md-select-header>
+                                          <span> Vessel Names - </span>
+                                       </md-select-header>
+                                            <md-option ng-repeat="vessel_name in vm.vessel_names" ng-value="vessel_name">
+                                                {{ vessel_name }}
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+
+                                </div>
+                                <div flex="25" flex-md="33" flex-sm="50" flex-xs="50" class="calendarOptions">
+                                      <md-input-container>
+                                         <label>Select Quarter</label>
+                                          <md-select class="simplified font-size-16 change-duration" ng-model="vm.selectedquarter" aria-label="Select Quarter" ng-change="vm.getQuarterlyData(vm.selectedquarter)">
+                                          <md-select-header>
+                                              <span> Quarters - </span>
+                                          </md-select-header>
+                                          <md-option ng-repeat="quarter in vm.quarter_data" ng-value="quarter">
+                                            {{ quarter }}
+                                         </md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                </div>
+                            </div>
+                        </div>
+                            <md-grid-list md-cols = "{{ vm.selectedquarter == 'All' ? 4 : 3 }}" md-cols-gt-lg = "{{ vm.selectedquarter == 'All' ? 6 : 3 }}"  md-row-height="200px" md-gutter="20px"  style="overflow-x: auto; min-width: 820px; height:500px;">
+                                <md-grid-tile ng-repeat="month_data in vm.cal_data">
+                                <table style="">
+                                <thead>
+                                    <tr>
+                                        <th colspan = '7'> {{month_data.month }}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>Sun</th>
+                                        <th>Mon</th>
+                                        <th>Teu</th>
+                                        <th>Wed</th>
+                                        <th>Thu</th>
+                                        <th>Fri</th>
+                                        <th>Sat</th>
+                                    <tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="week in month_data.month_rows">
+                                    <td ng-repeat="row in week" ng-style="{'background-color': row.backgroundColor, 'color': row.color}"><span> {{ row.day }}
+                                    <md-tooltip md-direction="center" ng-if="row.vessel_name"> Vessel Name: {{ row.vessel_name }}</md-tooltip></span>
+                                    </td>
+                                    </tr>
+                                </tbody>
+                                </table>
+                                </md-grid-tile>
+                            </md-grid-list>
+                      </md-content>
+                    </div>
+                </div>
+                 <div class="ph-5 card-block" flex-xs="100" flex-sm="100" flex-md="100" flex="100">
+                    <div class="md-whiteframe-4dp">
+                        <div class="card card-header">
+                            <div class="md-title graph-title">
+                                Critical Spares and Expired Certificates
+                                <span class="export">
+                                    <md-select name="duration" class="simplified font-size-16 change-duration" ng-model="vm.currentExportOption" aria-label="Export Graph" ng-change="vm.exportData('cspares-ecertificate-container','CSpares And Expired Certificates')">
+                                        <md-option class="duration-options" ng-repeat="(key, range) in vm.exportGraphOptions"
+                                             value="{{key}}" ng-selected="$first">
+                                            {{range}}
+                                        </md-option>
+                                    </md-select>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card md-card-margin-top-bottom-none">
+                            <div id="cspares-ecertificate-container" class="graph-container"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ph-5 card-block" flex-xs="100" flex-sm="100" flex-md="100" flex="100">
+                    <div class="md-whiteframe-4dp">
+                        <div class="card card-header">
+                            <div class="md-title graph-title">
+                                Safety & Quality
+                                <span class="export">
+                                    <md-select name="duration" class="simplified font-size-16 change-duration" ng-model="vm.currentExportOption" aria-label="Export Graph" ng-change="vm.exportData('sqr-container','Safety & Quality')">
+                                        <md-option class="duration-options" ng-repeat="(key, range) in vm.exportGraphOptions"
+                                             value="{{key}}" ng-selected="$first">
+                                            {{range}}
+                                        </md-option>
+                                    </md-select>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card md-card-margin-top-bottom-none">
+                            <div id="sqr-container" class="graph-container"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ph-5 card-block" flex-xs="100" flex-sm="100" flex-md="100" flex="100">
+                    <div class="md-whiteframe-4dp">
+                        <div class="card card-header">
+                            <div class="md-title graph-title">
+                                Incident Category Count
+                                <span class="export">
+                                    <md-select name="duration" class="simplified font-size-16 change-duration" ng-model="vm.currentExportOption" aria-label="Export Graph" ng-change="vm.exportData('incident-category-container','Incident Category Count')">
+                                        <md-option class="duration-options" ng-repeat="(key, range) in vm.exportGraphOptions"
+                                             value="{{key}}" ng-selected="$first">
+                                            {{range}}
+                                        </md-option>
+                                    </md-select>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card md-card-margin-top-bottom-none">
+                            <div id="incident-category-container" class="graph-container"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ph-5 card-block" flex-xs="100" flex-sm="100" flex-md="100" flex="100">
+                    <div class="md-whiteframe-4dp">
+                        <div class="card card-header">
+                            <div class="md-title graph-title">
+                                Accident Category Count
+                                <span class="export">
+                                    <md-select name="duration" class="simplified font-size-16 change-duration" ng-model="vm.currentExportOption" aria-label="Export Graph" ng-change="vm.exportData('accident-category-container','Accident Category Count')">
+                                        <md-option class="duration-options" ng-repeat="(key, range) in vm.exportGraphOptions"
+                                             value="{{key}}" ng-selected="$first">
+                                            {{range}}
+                                        </md-option>
+                                    </md-select>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card md-card-margin-top-bottom-none">
+                            <div id="accident-category-container" class="graph-container"></div>
+                        </div>
+                    </div>
+                </div>
+
+                 <div class="ph-5 card-block" flex-xs="100" flex-sm="100" flex-md="100" flex="100">
+                    <div class="md-whiteframe-4dp">
+                        <div class="card card-header">
+                            <div class="md-title graph-title">
+                                Year Wise Accident Nature Analysis
+                                <span class="export">
+                                    <md-select name="duration" class="simplified font-size-16 change-duration" ng-model="vm.currentExportOption" aria-label="Export Graph" ng-change="vm.exportData('accident-cause-container','Year Wise Accident Nature Analysis')">
+                                        <md-option class="duration-options" ng-repeat="(key, range) in vm.exportGraphOptions"
+                                             value="{{key}}" ng-selected="$first">
+                                            {{range}}
+                                        </md-option>
+                                    </md-select>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card md-card-margin-top-bottom-none">
+                            <div id="accident-cause-container" class="graph-container"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ph-5 card-block" flex-xs="100" flex-sm="100" flex-md="100" flex="100">
+                    <div class="md-whiteframe-4dp">
+                        <div class="card card-header">
+                            <div class="md-title graph-title">
+                                Mideast - LTIF, ITOSF-LTIF
+                                <span class="export">
+                                    <md-select name="duration" class="simplified font-size-16 change-duration" ng-model="vm.currentExportOption" aria-label="Export Graph" ng-change="vm.exportData('ltif-container','Mideast - LTIF, ITOSF-LTIF')">
+                                        <md-option class="duration-options" ng-repeat="(key, range) in vm.exportGraphOptions"
+                                             value="{{key}}" ng-selected="$first">
+                                            {{range}}
+                                        </md-option>
+                                    </md-select>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card md-card-margin-top-bottom-none">
+                            <div id="ltif-container" class="graph-container"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ph-5 card-block" flex-xs="100" flex-sm="100" flex-md="100" flex="100">
+                    <div class="md-whiteframe-4dp">
+                        <div class="card card-header">
+                            <div class="md-title graph-title">
+                                Mideast - TRCF, ITOSF-TRCF
+                                <span class="export">
+                                    <md-select name="duration" class="simplified font-size-16 change-duration" ng-model="vm.currentExportOption" aria-label="Export Graph" ng-change="vm.exportData('trcf-container','Mideast - TRCF, ITOSF-TRCF')">
+                                        <md-option class="duration-options" ng-repeat="(key, range) in vm.exportGraphOptions"
+                                             value="{{key}}" ng-selected="$first">
+                                            {{range}}
+                                        </md-option>
+                                    </md-select>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card md-card-margin-top-bottom-none">
+                            <div id="trcf-container" class="graph-container"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ph-5 card-block" flex-xs="100" flex-sm="100" flex-md="100" flex="100">
+                    <div class="md-whiteframe-4dp">
+                        <div class="card card-header">
+                            <div class="md-title graph-title">
+                                Average Observation Per SIRE Inspection
+                                <span class="export">
+                                    <md-select name="duration" class="simplified font-size-16 change-duration" ng-model="vm.currentExportOption" aria-label="Export Graph" ng-change="vm.exportData('obs-per-insp-container','Average Observation Per SIRE Inspection')">
+                                        <md-option class="duration-options" ng-repeat="(key, range) in vm.exportGraphOptions"
+                                             value="{{key}}" ng-selected="$first">
+                                            {{range}}
+                                        </md-option>
+                                    </md-select>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card md-card-margin-top-bottom-none">
+                            <div id="obs-per-insp-container" class="graph-container"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ph-5 card-block" flex-xs="100" flex-sm="100" flex-md="100" flex="100">
+                    <div class="md-whiteframe-4dp">
+                        <div class="card card-header">
+                            <div class="md-title graph-title">
+                                SIRE VIQ Chapter wise Observations
+                                <span class="export">
+                                    <md-select name="duration" class="simplified font-size-16 change-duration" ng-model="vm.currentExportOption" aria-label="Export Graph" ng-change="vm.exportData('obs-per-siriparent-container','Average Observation Per Sire Parent')">
+                                        <md-option class="duration-options" ng-repeat="(key, range) in vm.exportGraphOptions"
+                                             value="{{key}}" ng-selected="$first">
+                                            {{range}}
+                                        </md-option>
+                                    </md-select>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card md-card-margin-top-bottom-none">
+                            <div id="obs-per-siriparent-container" class="graph-container"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-block" flex-xs="100" flex-sm="100" flex-md="100" flex="100">
+                    <div class="card-wrapper" layout="row" layout-wrap layout-align="space-between center">
+                        <div class="ph-5 card-block small-card" layout="column" flex="100" flex-gt-xs="33" flex-gt-md="15" ng-repeat="block in vm.sqr_blocks">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header">
+                                    <div class="md-title small-card-title">
+                                        {{block.name}}
+                                    </div>
+                                </div>
+                                <div class="card small-card-header-content">
+                                    {{block.name != "" ? block.value+"" : ""}} {{block.name != "" && block.name != "Marpol Violations" ? "%" : ""}}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- <div class="ph-5 card-block small-card" layout="column" flex="100" flex-gt-xs="33" flex-gt-md="15">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header">
+                                    <div class="md-title small-card-title"> &nbsp; </div>
+                                </div>
+                                <div class="card small-card-header-content">
+                                </div>
+                            </div>
+                        </div> -->
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="table-data" ng-show="!(vm.dataGraphView)">
+            <div class="md-whiteframe-4dp card-block">
+                <div class="card card-header">
+                    <div class="md-title graph-title">
+                        Technical Operation
+                        <span class="export" ng-click="vm.exportTableData('technical_operation')" ng-hide="(vm.tcop_series.length == 0)">{{ exportExcel }}</span>
+                    </div>
+                </div>
+                <div class="card md-card-margin-top-bottom-none table-wrapper" ng-hide="(vm.tcop_series.length == 0)">                 
+                    <div class="block-left">
+                        <table class="simple table-data-left" ms-responsive-table>
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Days
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="attribute in vm.tcop_attribute_name">
+                                    <td class="name">
+                                        <span>
+                                            {{attribute}}
+                                            <md-tooltip md-direction="right">{{attribute}}</md-tooltip>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="block-right">
+                        <table class="simple table-data-right" ms-responsive-table>
+                            <thead>
+                                <tr>
+                                    <th colspan="{{row_first_data.colspan}}" ng-repeat="row_first_data in vm.tcop_row_first" class="{{vm.increaseHeight}}">
+                                        {{row_first_data.year}}
+                                    </th>
+                                </tr>
+                                <tr ng-if="(vm.currentDuration != 'year')">
+                                    <th ng-repeat="row_second_data in vm.tcop_row_second track by $index">   
+                                        {{row_second_data}}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="y in vm.tcop_series track by $index">
+                                    <td class="name" ng-repeat="x in y track by $index">{{x}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card md-card-margin-top-bottom-none table-wrapper" ng-show="(vm.tcop_series.length == 0)">
+                    <h2 align="center" class="no-record">{{ noDataAvailable }}</h2>
+                </div>
+            </div>
+
+            <div class="md-whiteframe-4dp card-block">
+                <div class="card card-header">
+                    <div class="md-title graph-title">
+                        Dry Docking
+                        <span class="export" ng-click="vm.exportTableData('drydock')" ng-hide="(vm.tcop_series.length == 0)">{{ exportExcel }}</span>
+                    </div>
+                </div>
+                <div class="card md-card-margin-top-bottom-none table-wrapper grouped_first_row" ng-hide="(vm.tcop_series.length == 0)">                 
+                    <div class="block">
+                        <table class="simple table-data-left" ms-responsive-table>
+                            <thead>
+                                <tr>
+                                    <th ng-repeat="(key, header_attribute) in vm.drydock_categories">
+                                        {{ header_attribute }}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="(key, tr_attribute) in vm.drydock_data">
+                                    <td  ng-repeat="(key, td_attribute) in tr_attribute" rowspan="{{td_attribute.rowspan}}">
+                                        <span ng-if="td_attribute.loop">
+                                            <div ng-repeat="(loop_index, td_loop_value) in td_attribute.value"">
+                                            {{loop_index+1}}. &nbsp;    {{td_loop_value}}
+                                            </div>
+                                        </span>
+                                        <span ng-if="!td_attribute.loop">
+                                            {{td_attribute.value}}
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card md-card-margin-top-bottom-none table-wrapper" ng-show="(vm.tcop_series.length == 0)">
+                    <h2 align="center" class="no-record">{{ noDataAvailable }}</h2>
+                </div>
+            </div>
+
+            <div class="md-whiteframe-4dp card-block">
+                <div class="card card-header">
+                    <div class="md-title graph-title">
+                        Critical Spares and Expired Certificates
+                        <span class="export" ng-click="vm.exportTableData('cspares_and_ecertificates')" ng-hide="(vm.tcop_series.length == 0)">{{ exportExcel }}</span>
+                    </div>
+                </div>
+                <div class="card md-card-margin-top-bottom-none table-wrapper grouped_first_row" ng-hide="(vm.tcop_series.length == 0)">                 
+                    <div class="block">
+                        <table class="simple table-data-left" ms-responsive-table>
+                            <thead>
+                                <tr>
+                                    <th ng-repeat="(key, header_attribute) in vm.cspares_and_ecertificates_categories">
+                                        {{ header_attribute }}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="(key, tr_attribute) in vm.cspares_and_ecertificates_data">
+                                    <td  ng-repeat="(key, td_attribute) in tr_attribute" rowspan="{{td_attribute.rowspan}}">
+                                        <div ng-bind-html="td_attribute.value"></div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card md-card-margin-top-bottom-none table-wrapper" ng-show="(vm.tcop_series.length == 0)">
+                    <h2 align="center" class="no-record">{{ noDataAvailable }}</h2>
+                </div>
+            </div>
+
+            <div class="md-whiteframe-4dp card-block">
+                <div class="card card-header">
+                    <div class="md-title graph-title">
+                        YTD PMS Outstanding Jobs
+                        <span class="export" ng-click="vm.exportTableData('pmsdue')" ng-hide="(vm.tcop_series.length == 0)">{{ exportExcel }}</span>
+                    </div>
+                </div>
+                <div class="card md-card-margin-top-bottom-none table-wrapper grouped_first_row" ng-hide="(vm.tcop_series.length == 0)">                 
+                    <div class="block">
+                        <table class="simple table-data-left" ms-responsive-table>
+                            <thead>
+                                <tr>
+                                    <th ng-repeat="(key, header_attribute) in vm.pmsdue_categories">
+                                        {{ header_attribute }}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="(key, tr_attribute) in vm.pmsdue_data">
+                                    <td  ng-repeat="(key, td_attribute) in tr_attribute" rowspan="{{td_attribute.rowspan}}">
+                                        <span ng-if="td_attribute.loop">
+                                            <div ng-repeat="(loop_index, td_loop_value) in td_attribute.value"">
+                                            {{loop_index+1}}. &nbsp;    {{td_loop_value}}
+                                            </div>
+                                        </span>
+                                        <span ng-if="!td_attribute.loop">
+                                            {{td_attribute.value}}
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card md-card-margin-top-bottom-none table-wrapper" ng-show="(vm.tcop_series.length == 0)">
+                    <h2 align="center" class="no-record">{{ noDataAvailable }}</h2>
+                </div>
+            </div>
+
+            <div class="md-whiteframe-4dp card-block">
+                <div class="card card-header">
+                    <div class="md-title graph-title">
+                        Safety, Quality & Reliability
+                        <span class="export" ng-click="vm.exportTableData('sqr')" ng-hide="(vm.sqr_series.length == 0)">{{ exportExcel }}</span>
+                    </div>
+                </div>
+                <div class="card md-card-margin-top-bottom-none table-wrapper" ng-hide="(vm.sqr_series.length == 0)">                 
+                    <div class="block-left">
+                        <table class="simple table-data-left" ms-responsive-table>
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Count (No.Of)
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="attribute in vm.sqr_attribute_name">
+                                    <td class="name">
+                                        <span>
+                                            {{attribute}}
+                                            <md-tooltip md-direction="right">{{attribute}}</md-tooltip>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="block-right">
+                        <table class="simple table-data-right" ms-responsive-table>
+                            <thead>
+                                <tr>
+                                    <th colspan="{{row_first_data.colspan}}" ng-repeat="row_first_data in vm.sqr_row_first" class="{{vm.increaseHeight}}">
+                                        {{row_first_data.year}}
+                                    </th>
+                                </tr>
+                                <tr ng-if="(vm.currentDuration != 'year')">
+                                    <th ng-repeat="row_second_data in vm.sqr_row_second track by $index">   
+                                        {{row_second_data}}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="y in vm.sqr_series track by $index">
+                                    <td class="name" ng-repeat="x in y track by $index">{{x}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card md-card-margin-top-bottom-none table-wrapper" ng-show="(vm.sqr_series.length == 0)">
+                    <h2 align="center" class="no-record">{{ noDataAvailable }}</h2>
+                </div>
+            </div>
+
+            <div class="md-whiteframe-4dp card-block">
+                <div class="card card-header">
+                    <div class="md-title graph-title">
+                        Incident Category V/S {{vm.currentDuration}}ly Wise
+                        <span class="export" ng-click="vm.exportTableData('incident_category')" ng-hide="(vm.iadet_series.length == 0)">{{ exportExcel }}</span>
+                    </div>
+                </div>
+                <div class="card md-card-margin-top-bottom-none table-wrapper" ng-hide="(vm.iadet_series.length == 0)">                 
+                    <div class="block-left">
+                        <table class="simple table-data-left" ms-responsive-table>
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Event Sub Type
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="attribute in vm.iadet_attribute_name">
+                                    <td class="name">
+                                        <span>
+                                            {{attribute}}
+                                            <md-tooltip md-direction="right">{{attribute}}</md-tooltip>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="block-right">
+                        <table class="simple table-data-right" ms-responsive-table>
+                            <thead>
+                                <tr>
+                                    <th colspan="{{row_first_data.colspan}}" ng-repeat="row_first_data in vm.iadet_row_first" class="{{vm.increaseHeight}}">
+                                        {{row_first_data.year}}
+                                    </th>
+                                </tr>
+                                <tr ng-if="(vm.currentDuration != 'year')">
+                                    <th ng-repeat="row_second_data in vm.iadet_row_second track by $index">   
+                                        {{row_second_data}}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="y in vm.iadet_series track by $index">
+                                    <td class="name" ng-repeat="x in y track by $index">{{x}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card md-card-margin-top-bottom-none table-wrapper" ng-show="(vm.iadet_series.length == 0)">
+                    <h2 align="center" class="no-record">{{ noDataAvailable }}</h2>
+                </div>
+            </div>
+
+            <div class="md-whiteframe-4dp card-block">
+                <div class="card card-header">
+                    <div class="md-title graph-title">
+                        Accident Category V/S {{vm.currentDuration}} Wise
+                        <span class="export" ng-click="vm.exportTableData('accident_category')" ng-hide="(vm.acccat_series.length == 0)">{{ exportExcel }}</span>
+                    </div>
+                </div>
+                <div class="card md-card-margin-top-bottom-none table-wrapper" ng-hide="(vm.acccat_series.length == 0)">                 
+                    <div class="block-left">
+                        <table class="simple table-data-left" ms-responsive-table>
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Event Sub Type
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="attribute in vm.acccat_attribute_name">
+                                    <td class="name">
+                                        <span>
+                                            {{attribute}}
+                                            <md-tooltip md-direction="right">{{attribute}}</md-tooltip>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="block-right">
+                        <table class="simple table-data-right" ms-responsive-table>
+                            <thead>
+                                <tr>
+                                    <th colspan="{{row_first_data.colspan}}" ng-repeat="row_first_data in vm.acccat_row_first" class="{{vm.increaseHeight}}">
+                                        {{row_first_data.year}}
+                                    </th>
+                                </tr>
+                                <tr ng-if="(vm.currentDuration != 'year')">
+                                    <th ng-repeat="row_second_data in vm.acccat_row_second track by $index">   
+                                        {{row_second_data}}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="y in vm.acccat_series track by $index">
+                                    <td class="name" ng-repeat="x in y track by $index">{{x}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card md-card-margin-top-bottom-none table-wrapper" ng-show="(vm.acccat_series.length == 0)">
+                    <h2 align="center" class="no-record">{{ noDataAvailable }}</h2>
+                </div>
+            </div>
+
+            <div class="md-whiteframe-4dp card-block">
+                <div class="card card-header">
+                    <div class="md-title graph-title">
+                        Accident with Accient Cause V/S {{vm.currentDuration}} Wise
+                        <span class="export" ng-click="vm.exportTableData('accident_cause')" ng-hide="(vm.acccause_series.length == 0)">{{ exportExcel }}</span>
+                    </div>
+                </div>
+                <div class="card md-card-margin-top-bottom-none table-wrapper" ng-hide="(vm.acccause_series.length == 0)">                 
+                    <div class="block-left">
+                        <table class="simple table-data-left" ms-responsive-table>
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Accident Cause
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="attribute in vm.acccause_attribute_name">
+                                    <td class="name">
+                                        <span>
+                                            {{attribute}}
+                                            <md-tooltip md-direction="right">{{attribute}}</md-tooltip>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="block-right">
+                        <table class="simple table-data-right" ms-responsive-table>
+                            <thead>
+                                <tr>
+                                    <th colspan="{{row_first_data.colspan}}" ng-repeat="row_first_data in vm.acccause_row_first" class="{{vm.increaseHeight}}">
+                                        {{row_first_data.year}}
+                                    </th>
+                                </tr>
+                                <tr ng-if="(vm.currentDuration != 'year')">
+                                    <th ng-repeat="row_second_data in vm.acccause_row_second track by $index">   
+                                        {{row_second_data}}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="y in vm.acccause_series track by $index">
+                                    <td class="name" ng-repeat="x in y track by $index">{{x}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card md-card-margin-top-bottom-none table-wrapper" ng-show="(vm.acccause_series.length == 0)">
+                    <h2 align="center" class="no-record">{{ noDataAvailable }}</h2>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    <!-- / CONTENT -->
+</div>

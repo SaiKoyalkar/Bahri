@@ -1,0 +1,226 @@
+.content {
+    .graph-container{
+    	width:100%;
+    	margin:0 auto;
+    }
+}
+
+#voyage-vessel{
+
+    > .content {
+
+        md-tabs {
+            box-shadow: $whiteframe-shadow-1dp;
+        }
+
+        .voyage-vessel-graph{
+            margin: 5px 5px 25px 5px;
+        }
+
+        .card {
+
+            .angular-google-map-container {
+                height: 500px;
+            }
+        }
+    }
+
+    .btn-filter{
+        cursor: pointer;
+    }
+    md-icon.filter-icon{
+        color: #ff6600;
+    }
+
+    .graph-details-wrapper{
+        padding: 0;
+
+    }
+
+    .graph-details-wrapper table.graph-details tr td{
+        padding: 10px 15px 10px 15px;
+    }
+
+    .graph-details{
+        padding: 0px 15px 10px 24px;   
+    }
+
+    table.table-data-right tr th,table.table-data-right tr td {
+        text-align: center !important;
+        padding: 5px  !important;
+        font-size: 1.3rem !important;
+        min-width:initial !important;
+    }
+
+    table.simple tbody tr td,table.table-data-right thead{
+        height: 0 !important;
+    }
+
+    table.simple tbody tr:last-child td{
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    table tr.current-port td{
+        background-color: #ff6600;
+        color: white;
+    }
+
+    //ADDED BY SAGAR
+    .voyage-vessel-table-card
+    {
+        padding: 0;
+        border-bottom: 0;
+    }
+    .voyage-vessel-table tbody tr{
+
+        line-height: 37px;        
+        td:first-child{
+            background-color: #083F5E;
+            color:white;
+            font-size:13px !important;
+            max-width:150px;
+        }
+        td:last-child{
+            font-weight:700;
+            font-size:14px !important;
+        }
+        
+    }
+    .voyage-vessel-table.vessel-performance tbody tr
+    {
+        line-height: 43px;
+    }
+    .team-container > div
+    {
+        min-height: 212px;
+    }
+    .status-table{
+        margin-bottom: 30px;
+    }
+    .status-table tbody {
+      /*tr td {
+        background-color: #FFF3E0 !important;
+        font-size: 14px !important;
+        line-height: 32px;
+      }
+      tr:nth-child(3) {
+        td {
+          background-color: #FFE0B2 !important;
+        }
+      }*/
+      tr {
+        td {
+          line-height: 35px;
+        }
+      }
+      tr:first-child {
+        td {
+          background-color: #083F5E !important;
+          color: white;
+          font-size: 15px !important;
+          max-width: 150px;
+          border-color: white;
+        }
+      }
+    }
+    .tabs-container
+    {
+        padding: 0;
+        md-tabs
+        {
+            margin: 0 5px;
+        }
+        md-content
+        {
+            padding: 5px;
+        }
+    }
+    .tabs-content
+    {
+        margin-top: 15px;
+    }
+
+}
+.alerts-div
+{
+    padding: 15px 10px 5px;
+    .alert-box {
+        background: #FF6600;
+        padding: 8px 15px;
+        color: white;
+        font-size: 14px;
+        margin: 10px 0px;
+        position: relative;
+        box-shadow: 1px 1px 4px grey;
+
+        span
+        {
+            float:right;
+            i.icon-close {
+                color: white;
+                position: absolute;
+                right: 14px;
+                top: 7px;
+            }
+            &:hover
+            {
+                cursor: pointer;
+            }
+        }
+    }
+
+}
+.fuel-type-selection
+{
+    padding:15px 10px;
+    .ng-scope
+    {
+        margin-right: 5px;
+    }
+    
+    .md-checked .md-off
+    {
+        border-color: #F47929 !important;
+    }
+    .md-on
+    {
+        background-color: #F47929 !important;
+    }
+}
+.port-calls {
+  padding: 10px !important;
+}
+
+
+.circleBase
+{
+    width: 25px;
+    height: 25px;
+  border-radius: 50%;
+    margin: 0 auto;
+}
+.background-red
+{
+    background: #F44336;
+}
+.background-green
+{
+    background: #4CAF50;
+}
+
+
+
+
+//ADDED BY SAGAR
+.float-left
+{
+    float:left;
+}
+.vessel-select
+{
+    margin-top: 20px;
+    .change-duration
+    {
+        color:red;
+    }
+}

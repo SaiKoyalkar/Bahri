@@ -1,0 +1,297 @@
+<div id="vessel" class="page-layout simple tabbed doc-page" layout="column">
+
+    <!-- HEADER -->
+    <div class="md-accent-bg header-vessel-bg" layout="row" layout-align="space-between">
+        <div layout="row" layout-align="start start" flex-xs="15" flex-sm="6" flex="6" hide-gt-sm>
+            <md-button id="navigation-toggle" class="md-icon-button" ng-click="vm.toggleSidenav('navigation')"
+                        aria-label="Toggle navigation" translate
+                       translate-attr-aria-label="TOOLBAR.TOGGLE_NAVIGATION">
+                <md-icon md-font-icon="icon-menu" class="icon"></md-icon>
+            </md-button>
+        </div>
+        <div class="ph-10" layout="column" layout-align="start start" layout-wrap flex>
+            <div class="title">Vessel Location With Alert</div>
+            <div class="description">
+                Last updated on: {{vm.date | date: 'dd/MM/yyyy HH:mm:ss'}}
+            </div>
+        </div>
+        <div layout="row" layout-align="end center" layout-wrap flex>
+            <md-menu-bar id="user-menu">
+                <md-menu md-position-mode="left bottom">
+                    <md-button class="user-menu-button" ng-click="$mdOpenMenu()"
+                               aria-label="User settings"
+                               translate translate-attr-aria-label="TOOLBAR.USER_SETTINGS">
+                        <div layout="row" layout-align="space-between center">
+                            <span class="username">{{ vm.username }}</span>
+                            <md-icon md-font-icon="icon-chevron-down"
+                                     class="icon s16"></md-icon>
+                        </div>
+                    </md-button>
+
+                    <md-menu-content width="3">
+                        <md-menu-item class="md-indent">
+                            <md-icon md-font-icon="icon-logout" class="icon"></md-icon>
+                            <md-button ng-click="vm.logout()">Logout</md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+            </md-menu-bar>
+        </div>
+    </div>
+    <!-- / HEADER -->
+
+    <!-- TOOLBAR -->
+    <md-toolbar id="toolbar" class="md-menu-toolbar md-whiteframe-4dp ng-scope _md md-default-theme toolbar-header">
+        <div class="ph-5" layout="row" layout-xs="row" layout-align="start center" style="min-height:64px">      
+            <div class="ph-5" flex="100" layout-align="start start" layout="row" layout-md="row" layout-sm="row" layout-xs="column">
+                <md-checkbox class="map-checkbox checkbox-orange" ng-init="bot=true" ng-model="bot" ng-change="vm.showVessels(bot,'BOT')" aria-label="Bahri Oil Transport" ng-show="vm.showBOTCheckbox">
+                    <span class="map-label-text text-orange">
+                        Bahri Oil Transport
+                    </span>
+                </md-checkbox>
+
+                <md-checkbox class="map-checkbox checkbox-yellow" ng-init="bcc=true" ng-model="bcc" ng-change="vm.showVessels(bcc,'BCC')" aria-label="Bahri Chemical Carriers" ng-show="vm.showBCCCheckbox">
+                    <span class="map-label-text text-yellow">
+                        Bahri Chemical Carriers
+                    </span>
+                </md-checkbox>
+
+                <md-checkbox class="map-checkbox checkbox-teal" ng-init="bdb=true" ng-model="bdb" ng-change="vm.showVessels(bdb,'BDB')" aria-label="Bahri Dry Bulk" ng-show="vm.showBDBCheckbox">
+                    <span class="map-label-text text-teal">
+                        Bahri Dry Bulk
+                    </span>
+                </md-checkbox>
+
+                <md-checkbox class="map-checkbox checkbox-aqua" ng-init="bgc=true" ng-model="bgc" ng-change="vm.showVessels(bgc,'BGC')" aria-label="Bahri General Cargo" ng-show="vm.showBGCCheckbox">
+                    <span class="map-label-text text-aqua">
+                        Bahri General Cargo
+                    </span>
+                </md-checkbox>
+                <md-checkbox class="map-checkbox checkbox-purple" ng-init="bdb_ais=true" ng-model="bdb_ais" ng-change="vm.showVessels(bdb_ais,'BDBAIS')" aria-label="Bahri General Cargo1" ng-show="vm.showBDBAISCheckbox">
+                    <span class="map-label-text text-purple">
+                        BDB Operator Model
+                    </span>
+                </md-checkbox>
+                <md-checkbox class="map-checkbox checkbox-dark-orange" ng-init="bcc_uacc=true" ng-model="bcc_uacc" ng-change="vm.showVessels(bcc_uacc,'BCCUACC')" aria-label="UACC Fleet" ng-show="vm.showBCCUACCFleetCheckbox">
+                    <span class="map-label-text text-dark-orange">
+                        UACC Fleet
+                    </span>
+                </md-checkbox>
+
+            </div>
+            <div>
+                <md-button id="navigation-toggle" class="md-icon-button btn-filter" ng-click="vm.showAdvanced($event)"
+                            aria-label="Filter Vessel">
+                    <md-icon md-font-icon="icon-filter" class="icon filter-icon"></md-icon>
+                </md-button>
+            </div>
+        </div>
+
+    </md-toolbar>
+    <!-- / TOOLBAR -->
+
+    <!-- CONTENT -->
+    <md-progress-linear md-mode="indeterminate" ng-show="vm.loadingProgress" class="md-warn"></md-progress-linear>
+    <div class="content" style="max-width:100%;height:100%;margin-top:2px;">
+        <ui-gmap-google-map center="customMarkerMap.center" 
+                    zoom="customMarkerMap.zoom" 
+                    options="customMarkerMap.options"
+                    draggable="false"
+                    click="customMarkerMap.window.model"
+                    events="customMarkerMap.events">
+
+            <!-- <ui-gmap-marker coords="marker.coords" idkey="marker.id" options="marker.options" ng-repeat="marker in customMarkerMap.markers" events="marker.events">
+                <ui-gmap-window idkey="marker.id" show="false">
+                    <div id="bodyContent" style="width:400px;max-width:476px;min-height:300px;heght:auto;font-family:Roboto;font-size:14px; padding: 20px 0px 0px 20px;">
+                        <span style="float:right">
+                            <img src="{{ marker.vesselInfo.vessel_image }}" height="150" width="150" />
+                        </span>
+                        <p>
+                            Vessel Name : 
+                            <span style="font-weight:500">
+                                {{ marker.vesselInfo.vessel_name }}
+                            </span>
+                        </p>
+                        <p>
+                            Vessel Type : 
+                            <span style="font-weight:500"> 
+                                {{ marker.vesselInfo.vessel_type }} 
+                            </span>
+                        </p>
+                        <p>
+                            Start At :
+                            <span style="font-weight:500"> 
+                                {{ marker.vesselInfo.departure_port }} 
+                            </span>
+                        </p>
+
+                        <p>
+                            End At :
+                            <span style="font-weight:500"> 
+                                {{ marker.vesselInfo.destination_port }} 
+                            </span>
+                        </p>
+                        <p>
+                            Next Port & ETA :
+                            <span style="font-weight:500"> 
+                                {{ marker.vesselInfo.eta }} 
+                            </span>
+                        </p>
+                        <p>
+                            Alert Type :
+                            <span style="font-weight:500"> 
+                                {{ marker.vesselInfo.alert_type }} 
+                            </span>
+                        </p>
+                        <p>
+                            Status :
+                            <span style="font-weight:500"> 
+                                {{ marker.vesselInfo.status }} 
+                            </span>
+                        </p>
+                        <p>
+                            Superintendent Name : 
+                            <span style="font-weight:500"> 
+                                {{ marker.vesselInfo.superintendent_name }} 
+                            </span>
+                        </p>
+                        <p>
+                            Voyage Manager Name : 
+                            <span style="font-weight:500"> 
+                                {{ marker.vesselInfo.voyagemanager_name }} 
+                            </span>
+                        </p>
+                    </div>
+                </ui-gmap-window>
+            </ui-gmap-marker> -->  
+            <ui-gmap-markers  
+                models="customMarkerMap.markers" 
+                coords="'self'"  
+                events="customMarkerMap.markersEvents"
+                options="'options'">
+                <ui-gmap-window 
+                    show="customMarkerMap.window.show" 
+                    coords="customMarkerMap.window.model"
+                    options="customMarkerMap.window.options" 
+                    click="customMarkerMap.window.model"
+                    closeClick="customMarkerMap.window.closeClick()">
+                    <div id="bodyContent" style="width:400px;max-width:476px;min-height:300px;heght:auto;font-family:Roboto;font-size:14px; padding: 20px 0px 0px 20px;">
+
+                        
+               <!-- <span style="float:right">
+                            <img src="{{ customMarkerMap.window.model.vesselInfo.vessel_image }}" height="150" width="150" ng-show="{{customMarkerMap.window.model.vesselInfo.vessel_image != '' }}" />
+                        </span>
+                        <p>
+                            Vessel Name : 
+                            <span style="font-weight:500">
+                                {{ customMarkerMap.window.model.vesselInfo.vessel_name }}
+                            </span>
+                        </p>
+                        <p>
+                            Vessel Type : 
+                            <span style="font-weight:500"> 
+                                {{ customMarkerMap.window.model.vesselInfo.vessel_type }} 
+                            </span>
+                        </p>
+                        <p>
+                            Voyage Start At :
+                            <span style="font-weight:500"> 
+                                {{ customMarkerMap.window.model.vesselInfo.departure_port }} 
+                            </span>
+                        </p>
+
+                        <p>
+                            Voyage End At :
+                            <span style="font-weight:500"> 
+                                {{ customMarkerMap.window.model.vesselInfo.destination_port }} 
+                            </span>
+                        </p>
+                        <p>
+                            Last Port:
+                            <span style="font-weight:500"> 
+                                {{ customMarkerMap.window.model.vesselInfo.last_port }} 
+                            </span>
+                        </p>
+                        <p>
+                            Next Port:
+                            <span style="font-weight:500"> 
+                                {{ customMarkerMap.window.model.vesselInfo.eta }} 
+                            </span>
+                        </p>
+                        <p>
+                            Alert Type :
+                            <span style="font-weight:500"> 
+                                {{ customMarkerMap.window.model.vesselInfo.alert_type }} 
+                            </span>
+                        </p>
+                        <p>
+                            Status :
+                            <span style="font-weight:500"> 
+                                {{ customMarkerMap.window.model.vesselInfo.status }} 
+                            </span>
+                        </p>
+                        <p ng-show="{{customMarkerMap.window.model.vesselInfo.vessel_category == 'BDBAIS' }}">
+                            Cargo : 
+                            <span style="font-weight:500"> 
+                                {{ customMarkerMap.window.model.vesselInfo.cargo }} 
+                            </span>
+                        </p>
+                        <p ng-show="{{customMarkerMap.window.model.vesselInfo.vessel_category == 'BDBAIS' }}">
+                            Charterer : 
+                            <span style="font-weight:500"> 
+                                {{ customMarkerMap.window.model.vesselInfo.charterer }} 
+                            </span>
+                        </p>
+                        <p ng-show="{{customMarkerMap.window.model.vesselInfo.vessel_category == 'BDBAIS' }}">
+                            Chartering Specialist : 
+                            <span style="font-weight:500"> 
+                                {{ customMarkerMap.window.model.vesselInfo.chartering_specialist }} 
+                            </span>
+                        </p>
+                        <p>
+                            Voyage Manager : 
+                            <span style="font-weight:500"> 
+                                {{ customMarkerMap.window.model.vesselInfo.voyagemanager_name }} 
+                            </span>
+                        </p>
+                        <p ng-show="{{customMarkerMap.window.model.vesselInfo.vessel_category != 'BDBAIS' }}">
+                            Superintendent : 
+                            <span style="font-weight:500"> 
+                                {{ customMarkerMap.window.model.vesselInfo.superintendent_name }} 
+                            </span>
+                        </p> -->
+                    </div>
+                </ui-gmap-window>
+            </ui-gmap-markers>
+
+        </ui-gmap-google-map>
+    <!--    <md-content ui-view="tabContent">
+        </md-content> -->
+    </div>
+    <!-- / CONTENT -->
+<!--     <div style="visibility: hidden;">
+        <div class="md-dialog-container" id="myDialog">
+            <md-dialog layout-padding aria-label="Sample Dialog" style="z-index:1000;">
+                <h2>Pre-Rendered Dialog</h2>
+                <p>
+                    This is a pre-rendered dialog, which means that <code>$mdDialog</code> doesn't compile its
+                    template on each opening.
+                    <br/><br/>
+                    The Dialog Element is a static element in the DOM, which is just visually hidden.<br/>
+                    Once the dialog opens, we just fetch the element from the DOM into our dialog and upon close
+                    we restore the element back into its old DOM position.
+                </p>
+            </md-dialog>
+        </div>
+    </div> -->
+
+</div>
+
+<style type="text/css">
+.angular-google-map-container{
+    position: absolute !important;
+    height: 100%;
+    width: 100%;
+}
+#map_canvas img { max-width: none !important; }
+</style>

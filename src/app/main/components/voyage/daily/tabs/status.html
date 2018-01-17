@@ -1,0 +1,308 @@
+<div class="md-whiteframe-4dp">
+    <div layout="row" layout-align="center center" ng-show="vm.circularLoader">
+      <md-progress-circular md-mode="indeterminate" md-diameter="80" class="md-warn"></md-progress-circular>
+    </div>
+    <div class="alerts-div" ng-hide="(vm.circularLoader)">
+  
+  
+      <!-- <div class="check-element animate-show-hide alert-box" ng-hide="checked" ng-repeat="(index,data) in vm.fuelConsumptionAlerts track by $index">
+              {{data}}
+              <span ng-click="hideParent($event)"><i class="icon icon-close s20"></i> </span>
+          </div> -->
+      <!--<div class="check-element animate-show-hide alert-box" ng-hide="checked">
+              Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+              <span ng-click="hideParent($event)"><i class="icon icon-close s20"></i> </span>
+          </div>-->
+  
+  
+    </div>
+  
+    <div flex="100" class="port-calls table-wrapper " ng-hide="(vm.circularLoader)">
+      <table class="simple table-data-right status-table" ms-responsive-table>
+  
+        <tbody>
+          <tr>
+            <td>
+              {{vm.fuelConsumptionDataTable1Date}}
+            </td>
+            <td colspan="2">
+              Fuel Consumption (MT/24h)
+            </td>
+            <td colspan="3">
+              Speed (Knot/24h)
+            </td>
+  
+          </tr>
+          <tr>
+            <td>Status</td>
+            <td>
+              <div class="circleBase {{vm.MainEngineErrorTable1 === 1  ? 'background-red':'background-green' }}">
+                <md-tooltip md-direction="bottom" ng-if="vm.MainEngineErrorTable1">{{vm.fuelConsumptionAlerts[0]}}</md-tooltip>
+              </div>
+            </td>
+            <td>
+              <div class="circleBase {{vm.TotalConsumptionErrorTable1 === 1  ? 'background-red':'background-green' }}">
+                <md-tooltip md-direction="bottom" ng-if="vm.TotalConsumptionErrorTable1">{{vm.fuelConsumptionAlerts[1]}}</md-tooltip>
+              </div>
+            </td>
+            <td>
+              <div class="circleBase {{vm.GpsSpeedErrorTable1 === 1  ? 'background-red':'background-green' }}">
+  
+                <md-tooltip md-direction="bottom" ng-if="vm.GpsSpeedErrorTable1">{{vm.fuelConsumptionAlerts[2]}}</md-tooltip>
+              </div>
+            </td>
+            <td>
+              <div class="circleBase {{vm.LogSpeedErrorTable1 === 1  ? 'background-red':'background-green' }}">
+                <md-tooltip md-direction="bottom" ng-if="vm.LogSpeedErrorTable1">{{vm.fuelConsumptionAlerts[3]}}</md-tooltip>
+              </div>
+            </td>
+            <td>
+              <div class="circleBase {{vm.AvgSpeedErrorTable1 === 1  ? 'background-red':'background-green' }}">
+                <md-tooltip md-direction="bottom" ng-if="vm.AvgSpeedErrorTable1">{{vm.fuelConsumptionAlerts[4]}}</md-tooltip>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td></td>
+            <td>Main Engine</td>
+            <td>Total Consumption</td>
+            <td>GPS Speed</td>
+            <td>Log Speed</td>
+            <td>Avg Speed</td>
+          </tr>
+          <tr ng-repeat="(index,data) in vm.table1data track by $index">
+            <td class="name">
+              {{ data.source }}
+              <md-tooltip md-direction="bottom">
+                {{ data.report_date }}
+              </md-tooltip>
+            </td>
+            <td class="name {{data.main_engine_error === 1  ? 'error-text':'' }}">
+              {{ data.main_engine }}
+              <md-tooltip md-direction="bottom">
+                {{ data.report_date }}
+              </md-tooltip>
+            </td>
+            <td class="name {{data.total_consumption_error === 1  ? 'error-text':'' }}">
+              {{ data.total_consumption }}
+              <md-tooltip md-direction="bottom">
+                {{ data.report_date }}
+              </md-tooltip>
+            </td>
+            <td class="name {{data.gps_speed_error === 1  ? 'error-text':'' }}">
+              {{ data.gps_speed }}
+              <md-tooltip md-direction="bottom">
+                {{ data.report_date }}
+              </md-tooltip>
+            </td>
+            <td class="name {{data.log_speed_error === 1  ? 'error-text':'' }}">
+              {{ data.log_speed }}
+              <md-tooltip md-direction="bottom">
+                {{ data.report_date }}
+              </md-tooltip>
+            </td>
+            <td class="name {{data.avg_speed_error === 1  ? 'error-text':'' }}">
+              {{ data.avg_speed }}
+              <md-tooltip md-direction="bottom">
+                {{ data.report_date }}
+              </md-tooltip>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <table class="simple table-data-right status-table" ms-responsive-table>
+  
+        <tbody>
+          <tr>
+            <td>
+              {{vm.fuelConsumptionDataTable2Date}}
+            </td>
+            <td colspan="2">
+              Fuel Consumption (MT/24h)
+            </td>
+            <td colspan="3">
+              Speed (Knot/24h)
+            </td>
+  
+          </tr>
+          <tr>
+            <td>Status</td>
+            <td>
+              <div class="circleBase {{vm.MainEngineErrorTable2 === 1  ? 'background-red':'background-green' }}">
+                <md-tooltip md-direction="bottom" ng-if="vm.MainEngineErrorTable2">{{vm.fuelConsumptionAlerts[0]}}</md-tooltip>
+              </div>
+            </td>
+            <td>
+              <div class="circleBase {{vm.TotalConsumptionErrorTable2 === 1  ? 'background-red':'background-green' }}">
+                <md-tooltip md-direction="bottom" ng-if="vm.TotalConsumptionErrorTable2">{{vm.fuelConsumptionAlerts[1]}}</md-tooltip>
+              </div>
+            </td>
+            <td>
+              <div class="circleBase {{vm.GpsSpeedErrorTable2 === 1  ? 'background-red':'background-green' }}">
+                <md-tooltip md-direction="bottom" ng-if="vm.GpsSpeedErrorTable2">{{vm.fuelConsumptionAlerts[2]}}</md-tooltip>
+  
+              </div>
+            </td>
+            <td>
+              <div class="circleBase {{vm.LogSpeedErrorTable2 === 1  ? 'background-red':'background-green' }}">
+                <md-tooltip md-direction="bottom" ng-if="vm.LogSpeedErrorTable2">{{vm.fuelConsumptionAlerts[3]}}</md-tooltip>
+  
+              </div>
+            </td>
+            <td>
+              <div class="circleBase {{vm.AvgSpeedErrorTable2 === 1  ? 'background-red':'background-green' }}">
+                <md-tooltip md-direction="bottom" ng-if="vm.AvgSpeedErrorTable2">{{vm.fuelConsumptionAlerts[4]}}</md-tooltip>
+  
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td></td>
+            <td>Main Engine</td>
+            <td>Total Consumption</td>
+            <td>GPS Speed</td>
+            <td>Log Speed</td>
+            <td>Avg Speed</td>
+          </tr>
+          <tr ng-repeat="(index,data) in vm.table2data track by $index">
+            <td class="name">
+              {{ data.source }}
+              <md-tooltip md-direction="bottom">
+                {{ data.report_date }}
+              </md-tooltip>
+            </td>
+            <td class="name {{data.main_engine_error === 1  ? 'error-text':'' }}">
+              {{ data.main_engine }}
+              <md-tooltip md-direction="bottom">
+                {{ data.report_date }}
+              </md-tooltip>
+            </td>
+            <td class="name {{data.total_consumption_error === 1  ? 'error-text':'' }}">
+              {{ data.total_consumption }}
+              <md-tooltip md-direction="bottom">
+                {{ data.report_date }}
+              </md-tooltip>
+            </td>
+            <td class="name {{data.gps_speed_error === 1  ? 'error-text':'' }}">
+              {{ data.gps_speed }}
+              <md-tooltip md-direction="bottom">
+                {{ data.report_date }}
+              </md-tooltip>
+            </td>
+            <td class="name {{data.log_speed_error === 1  ? 'error-text':'' }}">
+              {{ data.log_speed }}
+              <md-tooltip md-direction="bottom">
+                {{ data.report_date }}
+              </md-tooltip>
+            </td>
+            <td class="name {{data.avg_speed_error === 1  ? 'error-text':'' }}">
+              {{ data.avg_speed }}
+              <md-tooltip md-direction="bottom">
+                {{ data.report_date }}
+              </md-tooltip>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <table class="simple table-data-right status-table" ms-responsive-table>
+  
+        <tbody>
+          <tr>
+            <td>
+              {{vm.fuelConsumptionDataTable3Date}}
+            </td>
+            <td colspan="2">
+              Fuel Consumption (MT/24h)
+            </td>
+            <td colspan="3">
+              Speed (Knot/24h)
+            </td>
+  
+          </tr>
+          <tr>
+            <td>Status</td>
+            <td>
+              <div class="circleBase {{vm.MainEngineErrorTable3 === 1  ? 'background-red':'background-green' }}">
+                <md-tooltip md-direction="bottom" ng-if="vm.MainEngineErrorTable3">{{vm.fuelConsumptionAlerts[0]}}</md-tooltip>
+  
+              </div>
+            </td>
+            <td>
+              <div class="circleBase {{vm.TotalConsumptionErrorTable3 === 1  ? 'background-red':'background-green' }}">
+                <md-tooltip md-direction="bottom" ng-if="vm.TotalConsumptionErrorTable3">{{vm.fuelConsumptionAlerts[1]}}</md-tooltip>
+  
+              </div>
+            </td>
+            <td>
+              <div class="circleBase {{vm.GpsSpeedErrorTable3 === 1  ? 'background-red':'background-green' }}">
+                <md-tooltip md-direction="bottom" ng-if="vm.GpsSpeedErrorTable3">{{vm.fuelConsumptionAlerts[2]}}</md-tooltip>
+  
+              </div>
+            </td>
+            <td>
+              <div class="circleBase {{vm.LogSpeedErrorTable3 === 1  ? 'background-red':'background-green' }}">
+                <md-tooltip md-direction="bottom" ng-if="vm.LogSpeedErrorTable3">{{vm.fuelConsumptionAlerts[3]}}</md-tooltip>
+  
+              </div>
+            </td>
+            <td>
+              <div class="circleBase {{vm.AvgSpeedErrorTable3 === 1  ? 'background-red':'background-green' }}">
+                <md-tooltip md-direction="bottom" ng-if="vm.AvgSpeedErrorTable3">{{vm.fuelConsumptionAlerts[4]}}</md-tooltip>
+  
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td></td>
+            <td>Main Engine</td>
+            <td>Total Consumption</td>
+            <td>GPS Speed</td>
+            <td>Log Speed</td>
+            <td>Avg Speed</td>
+          </tr>
+          <tr ng-repeat="(index,data) in vm.table3data track by $index">
+            <td class="name">
+              {{ data.source }}
+              <md-tooltip md-direction="bottom">
+                {{ data.report_date }}
+              </md-tooltip>
+            </td>
+            <td class="name {{data.main_engine_error === 1  ? 'error-text':'' }}">
+              {{ data.main_engine }}
+              <md-tooltip md-direction="bottom">
+                {{ data.report_date }}
+              </md-tooltip>
+            </td>
+            <td class="name {{data.total_consumption_error === 1  ? 'error-text':'' }}">
+              {{ data.total_consumption }}
+              <md-tooltip md-direction="bottom">
+                {{ data.report_date }}
+              </md-tooltip>
+            </td>
+            <td class="name {{data.gps_speed_error === 1  ? 'error-text':'' }}">
+              {{ data.gps_speed }}
+              <md-tooltip md-direction="bottom">
+                {{ data.report_date }}
+              </md-tooltip>
+            </td>
+            <td class="name {{data.log_speed_error === 1  ? 'error-text':'' }}">
+              {{ data.log_speed }}
+              <md-tooltip md-direction="bottom">
+                {{ data.report_date }}
+              </md-tooltip>
+            </td>
+            <td class="name {{data.avg_speed_error === 1  ? 'error-text':'' }}">
+              {{ data.avg_speed }}
+              <md-tooltip md-direction="bottom">
+                {{ data.report_date }}
+              </md-tooltip>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+  
+      <!--<div class="port-calls" ng-show="(vm.portCalls.length == 0)">
+              <h2 align="center" class="ng-cloak no-record">No Port Calls Found.</h2>
+          </div>-->
+    </div>
+  </div>

@@ -1,0 +1,113 @@
+<div id="edit-group" class="page-layout simple fullwidth doc-page chart-doc-page">
+
+    <!-- HEADER -->
+    <div class="md-accent-bg header-msml-bg" layout="row" layout-align="space-between">
+        <div layout="row" layout-align="start start" flex-xs="15" flex-sm="6" flex="6" hide-gt-sm>
+            <md-button id="navigation-toggle" class="md-icon-button" ng-click="vm.toggleSidenav('navigation')"
+                        aria-label="Toggle navigation" translate
+                       translate-attr-aria-label="TOOLBAR.TOGGLE_NAVIGATION">
+                <md-icon md-font-icon="icon-menu" class="icon"></md-icon>
+            </md-button>
+        </div>
+        <div class="ph-10" layout="column" layout-align="start start" layout-wrap flex>
+            <div class="title">Edit Group</div>
+            <div class="description">Last updated on: {{vm.date | date: 'dd/MM/yyyy HH:mm:ss'}}</div>
+        </div>
+        <div layout="row" layout-align="end center" layout-wrap flex>
+            <md-menu-bar id="user-menu">
+                <md-menu md-position-mode="left bottom">
+                    <md-button class="user-menu-button" ng-click="$mdOpenMenu()"
+                               aria-label="User settings"
+                               translate translate-attr-aria-label="TOOLBAR.USER_SETTINGS">
+                        <div layout="row" layout-align="space-between center">
+                            <span class="username">{{ vm.username }}</span>
+                            <md-icon md-font-icon="icon-chevron-down"
+                                     class="icon s16"></md-icon>
+                        </div>
+                    </md-button>
+
+                    <md-menu-content width="3">
+                        <md-menu-item class="md-indent">
+                            <md-icon md-font-icon="icon-logout" class="icon"></md-icon>
+                            <md-button ng-click="vm.logout()">Logout</md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+            </md-menu-bar>
+        </div>
+    </div>
+    <!-- / HEADER -->
+
+    <!-- CONTENT -->
+    <md-progress-linear md-mode="indeterminate" ng-show="vm.loadingProgress" class="md-warn"></md-progress-linear>
+    <div class="content" ng-hide="vm.loadingProgress">
+       <div class="form-wrapper md-whiteframe-1dp" flex="100">
+
+            <form name="basicForm" class="md-inline-form" novalidate ng-submit="vm.submit()">
+
+                <div layout="column" layout-gt-sm="row">
+                    <md-input-container flex>
+                        <input type="text" name="name" ng-model="vm.basicForm.name"
+                                placeholder="Group Name *"
+                                ng-keyup = "vm.isGroupExist(this)"
+                                autocomplete = "off"
+                                required>
+                        <div ng-messages="basicForm.name.$error"
+                                role="alert">
+                            <div ng-message="validationError" ng-if="basicForm.name.$dirty"> 
+                                <span>{{ vm.existGroupError }}</span> 
+                            </div>
+                            <div ng-message="required">
+                                <span>Group Name field is required.</span>
+                            </div>
+                        </div>
+                    </md-input-container>
+
+                </div>
+
+                <div layout="row" class="pv-20" ng-show="vm.showModules">
+                    <fieldset class="demo-fieldset" flex>
+                        <legend class="demo-legend">Assign Individual Modules</legend>
+                        <v-accordion class="vAccordion--default" multiple ng-repeat="(mainModuleKey, mainModule) in vm.modules">
+                            <v-pane expanded="true">
+                                <v-pane-header>
+                                    {{ mainModuleKey }}
+                                </v-pane-header>
+                                <v-pane-content>
+                                    <span ng-repeat="(subModuleKey, subModule) in mainModule">
+                                        <md-checkbox class="capitalize margin-right-15" aria-label="subModule.module_name" ng-model = "subModule.is_checked">
+                                            {{ subModule.module_name }}
+                                        </md-checkbox>
+                                    </span>
+                                </v-pane-content>
+                            </v-pane>
+                        </v-accordion>
+                        <!-- <div layout="row" layout-wrap flex>
+                        <div layout="column" flex="25" ng-repeat="(mainModuleKey, mainModule) in vm.modules">
+                            <span ng-repeat="(subModuleKey, subModule) in mainModule">
+                                <span class="primary-title" ng-show="subModule.is_parent == true">{{ subModule.module_name | uppercase }}</span>
+
+                                <md-checkbox class="capitalize" aria-label="subModule.module_name" ng-show="subModule.is_parent == false" ng-model = "subModule.is_checked">
+                                    {{ subModule.module_name }}
+                                </md-checkbox>
+                            </span>
+                        </div>
+                    </div> -->
+                    </fieldset>
+                </div>
+                
+                <md-button type="submit" class="md-raised md-button-orange" aria-label="Update" ng-disabled="basicForm.$invalid">
+                    Update
+                </md-button>
+
+                <md-button type="button" ng-click="vm.btnCancel()" class="md-raised" aria-label="Cancel">
+                    Cancel
+                </md-button>
+                
+            </form>
+
+        </div>
+    </div>
+    <!-- / CONTENT -->
+
+</div>

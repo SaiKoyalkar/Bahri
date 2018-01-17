@@ -1,0 +1,514 @@
+<div id="bdb-overview" class="page-layout simple fullwidth doc-page chart-doc-page">
+
+    <!-- HEADER -->
+   <div class="md-accent-bg header-bdb-bg" layout="row" layout-align="space-between">
+        <div layout="row" layout-align="start start" flex-xs="15" flex-sm="6" flex="6" hide-gt-sm>
+            <md-button id="navigation-toggle" class="md-icon-button" ng-click="vm.toggleSidenav('navigation')"
+                        aria-label="Toggle navigation" translate
+                       translate-attr-aria-label="TOOLBAR.TOGGLE_NAVIGATION">
+                <md-icon md-font-icon="icon-menu" class="icon"></md-icon>
+            </md-button>
+        </div>
+        <div class="ph-10" layout="column" layout-align="start start" layout-wrap flex>
+            <div class="title">Bahri Dry Bulk at a glance</div>
+            <div class="description">Last updated on: {{vm.date | date: 'dd/MM/yyyy HH:mm:ss'}}</div>
+        </div>
+        <div layout="row" layout-align="end center" layout-wrap flex>
+            <md-menu-bar id="user-menu">
+                <md-menu md-position-mode="left bottom">
+                    <md-button class="user-menu-button" ng-click="$mdOpenMenu()"
+                               aria-label="User settings"
+                               translate translate-attr-aria-label="TOOLBAR.USER_SETTINGS">
+                        <div layout="row" layout-align="space-between center">
+                            <span class="username">{{ vm.username }}</span>
+                            <md-icon md-font-icon="icon-chevron-down"
+                                     class="icon s16"></md-icon>
+                        </div>
+                    </md-button>
+
+                    <md-menu-content width="3">
+                        <md-menu-item class="md-indent">
+                            <md-icon md-font-icon="icon-logout" class="icon"></md-icon>
+                            <md-button ng-click="vm.logout()">Logout</md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+            </md-menu-bar>
+        </div>
+    </div>
+    <!-- / HEADER -->
+
+    <!-- TOOLBAR -->
+    <md-toolbar id="toolbar" class="md-menu-toolbar md-whiteframe-1dp ng-scope _md md-default-theme toolbar-header">
+        <div class="ph-5" layout="row" layout-xs="row" layout-align="start center" style="min-height:64px">
+            
+            <div class="ph-5" flex="60" layout-align="center center" layout-xs="row">
+                <md-button id="btn-graph" class="md-button-data-view md-raised active md-button md-default-theme md-ink-ripple" ng-click="vm.setGraphView()"> 
+                    Month 
+                </md-button>
+                <md-button id="btn-table" class="md-button-data-view md-raised md-button md-default-theme md-ink-ripple" ng-click="vm.setTableView()"> 
+                    YTD
+                </md-button>
+            </div>
+
+            <div class="ph-15" flex="40" layout-xs="row">
+                <div class="ph-10 current-month" layout="row" layout-xs="column" layout-align="end center">
+                    {{vm.current_month}}
+                </div>
+            </div>
+        </div>
+    </md-toolbar>
+    
+    <!-- / TOOLBAR -->
+
+    <!-- CONTENT -->
+    <md-progress-linear md-mode="indeterminate" ng-show="vm.loadingProgress" class="md-warn"></md-progress-linear>
+    <div class="content" ng-hide="vm.loadingProgress">
+        <div class="graph-data" ng-show="vm.dataGraphView">  
+            <div class="card-wrapper" layout="row" layout-wrap>
+                <div class="card-block" flex-xs="100" flex-sm="100" flex-md="100" flex="100">
+
+                    <div class="card-wrapper" layout="row" ng-click="vm.navigateToModules('financial')">
+                        <div class="ph-5 card-block overview-header" flex="100">
+                            <div class="md-whiteframe-4dp">
+                                <div class="md-title">Bahri Dry Bulk Financial's at a Glance</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-wrapper" layout="row" layout-wrap layout-align="left">
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="20" ng-click="vm.navigateToModules('financial')">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header black-box">
+                                    <div class="md-title small-card-title">
+                                        {{ vm.tceMonth.name }}
+                                    </div>
+                                </div>
+                                <div class="card small-card-header-content black-box-gradient">
+                                    <div class="large-content">
+                                        {{ vm.tceMonth.color == 'nil' ? 'NA' : '$'+(vm.tceMonth.content | number)}}
+                                    </div>
+                                    <div class="small-text">per day</div>
+                                    <span class="percentage-{{vm.tceMonth.color }}">
+                                        <md-icon class="icon s55 {{ 'icon-menu-'+vm.tceMonth.arrow }}"></md-icon> {{ vm.tceMonth.percentage }} %
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="20" ng-click="vm.navigateToModules('financial')">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header black-box">
+                                    <div class="md-title small-card-title">
+                                        {{ vm.revenueMonth.name }}
+                                    </div>
+                                </div>
+                                <div class="card small-card-header-content black-box-gradient">
+                                    <div class="large-content">
+                                        {{ vm.revenueMonth.color == 'nil' ? 'NA' : (vm.revenueMonth.content | number)}}
+                                    </div>
+                                    <div class="small-text">SAR (M)</div>
+                                    <span class="percentage-{{ vm.revenueMonth.color }}">
+                                        <md-icon class="icon s55 {{ 'icon-menu-'+vm.revenueMonth.arrow }}"></md-icon> {{ vm.revenueMonth.percentage }} %
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="20" ng-click="vm.navigateToModules('financial')">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header black-box">
+                                    <div class="md-title small-card-title">{{vm.ebitdaMarginMonth.name}}</div>
+                                </div>
+                                <div class="card small-card-header-content black-box-gradient">
+                                    <div class="large-content"> 
+                                        {{ vm.ebitdaMarginMonth.color == 'nil' ? 'NA' : (vm.ebitdaMarginMonth.content+'%')}}
+                                    </div>
+                                    <div class="small-text">margin</div>
+                                    <span class="percentage-{{vm.ebitdaMarginMonth.color}}">
+                                        <md-icon class="icon s55 {{ 'icon-menu-'+vm.ebitdaMarginMonth.arrow }}"></md-icon> {{vm.ebitdaMarginMonth.percentage}} % 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="20" ng-click="vm.navigateToModules('financial')">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header black-box">
+                                    <div class="md-title small-card-title">
+                                        {{vm.revenueTimeMonth.name}}
+                                    </div>
+                                </div>
+                                <div class="card small-card-header-content black-box-gradient">
+                                    <div class="large-content">
+                                        {{ vm.revenueTimeMonth.color == 'nil' ? 'NA' : (vm.revenueTimeMonth.content | number) }}
+                                    </div>
+                                    <div class="small-text">
+                                        SAR (M)
+                                    </div>
+                                    <span class="percentage-{{vm.revenueTimeMonth.color}}">
+                                        <md-icon class="icon s55 {{ 'icon-menu-'+vm.revenueTimeMonth.arrow }}"></md-icon> {{vm.revenueTimeMonth.percentage}} % 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="20">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card md-card-margin-top-bottom-none chart-block">
+                                    <div class="md-title card-title chart-block">
+                                        BU Revenue / EBITDA
+                                    </div>
+                                    <div id="bu-revenue-ebitda-month-container" class="overview-activity-graph-container"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-wrapper" layout="row" layout-wrap>
+                <div class="card-block" flex-xs="100" flex-sm="100" flex-md="100" flex="100">
+
+                    <div class="card-wrapper" layout="row" ng-click="vm.navigateToModules('operational')">
+                        <div class="ph-5 card-block overview-header" flex="100">
+                            <div class="md-whiteframe-4dp">
+                                <div class="md-title">Bahri Dry Bulk Operations at a Glance</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-wrapper" layout="row" layout-wrap layout-align="left">
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="20" ng-click="vm.navigateToModules('operational')">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header orange-box">
+                                    <div class="md-title small-card-title">
+                                        {{ vm.volumeMonth.name }}
+                                    </div>
+                                </div>
+                                <div class="card small-card-header-content orange-box-gradient">
+                                    <div class="large-content">
+                                        {{ vm.volumeMonth.color == 'nil' ? 'NA' : (vm.volumeMonth.content | number) }}
+                                    </div>
+                                    <div class="small-text">
+                                        MT
+                                    </div>
+                                    <span class="percentage-{{ vm.volumeMonth.color }}">
+                                        <md-icon class="icon s55 {{'icon-menu-'+ vm.volumeMonth.arrow }}"></md-icon> {{ vm.volumeMonth.percentage }} % 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="20" ng-click="vm.navigateToModules('operational')">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header orange-box">
+                                    <div class="md-title small-card-title">
+                                        {{ vm.voyageDaysMonth.name }}
+                                    </div>
+                                </div>
+                                <div class="card small-card-header-content orange-box-gradient">
+                                    <div class="large-content">
+                                        {{ vm.voyageDaysMonth.color == 'nil' ? 'NA' : (vm.voyageDaysMonth.content | number) }}
+                                    </div>
+                                    <div class="small-text">
+                                        days
+                                    </div>
+                                    <span class="percentage-{{ vm.voyageDaysMonth.color }}">
+                                        <md-icon class="icon s55 {{'icon-menu-'+ vm.voyageDaysMonth.arrow }}"></md-icon> {{ vm.voyageDaysMonth.percentage }} % 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="20" ng-click="vm.navigateToModules('operational')">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header orange-box">
+                                    <div class="md-title small-card-title">
+                                        {{ vm.offhireDaysMonth.name }}
+                                    </div>
+                                </div>
+                                <div class="card small-card-header-content orange-box-gradient">
+                                    <div class="large-content">
+                                        {{ vm.offhireDaysMonth.color == 'nil' ? 'NA' : (vm.offhireDaysMonth.content | number) }}
+                                    </div>
+                                    <div class="small-text">
+                                        days
+                                    </div>
+                                    <span class="percentage-{{ vm.offhireDaysMonth.color }}">
+                                        <md-icon class="icon s55 {{'icon-menu-'+vm.offhireDaysMonth.arrow }}"></md-icon> {{ vm.offhireDaysMonth.percentage }} % 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="20" ng-click="vm.navigateToModules('operational')">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header orange-box">
+                                    <div class="md-title small-card-title">
+                                        {{ vm.activeVoyagesMonth.name }}
+                                    </div>
+                                </div>
+                                <div class="card small-card-header-content orange-box-gradient">
+                                    <div class="large-content">
+                                        {{ vm.activeVoyagesMonth.content == 0 ? 'NA' : (vm.activeVoyagesMonth.content | number) }}
+                                    </div>
+                                    <div class="small-text">voyages</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="20" ng-click="vm.navigateToModules('operational')">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header orange-box">
+                                    <div class="md-title small-card-title">
+                                        {{ vm.activeVoyagesWeekMonth.name }}
+                                    </div>
+                                </div>
+                                <div class="card small-card-header-content orange-box-gradient">
+                                    <div class="large-content">
+                                        {{ vm.activeVoyagesWeekMonth.content == 0 ? 'NA' : (vm.activeVoyagesWeekMonth.content | number) }}
+                                    </div>
+                                    <div class="small-text">voyages</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-data" ng-show="!(vm.dataGraphView)">
+            
+            <div class="card-wrapper" layout="row" layout-wrap>
+                <div class="card-block" flex-xs="100" flex-sm="100" flex-md="100" flex="100">
+
+                    <div class="card-wrapper" layout="row" ng-click="vm.navigateToModules('financial')">
+                        <div class="ph-5 card-block overview-header" flex="100">
+                            <div class="md-whiteframe-4dp">
+                                <div class="md-title">Bahri Dry Bulk Financial's at a Glance</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-wrapper" layout="row" layout-wrap layout-align="left">
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="20" ng-click="vm.navigateToModules('financial')">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header black-box">
+                                    <div class="md-title small-card-title">
+                                        {{ vm.tceYTD.name }}
+                                    </div>
+                                </div>
+                                <div class="card small-card-header-content black-box-gradient">
+                                    <div class="large-content">
+                                        {{ vm.tceYTD.color == 'nil' ? 'NA' : '$'+(vm.tceYTD.content | number)}}
+                                    </div>
+                                    <div class="small-text">per day</div>
+                                    <span class="percentage-{{vm.tceYTD.color }}">
+                                        <md-icon class="icon s55 {{ 'icon-menu-'+vm.tceYTD.arrow }}"></md-icon> {{ vm.tceYTD.percentage }} %
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="20" ng-click="vm.navigateToModules('financial')">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header black-box">
+                                    <div class="md-title small-card-title">
+                                        {{ vm.revenueYTD.name }}
+                                    </div>
+                                </div>
+                                <div class="card small-card-header-content black-box-gradient">
+                                    <div class="large-content">
+                                         {{ vm.revenueYTD.color == 'nil' ? 'NA' : (vm.revenueYTD.content | number)}}
+                                    </div>
+                                    <div class="small-text">SAR (M)</div>
+                                    <span class="percentage-{{ vm.revenueYTD.color }}">
+                                        <md-icon class="icon s55 {{ 'icon-menu-'+vm.revenueYTD.arrow }}"></md-icon> {{ vm.revenueYTD.percentage }} %
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="20" ng-click="vm.navigateToModules('financial')">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header black-box">
+                                    <div class="md-title small-card-title">{{vm.ebitdaMarginYTD.name}}</div>
+                                </div>
+                                <div class="card small-card-header-content black-box-gradient">
+                                    <div class="large-content">
+                                        {{ vm.ebitdaMarginYTD.color == 'nil' ? 'NA' : (vm.ebitdaMarginYTD.content+'%')}}
+                                    </div>
+                                    <div class="small-text">margin</div>
+                                    <span class="percentage-{{vm.ebitdaMarginYTD.color}}">
+                                        <md-icon class="icon s55 {{ 'icon-menu-'+vm.ebitdaMarginYTD.arrow }}"></md-icon> {{vm.ebitdaMarginYTD.percentage}} % 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="20" ng-click="vm.navigateToModules('financial')">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header black-box">
+                                    <div class="md-title small-card-title">
+                                        {{vm.revenueTimeYTD.name}}
+                                    </div>
+                                </div>
+                                <div class="card small-card-header-content black-box-gradient">
+                                    <div class="large-content">
+                                        {{ vm.revenueTimeYTD.color == 'nil' ? 'NA' : (vm.revenueTimeYTD.content | number) }}
+                                    </div>
+                                    <div class="small-text">
+                                        SAR (M)
+                                    </div>
+                                    <span class="percentage-{{vm.revenueTimeYTD.color}}">
+                                        <md-icon class="icon s55 {{ 'icon-menu-'+vm.revenueTimeYTD.arrow }}"></md-icon> {{vm.revenueTimeYTD.percentage}} % 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="20">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card md-card-margin-top-bottom-none chart-block">
+                                    <div class="md-title card-title chart-block">
+                                        BU Revenue / EBITDA
+                                    </div>
+                                    <div id="bu-revenue-ebitda-ytd-container" class="overview-activity-graph-container"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-wrapper" layout="row" layout-wrap>
+                <div class="card-block" flex-xs="100" flex-sm="100" flex-md="100" flex="100">
+
+                    <div class="card-wrapper" layout="row" ng-click="vm.navigateToModules('operational')">
+                        <div class="ph-5 card-block overview-header" flex="100">
+                            <div class="md-whiteframe-4dp">
+                                <div class="md-title">Bahri Dry Bulk Operations at a Glance</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-wrapper" layout="row" layout-wrap layout-align="left">
+                        
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="20" ng-click="vm.navigateToModules('operational')">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header orange-box">
+                                    <div class="md-title small-card-title">
+                                        {{ vm.volumeYTD.name }}
+                                    </div>
+                                </div>
+                                <div class="card small-card-header-content orange-box-gradient">
+                                    <div class="large-content">
+                                        {{ vm.volumeYTD.color == 'nil' ? 'NA' : (vm.volumeYTD.content | number) }}
+                                    </div>
+                                    <div class="small-text">
+                                        MT
+                                    </div>
+                                    <span class="percentage-{{ vm.volumeYTD.color }}">
+                                        <md-icon class="icon s55 {{'icon-menu-'+ vm.volumeYTD.arrow }}"></md-icon> {{ vm.volumeYTD.percentage }} % 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="20" ng-click="vm.navigateToModules('operational')">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header orange-box">
+                                    <div class="md-title small-card-title">
+                                        {{ vm.voyageDaysYTD.name }}
+                                    </div>
+                                </div>
+                                <div class="card small-card-header-content orange-box-gradient">
+                                    <div class="large-content">
+                                        {{ vm.voyageDaysYTD.color == 'nil' ? 'NA' : (vm.voyageDaysYTD.content | number) }}
+                                    </div>
+                                    <div class="small-text">
+                                        days
+                                    </div>
+                                    <span class="percentage-{{ vm.voyageDaysYTD.color }}">
+                                        <md-icon class="icon s55 {{'icon-menu-'+ vm.voyageDaysYTD.arrow }}"></md-icon> {{ vm.voyageDaysYTD.percentage }} % 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="20" ng-click="vm.navigateToModules('operational')">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header orange-box">
+                                    <div class="md-title small-card-title">
+                                        {{ vm.offhireDaysYTD.name }}
+                                    </div>
+                                </div>
+                                <div class="card small-card-header-content orange-box-gradient">
+                                    <div class="large-content">
+                                        {{ vm.offhireDaysYTD.color == 'nil' ? 'NA' : (vm.offhireDaysYTD.content | number) }}
+                                    </div>
+                                    <div class="small-text">
+                                        days
+                                    </div>
+                                    <span class="percentage-{{ vm.offhireDaysYTD.color }}">
+                                        <md-icon class="icon s55 {{'icon-menu-'+vm.offhireDaysYTD.arrow }}"></md-icon> {{ vm.offhireDaysYTD.percentage }} % 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="20" ng-click="vm.navigateToModules('operational')">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header orange-box">
+                                    <div class="md-title small-card-title">
+                                        {{ vm.activeVoyagesYTD.name }}
+                                    </div>
+                                </div>
+                                <div class="card small-card-header-content orange-box-gradient">
+                                    <div class="large-content">
+                                        {{ vm.activeVoyagesYTD.content == 0 ? 'NA' : (vm.activeVoyagesYTD.content | number) }}
+                                    </div>
+                                    <div class="small-text">voyages</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ph-5 card-block small-card overview-box" flex="100" flex-gt-xs="33" flex-gt-md="20" ng-click="vm.navigateToModules('operational')">
+                            <div class="md-whiteframe-4dp">
+                                <div class="card small-card-header orange-box">
+                                    <div class="md-title small-card-title">
+                                        {{ vm.activeVoyagesWeekYTD.name }}
+                                    </div>
+                                </div>
+                                <div class="card small-card-header-content orange-box-gradient">
+                                    <div class="large-content">
+                                        {{ vm.activeVoyagesWeekYTD.content == 0 ? 'NA' : (vm.activeVoyagesWeekYTD.content | number) }}
+                                    </div>
+                                    <div class="small-text">voyages</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="pb-16 ph-5 notes">
+            <span class="note-title">
+                {{ noteTitle }} <br />
+            </span>
+            <span class="note-description">
+                {{ noteDesctiptionLine1 }}
+            </span>
+        </div>
+
+    </div>
+    <!-- / CONTENT -->
+
+</div>

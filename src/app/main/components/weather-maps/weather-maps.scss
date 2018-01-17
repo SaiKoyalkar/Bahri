@@ -1,0 +1,88 @@
+/* #maps {
+
+    > .content {
+
+        md-tabs {
+            box-shadow: $whiteframe-shadow-1dp;
+        }
+
+        .card {
+            max-width: 1200px;
+            padding: 16px;
+            margin: 24px;
+
+            .angular-google-map-container {
+                height: 400px;
+            }
+        }
+    }
+} */
+
+
+#weather-vessel{
+    .btn-filter{
+        cursor: pointer;
+    }
+    md-icon.filter-icon{
+        color: #ff6600;
+    }
+}
+
+#windyty {
+    max-width: 100%;
+    max-height: 100%;
+    height: 500px;
+    width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+}
+
+#windyty-container .windyty-content{    
+  position: absolute;
+  top: 0px;
+  right: 100px;
+  padding: 10px;
+}
+
+#windyty-container .windyty-content a {
+    color: #000000;
+    cursor: pointer;
+    font-weight: normal;
+}
+
+p {
+    line-height: 1.0em;
+    color: currentColor;
+    font-weight: bold;
+    font-style: italic;
+}
+
+#preview{
+  display: none;
+  position: absolute;
+  bottom:0px;
+  width: 100%
+}
+
+.levels{
+  float:right;
+  margin-left: 20px;
+}
+
+.overlays{
+  float:left;
+}
+
+#forecastid{
+  display: none;
+}
+
+#weather-vessel{
+  .btn-filter{
+      cursor: pointer;
+  }
+  md-icon.close-icon{
+      color: #d32f2f;
+  }
+}
