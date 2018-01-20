@@ -60,17 +60,35 @@
                 return $q.reject(response.data);
             });
         }
-        // line graph step 2
+
         vm.voyageEconomyAvgSlipGraph = function(filter_params){
             return $http({
                 method: 'POST',
-                data: {'duration':filter_params.currentDuration,'vessel_id':filter_params.vessel_id},
+                data: filter_params,
                 url: baseURL+'voyageEconomyAvgSlipGraph.json',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 }
             }).then(function successCallback(response) {
 
+              console.log("voyageEconomyAvgSlipGraph", response.data.data)
+                return response.data.data;
+            }, function errorCallback(response) {
+                return $q.reject(response.data);
+            });
+        }
+//grouped graph
+        vm.engineAndTotalConsumptionSavingsGraph = function(filter_params){
+          console.log(filter_params);
+            return $http({
+                method: 'POST',
+                data: filter_params,
+                url: baseURL+'engineAndTotalConsumptionSavingsGraph.json',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            }).then(function successCallback(response) {
+              console.log("engineAndTotalConsumptionSavingsGraph", response.data.data)
                 return response.data.data;
             }, function errorCallback(response) {
                 return $q.reject(response.data);

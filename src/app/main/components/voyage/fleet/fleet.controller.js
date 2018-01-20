@@ -27,9 +27,9 @@
         vm.currentDuration = {"month" : "Month"};
         vm.currentSource = 'mips';
 
-        
 
-        
+
+
         if(typeof $stateParams.id == 'undefined' || $stateParams.id == ''){
             vm.loadingProgress = true;
             selectFleet();
@@ -38,9 +38,9 @@
         $(window).resize(function(){
            reInitializeGraphs();
         });
-        
+
         var element = angular.element( document.querySelector( '.fold-toggle' ) );
-            element.on('click', function(e){     
+            element.on('click', function(e){
             reInitializeGraphs();
         });
 
@@ -91,14 +91,14 @@
             if(graph && graph.vessel_fleet.fuel_consumption && angular.element('#fuel-consumption-container').length){
                 if(graph.vessel_fleet.fuel_consumption.graphInfo.series.length >0)
                 {
-                    Highcharts.chart('fuel-consumption-container'/*, 
+                    Highcharts.chart('fuel-consumption-container'/*,
                     graph.vessel_fleet.fuel_consumption.graphInfo*/,commonUtils.getFleetPerformanceGraphsWithTooltip(graph.vessel_fleet.fuel_consumption.graphInfo));
                 }
             }
             if(graph && graph.vessel_fleet.average_speed && angular.element('#average-speed-container').length){
                 if(graph.vessel_fleet.average_speed.graphInfo.series.length >0)
                 {
-                    Highcharts.chart('average-speed-container'/*, 
+                    Highcharts.chart('average-speed-container'/*,
                     graph.vessel_fleet.average_speed.graphInfo*/,commonUtils.getFleetPerformanceGraphsWithTooltip(graph.vessel_fleet.average_speed.graphInfo));
                 }
             }
@@ -113,9 +113,14 @@
             if(graph /*&& graph.bu_revenue*/ && angular.element('#ytd-savings').length){
                 Highcharts.chart('ytd-savings', commonUtils.activityChart(graph.vessel_fleet.savings.graphInfo,commonUtils.getNormalToolTip('MT',false)));
             }
-            if(graph /*&& graph.bu_revenue*/ && angular.element('#groupedbargraph').length){
-                Highcharts.chart('groupedbargraph', commonUtils.groupedBarChart(graph.vessel_fleet.savings.graphInfo));
-            }
+
+        }
+        //grouped graph
+
+        function engineAndTotalConsumptionSavingsGraph(graph){
+          if(graph /*&& graph.bu_revenue*/ && angular.element('#groupedbargraph').length){
+              Highcharts.chart('groupedbargraph', commonUtils.groupedColumnChart(graph.graphInfo.graphInfo));
+          }
 
         }
 
@@ -127,7 +132,7 @@
                 parent: angular.element(document.body),
                 //targetEvent: ev,
                 clickOutsideToClose: false,
-                
+
                 openFrom : {
                   top: -50,
                   width: 30,
@@ -141,7 +146,7 @@
                     $location.path("/components/voyage-economy/fleet/"+business_unit);
                 }
             }, function() {
-                
+
             });
         }
 
@@ -175,12 +180,12 @@
                     vm.filterValues = angular.copy(result);
                     delete result["selectedReports"]
                     delete result["selectedSailingConditions"]
-                    
+
                     getServices(result);
                     vm.currentBusinessUnit = commonUtils.buNames()[$stateParams.id.toLowerCase()];
                 }
             }, function() {
-                
+
             });
         }
 
@@ -219,8 +224,8 @@
         uiGmapGoogleMapApi.then(function(maps){
             $scope.map = {
                 center: {
-                    latitude: 0, 
-                    longitude: 0 
+                    latitude: 0,
+                    longitude: 0
                 },
                 options: {
                     backgroundColor : '#14224F',
@@ -237,8 +242,8 @@
             uiGmapGoogleMapApi.then(function(maps){
                 $scope.map = {
                     center: {
-                        latitude: 0, 
-                        longitude: 0 
+                        latitude: 0,
+                        longitude: 0
                     },
                     options: {
                         backgroundColor : '#14224F',
@@ -263,7 +268,7 @@
                         latitude: inner_trade_value.latitude,
                         longitude: inner_trade_value.longitude
                     });
-                    
+
                 });
 
                 polylines_arr.push({
@@ -287,7 +292,7 @@
                 });
 
             });
-        
+
             return polylines_arr;
         }
 
@@ -317,10 +322,22 @@
                     }
                 }, function(error) {
             });
-        }        
+            //grouped graph
+            apisVessel.engineAndTotalConsumptionSavingsGraph(filter_params)
+                .then(function(response) {
+                    if(vm.currentUrl == $location.absUrl()){
+                        if(response){
+                            vm.date = response.current_date_time;
+                            engineAndTotalConsumptionSavingsGraph(response);
+                            vm.loadingProgress = false;
+                        }
+                    }
+                }, function(error) {
+            });
+        }
     }
 
-    
-    
+
+
 
 })();
