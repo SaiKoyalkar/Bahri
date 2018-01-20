@@ -10,11 +10,11 @@
     function apisVessel($http,$q,$rootScope)
     {
         var vm = this;
-        
+
         /* Base URL */
         var baseURL = $rootScope.baseURL;
 
-        /* Vessel Voyage Starts */       
+        /* Vessel Voyage Starts */
 
         vm.getVesselComparisonGraph = function(filter_params){
             return $http({
@@ -60,6 +60,23 @@
                 return $q.reject(response.data);
             });
         }
+        // line graph step 2
+        vm.voyageEconomyAvgSlipGraph = function(filter_params){
+            return $http({
+                method: 'POST',
+                data: {'duration':filter_params.currentDuration,'vessel_id':filter_params.vessel_id},
+                url: baseURL+'voyageEconomyAvgSlipGraph.json',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            }).then(function successCallback(response) {
+
+                return response.data.data;
+            }, function errorCallback(response) {
+                return $q.reject(response.data);
+            });
+        }
+
 
         vm.getVesselName = function(vessel_name){
             //console.log("here")
@@ -75,7 +92,7 @@
             }, function errorCallback(response) {
                 return $q.reject(response.data);
             });
-        } 
+        }
 
         vm.getVesselNamesList = function(vessel_name){
             return $http({
@@ -106,7 +123,7 @@
                 return $q.reject(response.data);
             });
         }
-        
+
         vm.getVoyageEconomicSearchParam = function(){
             return $http({
                 method: 'POST',

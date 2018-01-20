@@ -41,12 +41,14 @@
             console.log("asbdhasb")
            reInitializeGraphs(vm.graphData);
            reInitializeCircularGraphs();
+           reInitializeAvgSlipGraphData();
         });
-        
+
         var element = angular.element( document.querySelector( '.fold-toggle' ) );
-            element.on('click', function(e){       
+            element.on('click', function(e){
             reInitializeGraphs(vm.graphData);
             reInitializeCircularGraphs();
+            reInitializeAvgSlipGraphData()
         });
 
         vm.filterValues = {
@@ -81,7 +83,7 @@
                     Highcharts.chart('fuel-consumption-container', commonUtils.getGraphsWithTooltip(graph.vessel_performance.fuel_consumption.graphInfo, 'Date'));
                 }
             }
-            
+
             if(graph && graph.vessel_performance.crew_fuel_consumption && angular.element('#crew-fuel-consumption-container').length){
                 if(graph.vessel_performance.crew_fuel_consumption.graphInfo.series.length >0)
                 {
@@ -96,28 +98,19 @@
                     Highcharts.chart('fuel-consumption-new-sister-ship-container', commonUtils.getGraphsWithTooltip(graph.vessel_performance.fuel_consumption_sister_ship.graphInfo, 'Date'));
                 }
             }
-
-            if(angular.element('#lineGraph').length){
-
-                vm.hideSisterShip = false;
-                
-                
-                    Highcharts.chart('lineGraph', commonUtils.vesselLineGraph(graph.vessel_performance.fuel_consumption_sister_ship.graphInfo));
-                
-            }
-            else
+           else
             {
                 vm.hideSisterShip =true;
             }
-            
 
-            
+
+
 
             /*if(graph && graph.fuel_consumption_sister_ship != undefined){
                 vm.sisteShips = graph.fuel_consumption_sister_ship;
                 $timeout(function() {
                     $.each(vm.sisteShips,function(key,value){
-                        Highcharts.chart('comparision-fleet-container-'+key, commonUtils.customLineChart(value.graph.graphInfo));       
+                        Highcharts.chart('comparision-fleet-container-'+key, commonUtils.customLineChart(value.graph.graphInfo));
                     });
                 }, 500);
             }*/
@@ -134,6 +127,21 @@
             }
             if(graph && graph.vessel_performance.savings && angular.element('#ytd-savings').length){
                 Highcharts.chart('ytd-savings', commonUtils.activityChart(graph.vessel_performance.savings.graphInfo,commonUtils.getNormalToolTip('MT',false)));
+            }
+
+        }
+            //line graph step 3
+        function AvgSlipGraphData(graph){
+            commonUtils.initializeSettings();
+            console.log(graph);
+
+            if(angular.element('#lineGraph').length){
+                //TO DO: 
+              Highcharts.chart('lineGraph',
+              commonUtils.getGraphsWithTooltip
+              
+              (graph.avg_slip_graph.graphInfo, 'Date'));
+
             }
 
         }
@@ -161,7 +169,7 @@
                     $location.path("/components/voyage-economy/vessel/"+vessel_id);
                 }
             }, function() {
-                
+
             });
         }
 
@@ -190,23 +198,20 @@
                     result.vessel_id = (result.vessel_id != '') ? result.vessel_id : $stateParams.id.toUpperCase();
                     result.currentDuration = vm.currentDuration;
                     vm.currentSource = result.data_source;
-                    
-                    
                     vm.filterValues = angular.copy(result);
-                    delete result["selectedReports"]
-                    delete result["selectedSailingConditions"]
-                    
+                    delete result["selectedReports"];
+                    delete result["selectedSailingConditions"];
                     getServices(result);
                     getPortCalls(result.vessel_id);
                     voyageEconomyGraph(result.vessel_id,vm.currentDuration);
                 }
             }, function() {
-                
+
             });
         }
 
         vm.changeDuration = function(){
-           
+
 
             vm.filterValues.currentDuration = vm.currentDuration;
             getServices(vm.filterValues);
@@ -230,7 +235,7 @@
             }
            /* $location.path("/components/voyage-economy/vessel/"+vm.currentVessel);
             if(vm.currentVessel != undefined && vm.currentVessel != '') {
-                    
+
             }*/
         }
 
@@ -257,6 +262,12 @@
                 voyageCircularGraphs(graph);
             },500);
         }
+        function reInitializeAvgSlipGraphData(graph){
+            $timeout(function () {
+                AvgSlipGraphData(graph);
+            },500);
+        }
+
 
 
         function getServices(filter_params) {
@@ -274,6 +285,24 @@
                             }, 500);
 
                            // reInitializeGraphs(response.vessel);
+                        }
+                    }
+                }, function (error) {
+            });
+            //line graph step 1
+            apisVessel.voyageEconomyAvgSlipGraph(filter_params)
+                .then(function (response) {
+                    if (vm.currentUrl == $location.absUrl()) {
+
+                        if (response) {
+                            vm.date = response.current_date_time;
+                            $timeout(function () {
+                                vm.circularLoader = false;
+                                vm.AvgSlipGraphData = response;
+                                AvgSlipGraphData(response);
+                            }, 500);
+
+                           reInitializeAvgSlipGraphData(response);
                         }
                     }
                 }, function (error) {
@@ -345,9 +374,9 @@
                 }, function(error) {
             });
         }
-        
 
-        
+
+
     }
 
 })();
